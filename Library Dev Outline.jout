@@ -1,0 +1,339 @@
+#net.laraifox.collision {
+	- class AABBCollider [GameObject] : ICollidable {
+		- constructor AABBCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class CapsuleCollider [GameObject] : ICollidable {
+		- constructor CapsuleCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class ConvexMeshCollider [GameObject] : ICollidable {
+		- constructor ConvexMeshCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class OBBCollider [GameObject] : ICollidable {
+		- constructor OBBCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class PlainCollider [GameObject] : ICollidable {
+		- constructor PlainCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class SphereCollider [GameObject] : ICollidable {
+		- constructor SphereCollider(Transform3D, GameObject)
+		- function collides(AABBCollider) : CollisionData @Override
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(CapsuleCollider) : CollisionData @Override
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(ConvexMeshCollider) : CollisionData @Override
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(OBBCollider) : CollisionData @Override
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(PlainCollider) : CollisionData @Override
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(SphereCollider) : CollisionData @Override
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData @Override
+			+ func collides(Vector3f) : CollisionData @Override
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData @Override
+	}
+	- class CollisionData {
+		- var colliding : boolean
+		- var collisionPoint : float
+		- var minTranslationX : float
+		- var minTranslationY : float
+		- var minTranslationZ : float
+		- var minTranslation2D : Vector2f
+		- var minTranslation3D : Vector3f
+	}
+	- class Quadtree {
+		- var level : int
+		- var bounds : AABBCollider
+		- var objects : ArrayList<ICollidable>
+		- var nodes : Quadtree
+		- var maxObjects : int
+		- var maxLevels : int
+		- function clear() : void
+		- function insert(ICollidable) : void
+		- function retrieve(ICollidable) : ArrayList<ICollidable>
+		- function split() : void
+		- function getIndex() : int
+	}
+	- class Octree {
+		- var level : int
+		- var bounds : AABBCollider
+		- var objects : ArrayList<ICollidable>
+		- var nodes : Octree
+		- var maxObjects : int
+		- var maxLevels : int
+		- function clear() : void
+		- function insert(ICollidable) : void
+		- function retrieve(ICollidable) : ArrayList<ICollidable>
+		- function split() : void
+		- function getIndex() : int
+	}
+__________________________________________
+	
+	- class Collision2D {
+		- function contains(IGeometricObject2D, IGeometricObject2D) : CollisionData2D 
+			@Overload(IGeometricObject2D, Transform2D, IGeometricObject2D, Transform2D)
+		- function intersects(IGeometricObject2D, IGeometricObject2D) : CollisionData2D
+			@Overload(IGeometricObject2D, Transform2D, IGeometricObject2D, Transform2D)
+	}
+	- class CollisionData2D {
+		// All variables are private and only accessible by getters or the constructor.
+		- var minimumTranslationVector : Vector2f
+		- var minimumTranslationX : float
+		- var minimumTranslationY : float
+		- var intersects : boolean
+		- var willIntersect : boolean
+		- var wasIntersecting : boolean
+	}
+	- class QuadTree {
+		- var level : int
+		- var bounds : AARectangle
+		- var objects : ArrayList<IGeometricObject>
+		- var nodes : QuadTree
+		- var maxObjects : int
+		- var maxLevels : int
+		- function clear() : void
+		- function insert(IGeometricObject) : void
+		- function retrieve(IGeometricObject) : ArrayList<IGeometricObject>
+		- function split() : void
+		- function getIndex() : int
+	}
+}
+#net.laraifox.core {
+	- class GameObject {
+		- var transform : Transform3D
+		- var childComponents : ArrayList<GameObject>
+		- function addComponent(GameObject) : void
+		- function update() : void
+		- function render() : void
+	}
+}
+#net.laraifox.geometry {
+	- class GeomProjection1D {
+		- constructor GeomProjection1D(IGeometricObject)
+		- var min : float
+		- var max : float
+	}
+	- class Shape : IGeometricObject {
+		- var transform : Transform2D
+		- var vertices : Vertex2D[]
+		- function calculateNormals() : void
+		- function transform(Transform2D) : void
+		- function translate(Vector2f) : void
+		- function rotate(float) : void
+		- function scale(float) : void
+		- function scale(Vector2f) : void
+		- function render() : void
+		- function getPoints() : Vector3f[] @Override
+		- function getNormals() : Vector3f[] @Override
+		- function getX() : float @Override
+		- function getY() : float @Override
+		- function getZ() : float @Override
+		- function getMinX() : float @Override
+		- function getMinY() : float @Override
+		- function getMinZ() : float @Override
+		- function getMaxX() : float @Override
+		- function getMaxY() : float @Override
+		- function getMaxZ() : float @Override
+		- function getWidth() : float @Override
+		- function getHeight() : float @Override
+		- function getLength() : float @Override
+	}
+	- class Quadrilateral [Shape] {
+		- function render() : void @Override
+		- function getNormals() : Vector2f[] @Override
+	}
+	- class Rectangle [Quadrilateral] {
+		- function render() : void @Override
+		- function getNormals() : Vector2f[] @Override
+	}
+	- class AARectangle [Rectangle] {
+		- function getPoints() : Vector3f[] @Override
+		- function getNormals() : Vector3f[] @Override
+		- function getX() : float @Override
+		- function getY() : float @Override
+		- function getZ() : float @Override
+		- function getMinX() : float @Override
+		- function getMinY() : float @Override
+		- function getMinZ() : float @Override
+		- function getMaxX() : float @Override
+		- function getMaxY() : float @Override
+		- function getMaxZ() : float @Override
+		- function getWidth() : float @Override
+		- function getHeight() : float @Override
+		- function getLength() : float @Override
+	}
+	- class Circle : IGeometricObject {
+		- var transform : Transform2D
+		- var maxVertices : int
+		- function transform(Transform2D) : void
+		- function translate(Vector2f) : void
+		- function rotate(float) : void
+		- function scale(float) : void
+		- function scale(Vector2f) : void
+		- function render() : void
+		- function getPoints() : Vector3f[] @Override
+		- function getNormals() : Vector3f[] @Override
+		- function getX() : float @Override
+		- function getY() : float @Override
+		- function getZ() : float @Override
+		- function getMinX() : float @Override
+		- function getMinY() : float @Override
+		- function getMinZ() : float @Override
+		- function getMaxX() : float @Override
+		- function getMaxY() : float @Override
+		- function getMaxZ() : float @Override
+		- function getWidth() : float @Override
+		- function getHeight() : float @Override
+		- function getLength() : float @Override
+	}
+	- class LineSegment : IGeometricObject {
+		- var transform : Transform2D
+		- var vertices : Vertex2D[]
+		- function transform(Transform2D) : void
+		- function translate(Vector2f) : void
+		- function rotate(float) : void
+		- function scale(float) : void
+		- function scale(Vector2f) : void
+		- function render() : void
+		- function getPoints() : Vector3f[] @Override
+		- function getNormals() : Vector3f[] @Override
+		- function getX() : float @Override
+		- function getY() : float @Override
+		- function getZ() : float @Override
+		- function getMinX() : float @Override
+		- function getMinY() : float @Override
+		- function getMinZ() : float @Override
+		- function getMaxX() : float @Override
+		- function getMaxY() : float @Override
+		- function getMaxZ() : float @Override
+		- function getWidth() : float @Override
+		- function getHeight() : float @Override
+		- function getLength() : float @Override
+	}
+	- class Point : IGeometricObject {
+		- var transform : Transform3D
+		- function transform(Transform3D) : void
+		- function translate(Vector2f) : void
+		- function rotate(float) : void
+		- function scale(float) : void
+		- function scale(Vector2f) : void
+		- function render() : void
+		- function getPoints() : Vector3f[] @Override
+		- function getNormals() : Vector3f[] @Override
+		- function getX() : float @Override
+		- function getY() : float @Override
+		- function getZ() : float @Override
+		- function getMinX() : float @Override
+		- function getMinY() : float @Override
+		- function getMinZ() : float @Override
+		- function getMaxX() : float @Override
+		- function getMaxY() : float @Override
+		- function getMaxZ() : float @Override
+		- function getWidth() : float @Override
+		- function getHeight() : float @Override
+		- function getLength() : float @Override
+	}
+}
+#net.laraifox.interfaces {
+	- interface ICollidable {
+		- function collides(AABBCollider) : CollisionData
+			+ func collides(AABBCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(CapsuleCollider) : CollisionData
+			+ func collides(CapsuleCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(ConvexMeshCollider) : CollisionData
+			+ func collides(ConvexMeshCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(OBBCollider) : CollisionData
+			+ func collides(OBBCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(PlainCollider) : CollisionData
+			+ func collides(PlainCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(SphereCollider) : CollisionData
+			+ func collides(SphereCollider, Vector3f, Vector3f) : CollisionData
+			+ func collides(Vector3f) : CollisionData
+			+ func collides(Vector3f, Vector3f, Vector3f) : CollisionData
+	}
+	- interface IGeometricObject {
+		- function getPoints() : Vector3f[]
+		- function getNormals() : Vector3f[]
+		- function getX() : float
+		- function getY() : float
+		- function getZ() : float
+		- function getMinX() : float
+		- function getMinY() : float
+		- function getMinZ() : float
+		- function getMaxX() : float
+		- function getMaxY() : float
+		- function getMaxZ() : float
+		- function getWidth() : float
+		- function getHeight() : float
+		- function getLength() : float
+	}
+}
