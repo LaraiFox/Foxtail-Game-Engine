@@ -22,6 +22,10 @@ public class Camera {
 		transform.translate(translation);
 	}
 
+	public void translate(Vector3f direction, float scale) {
+		transform.translate(Vector3f.scale(direction, scale));
+	}
+
 	public void rotate(Vector3f axis, float theta) {
 		transform.rotate(axis, theta);
 	}

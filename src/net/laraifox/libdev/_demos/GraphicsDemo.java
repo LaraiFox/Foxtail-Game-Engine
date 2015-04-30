@@ -12,6 +12,7 @@ import net.laraifox.libdev.math.Matrix4f;
 import net.laraifox.libdev.math.Vector3f;
 import net.laraifox.libdev.utils.BufferUtils;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -23,12 +24,39 @@ public class GraphicsDemo extends OpenGLDisplay {
 	private Shader shader;
 
 	private float[] vertices = new float[] {
-			-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f
+			-0.5f, -0.5f, 0.0f, //
+			0.5f, -0.5f, 0.0f, //
+			0.5f, 0.5f, 0.0f, //
+			-0.5f, 0.5f, 0.0f
 	};
 
 	private int[] indices = new int[] {
-			0, 1, 2, 0, 2, 3
+			0, 1, 2, //
+			0, 2, 3
 	};
+	//
+	// private float[] vertices = new float[] {
+	// 0.0f, 0.0f, -5.0f,
+	// 2.5f, 0.0f, -5.0f,
+	// 5.0f, 0.0f, -5.0f,
+	// 5.0f, 0.0f, -2.5f,
+	// 5.0f, 0.0f, 0.0f,
+	// 5.0f, 0.0f, 2.5f,
+	// 5.0f, 0.0f, 5.0f,
+	// 2.5f, 0.0f, 5.0f,
+	// 0.0f, 0.0f, 5.0f,
+	// -2.5f, 0.0f, 5.0f,
+	// -5.0f, 0.0f, 5.0f,
+	// -5.0f, 0.0f, 2.5f,
+	// -5.0f, 0.0f, 0.0f,
+	// -5.0f, 0.0f, -2.5f,
+	// -5.0f, 0.0f, -5.0f,
+	// -2.5f, 0.0f, -5.0f,
+	// };
+	//
+	// private int[] indices = new int[] {
+	// 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+	// };
 
 	private VertexArray vao;
 	private DataBuffer vbo;
@@ -40,6 +68,8 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	public GraphicsDemo() {
 		super("Quadtree Test Window");
+
+		// setOrthographicProjection(new OrthographicProjection(0.1f, 50f));
 	}
 
 	@Override
@@ -49,7 +79,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	@Override
 	protected void initializeVariables() {
-		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -10)), Matrix4f.Projection(70.0f, width, height, 0.1f, 100.0f));
+		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -1)), Matrix4f.Projection(70.0f, width, height, 0.1f, 100.0f));
 
 		try {
 			this.shader = new Shader("res/shaders/basic.vs", "res/shaders/basic.fs", true);
@@ -87,7 +117,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(vertices, true), GL15.GL_STATIC_DRAW);
 
 		GL20.glEnableVertexAttribArray(0);
-		GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
+		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, iboID);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferUtils.createIntBuffer(indices, true), GL15.GL_STATIC_DRAW);
@@ -99,16 +129,32 @@ public class GraphicsDemo extends OpenGLDisplay {
 	@Override
 	protected void tick() {
 
-
-		System.out.println(camera.getViewMatrix().toString());
-		System.out.println(camera.getProjectionMatrix().toString());
+		System.out.println("     Shader:");
+		System.out.println(camera.getViewMatrix().transpose().multiply(camera.getProjectionMatrix().transpose()).toString());
+		System.out.println("");
+		System.out.println("     Camera:");
+		System.out.println(camera.getViewProjectionMatrix().transpose().toString());
+		// System.out.println(camera.getViewProjectionMatrix().multiply(new Vector4f(-0.5f, -0.5f, 0.5f, 1.0f)).toString());
 	}
 
 	@Override
 	protected void update(float delta) {
-//		camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			camera.translate(camera.getForward(), 1.2f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			camera.translate(camera.getForward(), -1.2f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			camera.translate(camera.getRight(), -1.2f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			camera.translate(camera.getRight(), 1.2f);
+		}
 
-		//camera.setPosition(Vector3f.PositiveZ().scale(10));
+		// camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
+
+		// camera.setPosition(Vector3f.PositiveZ().scale(10));
 	}
 
 	@Override
@@ -121,10 +167,10 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 		shader.bindShader();
 		shader.setUniform("ml_matrix", Matrix4f.Identity());
-//		 shader.setUniform("vw_matrix", Matrix4f.Identity());
-		shader.setUniform("vw_matrix", camera.getViewMatrix());
+		// shader.setUniform("vw_matrix", Matrix4f.Identity());
+		shader.setUniform("vw_matrix", camera.getViewMatrix(), true);
 		// shader.setUniform("pr_matrix", Matrix4f.Identity());
-		shader.setUniform("pr_matrix", camera.getProjectionMatrix());
+		shader.setUniform("pr_matrix", camera.getProjectionMatrix(), true);
 
 		// shader.setUniform("lightPosition", new Vector2f(Mouse.getX(), Mouse.getY()));
 

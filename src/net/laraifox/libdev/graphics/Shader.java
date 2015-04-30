@@ -244,6 +244,10 @@ public class Shader {
 	}
 
 	public void setUniform(String name, Matrix4f value) {
-		GL20.glUniformMatrix4(uniforms.get(name), true, BufferUtils.createFloatBuffer(value, true));
+		GL20.glUniformMatrix4(uniforms.get(name), false, BufferUtils.createFloatBuffer(value, true));
+	}
+
+	public void setUniform(String name, Matrix4f value, boolean transpose) {
+		GL20.glUniformMatrix4(uniforms.get(name), transpose, BufferUtils.createFloatBuffer(value, true));
 	}
 }

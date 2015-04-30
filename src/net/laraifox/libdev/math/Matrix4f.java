@@ -1,7 +1,5 @@
 package net.laraifox.libdev.math;
 
-import net.laraifox.lib.math.Vector4f;
-
 public class Matrix4f {
 	private float[][] data;
 
@@ -347,29 +345,53 @@ public class Matrix4f {
 	public static Matrix4f Projection(float fov, float width, float height, float zNear, float zFar) {
 		Matrix4f result = new Matrix4f();
 
-		float aspectRatio = width / height;
-		float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2.0f));
-		float zRange = zNear - zFar;
+		 float aspect = width / height;
+		 float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2.0f));
+		 float zRange = zNear - zFar;
+		
+		 result.data[0][0] = 1.0f / (tanHalfFOV * aspect);
+		 result.data[0][1] = 0;
+		 result.data[0][2] = 0;
+		 result.data[0][3] = 0;
+		
+		 result.data[1][0] = 0;
+		 result.data[1][1] = 1.0f / tanHalfFOV;
+		 result.data[1][2] = 0;
+		 result.data[1][3] = 0;
+		
+		 result.data[2][0] = 0;
+		 result.data[2][1] = 0;
+		 result.data[2][2] = (-zNear - zFar) / zRange;
+		 result.data[2][3] = (2.0f * zFar * zNear) / zRange;
+		
+		 result.data[3][0] = 0;
+		 result.data[3][1] = 0;
+		 result.data[3][2] = 1;
+		 result.data[3][3] = 0;
 
-		result.data[0][0] = 1.0f / (tanHalfFOV * aspectRatio);
-		result.data[0][1] = 0;
-		result.data[0][2] = 0;
-		result.data[0][3] = 0;
-
-		result.data[1][0] = 0;
-		result.data[1][1] = 1.0f / tanHalfFOV;
-		result.data[1][2] = 0;
-		result.data[1][3] = 0;
-
-		result.data[2][0] = 0;
-		result.data[2][1] = 0;
-		result.data[2][2] = (-zNear - zFar) / zRange;
-		result.data[2][3] = (2.0f * zFar * zNear) / zRange;
-
-		result.data[3][0] = 0;
-		result.data[3][1] = 0;
-		result.data[3][2] = 1;
-		result.data[3][3] = 0;
+//		 float aspect = width / height;
+//		 float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2.0f));
+//		 float zRange = zNear - zFar;
+//		
+//		 result.data[0][0] = 1.0f / (tanHalfFOV * aspect);
+//		 result.data[0][1] = 0;
+//		 result.data[0][2] = 0;
+//		 result.data[0][3] = 0;
+//		
+//		 result.data[1][0] = 0;
+//		 result.data[1][1] = 1.0f / tanHalfFOV;
+//		 result.data[1][2] = 0;
+//		 result.data[1][3] = 0;
+//		
+//		 result.data[2][0] = 0;
+//		 result.data[2][1] = 0;
+//		 result.data[2][2] = (-zNear - zFar) / zRange;
+//		 result.data[2][3] = 1;
+//		
+//		 result.data[3][0] = 0;
+//		 result.data[3][1] = 0;
+//		 result.data[3][2] = (2.0f * zFar * zNear) / zRange;
+//		 result.data[3][3] = 0;
 
 		return result;
 	}
