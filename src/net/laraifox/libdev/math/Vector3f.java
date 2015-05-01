@@ -105,6 +105,10 @@ public class Vector3f {
 		return this;
 	}
 
+	public Vector3f project(Vector3f normal) {
+		return this.set(Vector3f.scale(normal, this.dot(normal)));
+	}
+
 	public Vector3f rotate(Vector3f v, float theta) {
 		float sineHalfTheta = (float) Math.sin(Math.toRadians(theta / 2.0f));
 		float cosineHalfTheta = (float) Math.cos(Math.toRadians(theta / 2.0f));

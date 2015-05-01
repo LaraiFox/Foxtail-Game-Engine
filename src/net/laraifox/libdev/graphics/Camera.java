@@ -31,17 +31,24 @@ public class Camera {
 	}
 
 	public void lookAt(Vector3f location, Vector3f up) {
-		Vector3f normDirection = Vector3f.subtract(transform.getTranslation(), location).normalize();
+		// Vector3f normDirection = Vector3f.subtract(transform.getTranslation(), location).normalize();
+		//
+		// Vector3f alpha = Vector3f.cross(normDirection, Vector3f.NegativeZ()).normalize();
+		// float phi = (float) Math.acos(Vector3f.dot(Vector3f.NegativeZ(), normDirection));
+		//
+		// Vector3f beta = Vector3f.cross(alpha, Vector3f.NegativeZ()).normalize();
+		// if (Vector3f.dot(beta, normDirection) < 0) {
+		// phi = -phi;
+		// }
+		//
+		// transform.setRotation(new Quaternion(alpha, phi));
 
-		Vector3f alpha = Vector3f.cross(normDirection, Vector3f.NegativeZ()).normalize();
-		float phi = (float) Math.acos(Vector3f.dot(Vector3f.NegativeZ(), normDirection));
+		Vector3f forwardVector = Vector3f.subtract(location, transform.getTranslation()).normalize();
+		float dot = Vector3f.dot(Vector3f.NegativeZ(), forwardVector);
 
-		Vector3f beta = Vector3f.cross(alpha, Vector3f.NegativeZ()).normalize();
-		if (Vector3f.dot(beta, normDirection) < 0) {
-			phi = -phi;
-		}
-
-		transform.setRotation(new Quaternion(alpha, phi));
+		float rotationAngle = (float)Math.acos(dot);
+		Vector3f rotationAxis = Vector3f.cross(Vector3f.NegativeZ(), forwardVector).normalize();
+		transform.setRotation(new Quaternion(rotationAxis, rotationAngle).normalize());
 	}
 
 	public Matrix4f getProjectionMatrix() {

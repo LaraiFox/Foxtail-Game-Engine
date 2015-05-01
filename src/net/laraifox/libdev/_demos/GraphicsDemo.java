@@ -34,7 +34,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 			0, 1, 2, //
 			0, 2, 3
 	};
-	//
+
 	// private float[] vertices = new float[] {
 	// 0.0f, 0.0f, -5.0f,
 	// 2.5f, 0.0f, -5.0f,
@@ -66,8 +66,10 @@ public class GraphicsDemo extends OpenGLDisplay {
 	private int vboID;
 	private int iboID;
 
+	private float t;
+
 	public GraphicsDemo() {
-		super("Quadtree Test Window");
+		super("Quadtree Test Window", 1024, 768);
 
 		// setOrthographicProjection(new OrthographicProjection(0.1f, 50f));
 	}
@@ -79,7 +81,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	@Override
 	protected void initializeVariables() {
-		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -1)), Matrix4f.Projection(70.0f, width, height, 0.1f, 100.0f));
+		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -50)), Matrix4f.Projection(70.0f, width, height, 0.1f, 500.0f));
 
 		try {
 			this.shader = new Shader("res/shaders/basic.vs", "res/shaders/basic.fs", true);
@@ -103,6 +105,8 @@ public class GraphicsDemo extends OpenGLDisplay {
 		this.vboID = GL15.glGenBuffers();
 		this.iboID = GL15.glGenBuffers();
 
+		this.t = 0.0f;
+
 		// glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
 		// glBufferData(GL_ARRAY_BUFFER, sizeof(Positions[0]) * Positions.size(), &Positions[0], GL_STATIC_DRAW);
 		// glEnableVertexAttribArray(0);
@@ -123,6 +127,8 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferUtils.createIntBuffer(indices, true), GL15.GL_STATIC_DRAW);
 
 		GL30.glBindVertexArray(0);
+		
+		shader.setUniform("fogColor", new Vector3f(0, 0, 0));
 
 	}
 
@@ -140,17 +146,21 @@ public class GraphicsDemo extends OpenGLDisplay {
 	@Override
 	protected void update(float delta) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			camera.translate(camera.getForward(), 1.2f);
+			camera.translate(camera.getForward(), 0.2f);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			camera.translate(camera.getForward(), -1.2f);
+			camera.translate(camera.getForward(), -0.2f);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			camera.translate(camera.getRight(), -1.2f);
+			camera.translate(camera.getRight(), -0.2f);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			camera.translate(camera.getRight(), 1.2f);
+			camera.translate(camera.getRight(), 0.2f);
 		}
+		
+		camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
+
+		t += 0.01f;
 
 		// camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
 
@@ -166,11 +176,13 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL11.glEnable(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
 		shader.bindShader();
-		shader.setUniform("ml_matrix", Matrix4f.Identity());
+		shader.setUniform("ml_matrix", Matrix4f.Identity());//Matrix4f.Translation((float) Math.sin(t), 0.0f, (float) Math.cos(t)));
 		// shader.setUniform("vw_matrix", Matrix4f.Identity());
-		shader.setUniform("vw_matrix", camera.getViewMatrix(), true);
+		shader.setUniform("vw_matrix", camera.getViewMatrix());
 		// shader.setUniform("pr_matrix", Matrix4f.Identity());
-		shader.setUniform("pr_matrix", camera.getProjectionMatrix(), true);
+		shader.setUniform("pr_matrix", camera.getProjectionMatrix());
+
+		// TODO: try un-transposing both view and projection matrices and un-reversing the matrix multiplication order in the vertex shader;
 
 		// shader.setUniform("lightPosition", new Vector2f(Mouse.getX(), Mouse.getY()));
 
