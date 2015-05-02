@@ -81,7 +81,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	@Override
 	protected void initializeVariables() {
-		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -50)), Matrix4f.Projection(70.0f, width, height, 0.1f, 500.0f));
+		this.camera = new Camera(new Transform3D(new Vector3f(0, 0, -1)), Matrix4f.Projection(70.0f, width, height, 0.1f, 500.0f));
 
 		try {
 			this.shader = new Shader("res/shaders/basic.vs", "res/shaders/basic.fs", true);
@@ -127,20 +127,27 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, BufferUtils.createIntBuffer(indices, true), GL15.GL_STATIC_DRAW);
 
 		GL30.glBindVertexArray(0);
-		
+
 		shader.setUniform("fogColor", new Vector3f(0, 0, 0));
 
 	}
 
 	@Override
 	protected void tick() {
+		System.err.println(Vector3f.orthonormalize(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()).toString());
+		System.err.println(Vector3f.cross(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()).toString());
+		System.err.println(Vector3f.cross(Vector3f.cross(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()), new Vector3f(0.0f, 0.3f, 0.4f)).toString());
+		
+		
+		System.err.println(Vector3f.cross(Vector3f.PositiveZ(), Vector3f.PositiveY()).toString());
+		
+		
 
-		System.out.println("     Shader:");
-		System.out.println(camera.getViewMatrix().transpose().multiply(camera.getProjectionMatrix().transpose()).toString());
-		System.out.println("");
-		System.out.println("     Camera:");
-		System.out.println(camera.getViewProjectionMatrix().transpose().toString());
-		// System.out.println(camera.getViewProjectionMatrix().multiply(new Vector4f(-0.5f, -0.5f, 0.5f, 1.0f)).toString());
+		// System.out.println("     Shader:");
+		// System.out.println(camera.getViewMatrix().transpose().multiply(camera.getProjectionMatrix().transpose()).toString());
+		// System.out.println("");
+		// System.out.println("     Camera:");
+		// System.out.println(camera.getViewProjectionMatrix().transpose().toString());
 	}
 
 	@Override
@@ -157,10 +164,21 @@ public class GraphicsDemo extends OpenGLDisplay {
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			camera.translate(camera.getRight(), 0.2f);
 		}
-		
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			camera.translate(camera.getUpward(), 0.2f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			camera.translate(camera.getUpward(), -0.2f);
+		}
+
 		camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
 
 		t += 0.01f;
+
+//		System.out.println(camera.getForward().toString());
+//		System.out.println(camera.getUpward().toString());
+//		System.out.println(camera.getRight().toString());
+//		System.out.println(" - - - - - - - - - - - - - - -");
 
 		// camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
 
@@ -176,7 +194,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL11.glEnable(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
 		shader.bindShader();
-		shader.setUniform("ml_matrix", Matrix4f.Identity());//Matrix4f.Translation((float) Math.sin(t), 0.0f, (float) Math.cos(t)));
+		shader.setUniform("ml_matrix", Matrix4f.Identity());// Matrix4f.Translation((float) Math.sin(t), 0.0f, (float) Math.cos(t)));
 		// shader.setUniform("vw_matrix", Matrix4f.Identity());
 		shader.setUniform("vw_matrix", camera.getViewMatrix());
 		// shader.setUniform("pr_matrix", Matrix4f.Identity());

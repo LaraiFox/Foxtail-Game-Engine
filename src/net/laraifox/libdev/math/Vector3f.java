@@ -159,6 +159,13 @@ public class Vector3f {
 		return this;
 	}
 
+	public Vector3f orthonormalize(Vector3f v) {
+		Vector3f n = Vector3f.cross(this, v);
+		this.set(Vector3f.cross(n, this).normalize());
+
+		return this;
+	}
+
 	public Vector3f absolute() {
 		this.x = Math.abs(this.x);
 		this.y = Math.abs(this.y);
@@ -394,6 +401,14 @@ public class Vector3f {
 		float y = u.y / length;
 		float z = u.z / length;
 		return new Vector3f(x, y, z);
+	}
+
+	public static Vector3f orthonormalize(Vector3f u, Vector3f v) {
+		Vector3f u_ = Vector3f.normalize(u);
+		Vector3f v_ = Vector3f.normalize(v);
+		Vector3f n = Vector3f.cross(u_, v_);
+
+		return Vector3f.cross(n, v_).normalize();
 	}
 
 	public static Vector3f absolute(Vector3f v) {
