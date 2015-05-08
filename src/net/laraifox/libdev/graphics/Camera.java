@@ -42,13 +42,46 @@ public class Camera {
 		// }
 		//
 		// transform.setRotation(new Quaternion(alpha, phi));
+		//
+		// /////////////////////////////////////////////////////////////////////////////////////////////////
+		//
 
-		Vector3f forwardVector = Vector3f.subtract(location, transform.getTranslation()).normalize();
-		float dot = Vector3f.dot(Vector3f.NegativeZ(), forwardVector);
+		Vector3f forwardVector = Vector3f.subtract(transform.getTranslation(), location);
+		Vector3f horizonalVector = Vector3f.normalize(new Vector3f(forwardVector.getX(), 0.0f, forwardVector.getZ()));
+		float dot = Vector3f.dot(Vector3f.NegativeZ(), horizonalVector);
 
-		float rotationAngle = (float)Math.acos(dot);
-		Vector3f rotationAxis = Vector3f.cross(Vector3f.NegativeZ(), forwardVector).normalize();
-		transform.setRotation(new Quaternion(rotationAxis, rotationAngle).normalize());
+		float rotationAngle = (float) Math.toDegrees(Math.acos(dot));
+		if (horizonalVector.getX() < 0.0f)
+			rotationAngle = -rotationAngle;
+
+		Vector3f rotationAxis = Vector3f.cross(new Vector3f(horizonalVector.getZ(), 0.0f, -horizonalVector.getX()), horizonalVector).normalize();
+		Quaternion yaw = new Quaternion(rotationAxis, rotationAngle).normalize();
+
+		if (forwardVector.getY() != 0.0f) {
+			float pitchDot = Vector3f.dot(yaw.getBackward(), Vector3f.normalize(forwardVector));
+
+			float pitchAngle = (float) Math.toDegrees(Math.acos(pitchDot));
+			if (forwardVector.getY() < 0.0f)
+				pitchAngle = -pitchAngle;
+
+			Quaternion pitch = new Quaternion(yaw.getRight(), pitchAngle).normalize();
+
+			transform.setRotation(pitch.multiply(yaw));
+		} else {
+			transform.setRotation(yaw);
+		}
+
+		// Vector3f forward = Vector3f.subtract(location, transform.getTranslation()).normalize();
+		// Vector3f upward = Vector3f.orthonormalize(up, forward); // Keeps up the same, make forward orthogonal to up
+		// Vector3f right = Vector3f.cross(up, forward);
+		//
+		// float w = (float) (Math.sqrt(1.0f + right.getX() + upward.getY() + forward.getZ()) * 0.5f);
+		// float w4_recip = 1.0f / (4.0f * w);
+		// float x = (forward.getY() - upward.getZ()) * w4_recip;
+		// float y = (right.getZ() - forward.getX()) * w4_recip;
+		// float z = (upward.getX() - right.getY()) * w4_recip;
+		//
+		// transform.setRotation(new Quaternion(x, y, z, w).conjugate().normalize());
 	}
 
 	public Matrix4f getProjectionMatrix() {
