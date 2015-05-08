@@ -337,3 +337,51 @@ __________________________________________
 		- function getLength() : float
 	}
 }
+#net.laraifox.math {
+	- class Vector3f {
+		- function add(Vector3f) : Vector3f
+		- function subtract(Vector3f) : Vector3f
+		- function multiply(Vector3f) : Vector3f
+		- function divide(Vector3f) : Vector3f
+		- function scale(float) : Vector3f
+		- function normalize() : Vector3f
+		- function length() : float
+		- function lengthSq() : float
+		- function distance(Vector3f) : float
+		- function distanceSq(Vector3f) : float
+		- function abs() : Vector3f
+		- function lerp(Vector3f, float) : Vector3f
+		- function slerp(Vector3f, float) : Vector3f
+		- function nlerp(Vector3f, float) : Vector3f
+		- function rotate(Vector3f, float) : Vector3f
+		- function min(Vector3f) : Vector3f
+		- function max(Vector3f) : Vector3f
+		- function dot(Vector3f) : float
+		- function cross(Vector3f) : Vector3f
+		- function reflect(Vector3f) : Vector3f
+		- function project(Vector3f) : Vector3f
+		- function angle(Vector3f) : float
+		- function moveTowards(Vector3f, float) : Vector3f
+		- function rotateTowards(Vector3f, float) : Vector3f
+		- function orthoNormalize(Vector3f) : Vector3f
+		- function clampLength(float) : Vector3f
+		- function negate() : Vector3f
+		- function floor() : Vector3f
+		- function round() : Vector3f
+		- function ceil() : Vector3f
+		
+		- function isNormalized() : boolean
+		- function equals(Vector3f) : boolean @Override
+		
+		- function toString() : String @Override
+		- function toArray() : float[]
+		
+		- function getX()
+		- function getY()
+		- function getZ()
+		- function getXY()
+		- function getYZ()
+		- function getZX()
+		
+	}
+}
