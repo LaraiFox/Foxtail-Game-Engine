@@ -660,7 +660,7 @@ public class Vector3f {
 	}
 
 	public Vector3f orthoNormalize(Vector3f normal) {
-		return this.subtract(Vector3f.projectToVector(normal, this)).normalize();
+		return projectToPlane(normal).normalize();
 	}
 
 	public Vector3f projectToVector(Vector3f vector) {
@@ -779,7 +779,7 @@ public class Vector3f {
 	}
 
 	public float length() {
-		return (float) Math.sqrt(x * x + y * y + z * z);
+		return (float) Math.sqrt(this.lengthSq());
 	}
 
 	public float lengthSq() {
@@ -789,9 +789,7 @@ public class Vector3f {
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof Vector3f) {
-			Vector3f vector = (Vector3f) object;
-			if (this.x == vector.getX() && this.y == vector.getY() && this.z == vector.getZ())
-				return true;
+			return this.isEqual((Vector3f) object);
 		}
 
 		return false;
@@ -823,7 +821,7 @@ public class Vector3f {
 	}
 
 	public Vector3f get() {
-		return new Vector3f(this.x, this.y, this.z);
+		return new Vector3f(this);
 	}
 
 	public float get(int i) {
@@ -919,10 +917,7 @@ public class Vector3f {
 	}
 
 	public Vector3f setLength(float length) {
-		float thisLength = this.length();
-		float scalar = length / thisLength;
-
-		return this.scale(scalar);
+		return this.scale(length / this.length());
 	}
 
 	public Vector3f setX(float x) {

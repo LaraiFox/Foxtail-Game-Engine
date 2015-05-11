@@ -339,6 +339,11 @@ __________________________________________
 }
 #net.laraifox.math {
 	- class Vector3f {
+		- variable x : float
+		- variable y : float
+		- variable z : float
+		
+		- constructor Vector3f()
 		- constructor Vector3f(float)
 		- constructor Vector3f(float, float, float)
 		- constructor Vector3f(Vector3f)
@@ -448,9 +453,9 @@ __________________________________________
 		
 		- static function abs(Vector3f) : Vector3f
 		- static function ceil(Vector3f) : Vector3f
-		- static function clamp(Vector3f, Vector3f) : Vector3f
-			- static func clamp(float, float, float, float, float, float) : Vector3f
-			- static func clamp(float, float) : Vector3f
+		- static function clamp(Vector3f, Vector3f, Vector3f) : Vector3f
+			- static func clamp(Vector3f, float, float, float, float, float, float) : Vector3f
+			- static func clamp(Vector3f, float, float) : Vector3f
 		- static function clampLength(Vector3f, float) : Vector3f
 		- static function cross(Vector3f, Vector3f) : Vector3f
 		- static function floor(Vector3f) : Vector3f
@@ -492,5 +497,103 @@ __________________________________________
 			- static func back(float) : Vector3f
 		- static function forward() : Vector3f
 			- static func forward(float) : Vector3f
+	}
+	- class Vector4f {
+		- variable x : float
+		- variable y : float
+		- variable z : float
+		- variable w : float
+		
+		- constructor Vector4f()
+		- constructor Vector4f(float)
+		- constructor Vector4f(float, float, float, float)
+		- constructor Vector4f(Vector3f, float)
+		- constructor Vector4f(Vector4f)
+		
+		- function add(Vector4f) : Vector4f
+			- func add(float, float, float, float) : Vector4f
+		- function subtract(Vector4f) : Vector4f
+			- func subtract(float, float, float, float) : Vector4f
+		- function multiply(Vector4f) : Vector4f
+			- func multiply(float, float, float, float) : Vector4f
+		- function divide(Vector4f) : Vector4f
+			- func divide(float, float, float, float) : Vector4f
+		
+		- function abs() : Vector4f
+		- function ceil() : Vector4f
+		- function clamp(Vector4f, Vector4f) : Vector4f
+			- func clamp(float, float, float, float, float, float, float, float) : Vector4f
+			- func clamp(float, float) : Vector4f
+		- function clampLength(float) : Vector4f
+		- function floor() : Vector4f
+		- function lerp(Vector4f, float) : Vector4f
+		- function max(Vector4f) : Vector4f
+			- func max(float, float, float) : Vector4f
+			- func max(float) : Vector4f
+		- function min(Vector4f) : Vector4f
+			- func min(float, float, float) : Vector4f
+			- func min(float) : Vector4f
+		- function moveTowards(Vector4f, float) : Vector4f
+		- function negate() : Vector4f
+		- function nlerp(Vector4f, float) : Vector4f
+		- function normalize() : Vector4f
+		- function orthoNormalize(Vector4f) : Vector4f
+		- function projectToVector(Vector4f) : Vector4f
+		- function projectToPlane(Vector4f) : Vector4f
+		- function round() : Vector4f
+		- function scale(float) : Vector4f
+		- function slerp(Vector4f, float) : Vector4f
+		
+		- function distance(Vector4f) : float
+		- function distanceSq(Vector4f) : float
+		- function dot(Vector4f) : float
+		- function length() : float
+		- function lengthSq() : float
+		
+		- function equals(Object) : boolean @Override
+		
+		- function isEqual(Vector4f) : boolean
+		- function isNormalized() : boolean
+		- function isZero() : boolean
+		
+		- function toArray() : float[]
+		- function toString() : String @Override
+		
+		- static function add(Vector4f, Vector4f) : Vector4f
+			- static func add(Vector4f, float, float, float) : Vector4f
+		- static function subtract(Vector4f, Vector4f) : Vector4f
+			- static func subtract(Vector4f, float, float, float) : Vector4f
+		- static function multiply(Vector4f, Vector4f) : Vector4f
+			- static func multiply(Vector4f, float, float, float) : Vector4f
+		- static function divide(Vector4f, Vector4f) : Vector4f
+			- static func divide(Vector4f, float, float, float) : Vector4f
+		
+		- static function abs(Vector4f) : Vector4f
+		- static function ceil(Vector4f) : Vector4f
+		- static function clamp(Vector4f, Vector4f, Vector4f) : Vector4f
+			- static func clamp(Vector4f, float, float, float, float, float, float) : Vector4f
+			- static func clamp(Vector4f, float, float) : Vector4f
+		- static function clampLength(Vector4f, float) : Vector4f
+		- static function floor(Vector4f) : Vector4f
+		- static function lerp(Vector4f, Vector4f, float) : Vector4f
+		- static function max(Vector4f, Vector4f) : Vector4f
+			- static func max(Vector4f, float, float, float) : Vector4f
+			- static func max(Vector4f, float) : Vector4f
+		- static function min(Vector4f, Vector4f) : Vector4f
+			- static func min(Vector4f, float, float, float) : Vector4f
+			- static func min(Vector4f, float) : Vector4f
+		- static function moveTowards(Vector4f, Vector4f, float) : Vector4f
+		- static function negate(Vector4f) : Vector4f
+		- static function nlerp(Vector4f, Vector4f, float) : Vector4f
+		- static function normalize(Vector4f) : Vector4f
+		- static function orthoNormalize(Vector4f, Vector4f) : Vector4f
+		- static function projectToVector(Vector4f, Vector4f) : Vector4f
+		- static function projectToPlane(Vector4f, Vector4f) : Vector4f
+		- static function round(Vector4f) : Vector4f
+		- static function scale(Vector4f, float) : Vector4f
+		- static function slerp(Vector4f, Vector4f, float) : Vector4f
+			
+		- static function zero() : Vector4f
+		- static function one() : Vector4f
 	}
 }

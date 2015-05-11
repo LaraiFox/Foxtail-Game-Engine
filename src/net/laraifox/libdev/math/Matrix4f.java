@@ -1,5 +1,7 @@
 package net.laraifox.libdev.math;
 
+import net.laraifox.libdev._old.Vector4f_old;
+
 public class Matrix4f {
 	private float[][] data;
 
@@ -32,8 +34,8 @@ public class Matrix4f {
 		return result;
 	}
 
-	public Vector4f multiply(Vector4f vector) {
-		Vector4f result = new Vector4f();
+	public Vector4f_old multiply(Vector4f_old vector) {
+		Vector4f_old result = new Vector4f_old();
 		result.setX(data[0][0] * vector.getX() + data[1][0] * vector.getY() + data[2][0] * vector.getZ() + data[3][0] * vector.getW());
 		result.setY(data[0][1] * vector.getX() + data[1][1] * vector.getY() + data[2][1] * vector.getZ() + data[3][1] * vector.getW());
 		result.setZ(data[0][2] * vector.getX() + data[1][2] * vector.getY() + data[2][2] * vector.getZ() + data[3][2] * vector.getW());

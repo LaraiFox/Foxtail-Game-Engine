@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.laraifox.libdev._old.Vector4f_old;
 import net.laraifox.libdev.math.Matrix4f;
 import net.laraifox.libdev.math.Vector2f;
 import net.laraifox.libdev.math.Vector3f;
-import net.laraifox.libdev.math.Vector4f;
 import net.laraifox.libdev.utils.BufferUtils;
 import net.laraifox.libdev.utils.FileUtils;
 
@@ -239,7 +239,7 @@ public class Shader {
 		GL20.glUniform3f(uniforms.get(name), value.getX(), value.getY(), value.getZ());
 	}
 
-	public void setUniform(String name, Vector4f value) {
+	public void setUniform(String name, Vector4f_old value) {
 		GL20.glUniform4f(uniforms.get(name), value.getX(), value.getY(), value.getZ(), value.getW());
 	}
 

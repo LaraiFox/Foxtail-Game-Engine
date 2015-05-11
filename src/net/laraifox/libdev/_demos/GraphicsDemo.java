@@ -134,14 +134,6 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	@Override
 	protected void tick() {
-		System.err.println(Vector3f.orthonormalize(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()).toString());
-		System.err.println(Vector3f.cross(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()).toString());
-		System.err.println(Vector3f.cross(Vector3f.cross(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.PositiveY()), new Vector3f(0.0f, 0.3f, 0.4f)).toString());
-		
-		
-		System.err.println(Vector3f.cross(Vector3f.PositiveZ(), Vector3f.PositiveY()).toString());
-		
-		
 
 		// System.out.println("     Shader:");
 		// System.out.println(camera.getViewMatrix().transpose().multiply(camera.getProjectionMatrix().transpose()).toString());
@@ -152,6 +144,9 @@ public class GraphicsDemo extends OpenGLDisplay {
 
 	@Override
 	protected void update(float delta) {
+		System.err.println(Vector3f.orthoNormalize(new Vector3f(0.0f, 0.3f, 0.4f), Vector3f.Up()).toString());
+		System.out.println("");
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			camera.translate(camera.getForward(), 0.2f);
 		}
@@ -171,14 +166,14 @@ public class GraphicsDemo extends OpenGLDisplay {
 			camera.translate(camera.getUpward(), -0.2f);
 		}
 
-		camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
+		camera.lookAt(Vector3f.Zero(), Vector3f.Up());
 
 		t += 0.01f;
 
-//		System.out.println(camera.getForward().toString());
-//		System.out.println(camera.getUpward().toString());
-//		System.out.println(camera.getRight().toString());
-//		System.out.println(" - - - - - - - - - - - - - - -");
+		// System.out.println(camera.getForward().toString());
+		// System.out.println(camera.getUpward().toString());
+		// System.out.println(camera.getRight().toString());
+		// System.out.println(" - - - - - - - - - - - - - - -");
 
 		// camera.lookAt(Vector3f.Zero(), Vector3f.PositiveY());
 

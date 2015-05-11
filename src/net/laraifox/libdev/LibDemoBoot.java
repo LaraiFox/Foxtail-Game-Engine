@@ -9,10 +9,10 @@ import org.lwjgl.LWJGLException;
 
 public class LibDemoBoot {
 	public static void main(String[] args) throws LWJGLException {
-		 System.out.println(new Vector3f_old(0.0000000000001f, 0.0f, 0.0f).length());
+//		 System.out.println(new Vector3f_old(0.0000000000001f, 0.0f, 0.0f).length());
 
-//		OpenGLDisplay display = new GraphicsDemo();
-//		display.initialize();
-//		display.start();
+		OpenGLDisplay display = new GraphicsDemo();
+		display.initialize();
+		display.start();
 	}
 }
