@@ -354,12 +354,19 @@ __________________________________________
 		
 		- function abs() : Vector3f
 		- function ceil() : Vector3f
+		- function clamp(Vector3f, Vector3f) : Vector3f
+			- func clamp(float, float, float, float, float, float) : Vector3f
+			- func clamp(float, float) : Vector3f
 		- function clampLength(float) : Vector3f
 		- function cross(Vector3f) : Vector3f
 		- function floor() : Vector3f
 		- function lerp(Vector3f, float) : Vector3f
 		- function max(Vector3f) : Vector3f
+			- func max(float, float, float) : Vector3f
+			- func max(float) : Vector3f
 		- function min(Vector3f) : Vector3f
+			- func min(float, float, float) : Vector3f
+			- func min(float) : Vector3f
 		- function moveTowards(Vector3f, float) : Vector3f
 		- function negate() : Vector3f
 		- function nlerp(Vector3f, float) : Vector3f
@@ -386,14 +393,15 @@ __________________________________________
 		
 		- function equals(Object) : boolean @Override
 		
-		- function isNormalized() : boolean
 		- function isEqual(Vector3f) : boolean
-		- function isClose(float) : boolean
+		- function isNormalized() : boolean
+		- function isZero() : boolean
 		
 		- function toArray() : float[]
 		- function toString() : String @Override
 		
 		- function get() : Vector3f
+			- func get(int) : float
 		- function getX() : float
 		- function getY() : float
 		- function getZ() : float
@@ -411,6 +419,7 @@ __________________________________________
 		- function getZYX() : Vector3f
 		
 		- function set(Vector3f) : Vector3f
+			- func set(int, float) : Vector3f
 		- function setLength(float) : Vector3f
 		- function setX(float) : Vector3f
 		- function setY(float) : Vector3f
@@ -439,12 +448,19 @@ __________________________________________
 		
 		- static function abs(Vector3f) : Vector3f
 		- static function ceil(Vector3f) : Vector3f
+		- static function clamp(Vector3f, Vector3f) : Vector3f
+			- static func clamp(float, float, float, float, float, float) : Vector3f
+			- static func clamp(float, float) : Vector3f
 		- static function clampLength(Vector3f, float) : Vector3f
 		- static function cross(Vector3f, Vector3f) : Vector3f
 		- static function floor(Vector3f) : Vector3f
 		- static function lerp(Vector3f, Vector3f, float) : Vector3f
 		- static function max(Vector3f, Vector3f) : Vector3f
+			- static func max(Vector3f, float, float, float) : Vector3f
+			- static func max(Vector3f, float) : Vector3f
 		- static function min(Vector3f, Vector3f) : Vector3f
+			- static func min(Vector3f, float, float, float) : Vector3f
+			- static func min(Vector3f, float) : Vector3f
 		- static function moveTowards(Vector3f, Vector3f, float) : Vector3f
 		- static function negate(Vector3f) : Vector3f
 		- static function nlerp(Vector3f, Vector3f, float) : Vector3f

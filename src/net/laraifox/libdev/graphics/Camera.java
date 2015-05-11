@@ -48,7 +48,7 @@ public class Camera {
 
 		Vector3f forwardVector = Vector3f.subtract(transform.getTranslation(), location);
 		Vector3f horizonalVector = Vector3f.normalize(new Vector3f(forwardVector.getX(), 0.0f, forwardVector.getZ()));
-		float dot = Vector3f.dot(Vector3f.NegativeZ(), horizonalVector);
+		float dot = Vector3f.dot(Vector3f.Back(), horizonalVector);
 
 		float rotationAngle = (float) Math.toDegrees(Math.acos(dot));
 		if (horizonalVector.getX() < 0.0f)
