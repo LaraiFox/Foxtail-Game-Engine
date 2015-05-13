@@ -338,6 +338,278 @@ __________________________________________
 	}
 }
 #net.laraifox.math {
+	- class MathHelper {
+		- static variable milliard : long
+		- static variable tau : double
+		
+		- static function clamp(int, int, int) : int
+			- static func clamp(long, long, long) : long
+			- static func clamp(float, float, float) : float
+			- static func clamp(double, double, double) : double
+		- static function lerp(int, int, float) : int
+			- static func lerp(long, long, float) : long
+			- static func lerp(float, float, float) : long
+			- static func lerp(double, double, float) : long
+	}
+	- class Matrix2f {
+		- variable matrix : float[][]
+	}
+	- class Matrix3f {
+		- variable matrix : float[][]
+	}
+	- class Matrix4f {
+		- variable matrix : float[][]
+		
+		- constructor Matrix4f()
+		- constructor Matrix4f(float)
+		- constructor Matrix4f(Matrix4f)
+
+		- function inverse() : Matrix4f
+		- function multiply(Matrix4f) : Matrix4f
+		- function multiply(Vector3f) : Vector4f
+		- function multiply(Vector4f) : Vector4f
+		- function transpose() : Matrix4f
+		
+		- function equals(Object) : boolean @Override
+		
+		- function isEqual(Matrix4f) : boolean
+		- function isIdentity() : boolean
+		
+		- function toString() : String @Override
+		
+		- function get() : Matrix4f
+		- function getData() : float[][]
+		- function getDataAt(int, int) : float
+		- function getColumn(int) : Vector4f
+		- function getRow(int) : Vector4f
+		
+		- function set(Matrix4f) : void
+		- function setData(float[][]) : void
+		- function setDataAt(int, int, float) : void
+		- function setColumn(int, Vector4f) : void
+		- function setRow(int, Vector4f) : void
+
+		- static function inverse(Matrix4f) : Matrix4f
+		- static function multiply(Matrix4f, Matrix4f) : Matrix4f
+		- static function multiply(Matrix4f, Vector3f) : Vector4f
+		- static function multiply(Matrix4f, Vector4f) : Vector4f
+		- static function transpose(Matrix4f) : Matrix4f
+		
+		- static function identity() : Matrix4f
+		- static function lookAt(Vector3f, Vector3f) : Matrix4f
+		- static function orthoProjection(float, float, float, float, float, float) : Matrix4f
+		- static function perspectiveProjection(float, float, float, float) : Matrix4f
+			- static func perspectiveProjection(float, float, float, float, float) : Matrix4f
+		- static function rotation(Quaternion) : Matrix4f
+			- static func rotation(Vector3f, Vector3f) : Matrix4f
+			- static func rotation(Vector3f, float) : Matrix4f
+			- static func rotation(Matrix3f) : Matrix4f
+		- static function scale(Vector3f) : Matrix4f
+		- static function transformation(Vector3f, Quaternion, Vector3f) : Matrix4f
+		- static function translation(Vector3f) : Matrix4f
+		- static function view(Camera) : Matrix4f
+			- static func view(Vector3f, Quaternion) : Matrix4f
+		- static function zero() : Matrix4f
+	}
+	- class Quaternion {
+		- variable w : float
+		- variable x : float
+		- variable y : float
+		- variable z : float
+		
+		- constructor Quaternion()
+		- constructor Quaternion(float, float, float, float)
+		- constructor Quaternion(Quaternion)
+		
+		- function conjugate() : Quaternion
+		- function inverse() : Quaternion
+		- function lerp(Quaternion, float) : Quaternion
+		- function multiply(Quaternion) : Quaternion
+		- function nlerp(Quaternion, float) : Quaternion
+		- function normalize() : Quaternion
+		- function rotateTowards(Quaternion, float) : Quaternion
+		- function slerp(Quaternion, float) : Quaternion
+		
+		- function angle(Quaternion) : float
+		- function dot(Quaternion) : float
+		- function length() : float
+		- function lengthSq() : float
+		
+		- function equals(Object) : boolean
+		
+		- function isEqual(Quaternion) : boolean
+		- function isIdentity() : boolean
+		- function isNormalized() : boolean
+		
+		- function toString() : String @Override
+		
+		- function get() : Quaternion
+		- function getW() : float
+		- function getX() : float
+		- function getY() : float
+		- function getZ() : float
+		- function getLeft() : Vector3f
+		- function getRight() : Vector3f
+		- function getDown() : Vector3f
+		- function getUp() : Vector3f
+		- function getBack() : Vector3f
+		- function getForward() : Vector3f
+		
+		- function set(Quaternion) : void
+		- function setW(float) : void
+		- function setX(float) : void
+		- function setY(float) : void
+		- function setZ(float) : void
+		
+		- static function conjugate(Quaternion) : Quaternion
+		- static function inverse(Quaternion) : Quaternion
+		- static function lerp(Quaternion, Quaternion, float) : Quaternion
+		- static function multiply(Quaternion, Quaternion) : Quaternion
+		- static function nlerp(Quaternion, Quaternion, float) : Quaternion
+		- static function normalize(Quaternion) : Quaternion
+		- static function rotateTowards(Quaternion, Quaternion, float) : Quaternion
+		- static function slerp(Quaternion, Quaternion, float) : Quaternion
+		
+		- static function angle(Quaternion, Quaternion) : float
+		- static function dot(Quaternion, Quaternion) : float
+		- static function length(Quaternion) : float
+		- static function lengthSq(Quaternion) : float
+		
+		- static function axisAngle(Vector3f, float) : Quaternion
+		- static function euler(float, float, float) : Quaternion
+		- static function identity() : Quaternion
+		- static function lookAt(Vector3f, Vector3f) : Quaternion
+		- static function fromToRotation(Vector3f, Vector3f) : Quaternion
+	}
+	- class Vector2f {
+		- variable x : float
+		- variable y : float
+		
+		- constructor Vector2f()
+		- constructor Vector2f(float)
+		- constructor Vector2f(float, float)
+		- constructor Vector2f(Vector2f)
+	
+		- function add(Vector2f) : Vector2f
+			- func add(float, float) : Vector2f
+		- function subtract(Vector2f) : Vector2f
+			- func subtract(float, float) : Vector2f
+		- function multiply(Vector2f) : Vector2f
+			- func multiply(float, float) : Vector2f
+		- function divide(Vector2f) : Vector2f
+			- func divide(float, float) : Vector2f
+		
+		- function abs() : Vector2f
+		- function ceil() : Vector2f
+		- function clamp(Vector2f, Vector2f) : Vector2f
+			- func clamp(float, float, float, float) : Vector2f
+			- func clamp(float, float) : Vector2f
+		- function clampLength(float) : Vector2f
+		- function cross() : Vector2f // Don't know what else to call this function although it isn't technically a cross product;
+		- function floor() : Vector2f
+		- function lerp(Vector2f, float) : Vector2f
+		- function max(Vector2f) : Vector2f
+			- func max(float, float) : Vector2f
+			- func max(float) : Vector2f
+		- function min(Vector2f) : Vector2f
+			- func min(float, float) : Vector2f
+			- func min(float) : Vector2f
+		- function moveTowards(Vector2f, float) : Vector2f
+		- function negate() : Vector2f
+		- function nlerp(Vector2f, float) : Vector2f
+		- function normalize() : Vector2f
+		- function orthoNormalize(Vector2f) : Vector2f
+		- function projectToVector(Vector2f) : Vector2f
+		- function projectToPlane(Vector2f) : Vector2f
+		- function reflect(Vector2f) : Vector2f
+		- function rotate(float) : Vector2f
+		- function rotateTowards(Vector2f, float) : Vector2f
+		- function round() : Vector2f
+		- function scale(float) : Vector2f
+		- function slerp(Vector2f, float) : Vector2f
+		- function transform(Matrix3f) : Vector2f
+		
+		- function angle(Vector2f) : float
+		- function distance(Vector2f) : float
+		- function distanceSq(Vector2f) : float
+		- function dot(Vector2f) : float
+		- function length() : float
+		- function lengthSq() : float
+		
+		- function equals(Object) : boolean @Override
+		
+		- function isEqual(Vector2f) : boolean
+		- function isNormalized() : boolean
+		- function isZero() : boolean
+		
+		- function toArray() : float[]
+		- function toString() : String @Override
+		
+		- function get() : Vector2f
+			- func get(int) : float
+		- function getX() : float
+		- function getY() : float
+		- function getXY() : Vector2f
+		- function getYX() : Vector2f
+		
+		- function set(Vector2f) : Vector2f
+			- func set(int, float) : Vector2f
+		- function setLength(float) : Vector2f
+		- function setX(float) : Vector2f
+		- function setY(float) : Vector2f
+		- function setXY(Vector2f) : Vector2f
+		- function setYX(Vector2f) : Vector2f
+		
+		- static function add(Vector2f, Vector2f) : Vector2f
+			- static func add(Vector2f, float, float, float) : Vector2f
+		- static function subtract(Vector2f, Vector2f) : Vector2f
+			- static func subtract(Vector2f, float, float, float) : Vector2f
+		- static function multiply(Vector2f, Vector2f) : Vector2f
+			- static func multiply(Vector2f, float, float, float) : Vector2f
+		- static function divide(Vector2f, Vector2f) : Vector2f
+			- static func divide(Vector2f, float, float, float) : Vector2f
+		
+		- static function abs(Vector2f) : Vector2f
+		- static function ceil(Vector2f) : Vector2f
+		- static function clamp(Vector2f, Vector2f, Vector2f) : Vector2f
+			- static func clamp(Vector2f, float, float, float, float) : Vector2f
+			- static func clamp(Vector2f, float, float) : Vector2f
+		- static function clampLength(Vector2f, float) : Vector2f
+		- static function cross(Vector2f, Vector2f) : Vector2f
+		- static function floor(Vector2f) : Vector2f
+		- static function lerp(Vector2f, Vector2f, float) : Vector2f
+		- static function max(Vector2f, Vector2f) : Vector2f
+			- static func max(Vector2f, float, float) : Vector2f
+			- static func max(Vector2f, float) : Vector2f
+		- static function min(Vector2f, Vector2f) : Vector2f
+			- static func min(Vector2f, float, float) : Vector2f
+			- static func min(Vector2f, float) : Vector2f
+		- static function moveTowards(Vector2f, Vector2f, float) : Vector2f
+		- static function negate(Vector2f) : Vector2f
+		- static function nlerp(Vector2f, Vector2f, float) : Vector2f
+		- static function normalize(Vector2f) : Vector2f
+		- static function orthoNormalize(Vector2f, Vector2f) : Vector2f
+		- static function projectToVector(Vector2f, Vector2f) : Vector2f
+		- static function projectToPlane(Vector2f, Vector2f) : Vector2f
+		- static function reflect(Vector2f, Vector2f) : Vector2f
+		- static function rotate(Vector2f, float) : Vector2f
+		- static function rotateTowards(Vector2f, Vector2f, float) : Vector2f
+		- static function round(Vector2f) : Vector2f
+		- static function scale(Vector2f, float) : Vector2f
+		- static function slerp(Vector2f, Vector2f, float) : Vector2f
+		- static function transform(Vector2f, Matrix3f) : Vector2f
+		
+		- static function zero() : Vector2f
+		- static function one() : Vector2f
+		- static function left() : Vector2f
+			- static func left(float) : Vector2f
+		- static function right() : Vector2f
+			- static func right(float) : Vector2f
+		- static function down() : Vector2f
+			- static func down(float) : Vector2f
+		- static function up() : Vector2f
+			- static func up(float) : Vector2f
+	}
 	- class Vector3f {
 		- variable x : float
 		- variable y : float
