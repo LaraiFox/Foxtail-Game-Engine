@@ -353,9 +353,92 @@ __________________________________________
 	}
 	- class Matrix2f {
 		- variable matrix : float[][]
+		
+		- constructor Matrix2f()
+		- constructor Matrix2f(float)
+		- constructor Matrix2f(Matrix2f)
+
+		- function inverse() : Matrix2f
+		- function multiply(Matrix2f) : Matrix2f
+		- function multiply(Vector2f) : Vector2f
+		- function transpose() : Matrix2f
+		
+		- function equals(Object) : boolean @Override
+		
+		- function isEqual(Matrix2f) : boolean
+		- function isIdentity() : boolean
+		
+		- function toString() : String @Override
+		
+		- function get() : Matrix2f
+		- function getData() : float[][]
+		- function getDataAt(int, int) : float
+		- function getColumn(int) : Vector2f
+		- function getRow(int) : Vector2f
+		
+		- function set(Matrix2f) : void
+		- function setData(float[][]) : void
+		- function setDataAt(int, int, float) : void
+		- function setColumn(int, Vector2f) : void
+		- function setRow(int, Vector2f) : void
+
+		- static function inverse(Matrix2f) : Matrix2f
+		- static function multiply(Matrix2f, Matrix2f) : Matrix2f
+		- static function multiply(Matrix2f, Vector2f) : Vector2f
+		- static function transpose(Matrix2f) : Matrix2f
+		
+		- static function identity() : Matrix2f
+		- static function rotation(float) : Matrix2f
+		- static function scale(Vector2f) : Matrix2f
+		- static function zero() : Matrix2f
 	}
 	- class Matrix3f {
 		- variable matrix : float[][]
+		
+		- constructor Matrix3f()
+		- constructor Matrix3f(float)
+		- constructor Matrix3f(Matrix3f)
+
+		- function inverse() : Matrix3f
+		- function multiply(Matrix3f) : Matrix3f
+		- function multiply(Vector2f) : Vector2f
+		- function multiply(Vector3f) : Vector3f
+		- function transpose() : Matrix3f
+		
+		- function equals(Object) : boolean @Override
+		
+		- function isEqual(Matrix3f) : boolean
+		- function isIdentity() : boolean
+		
+		- function toString() : String @Override
+		
+		- function get() : Matrix3f
+		- function getData() : float[][]
+		- function getDataAt(int, int) : float
+		- function getColumn(int) : Matrix3f
+		- function getRow(int) : Matrix3f
+		
+		- function set(Matrix3f) : void
+		- function setData(float[][]) : void
+		- function setDataAt(int, int, float) : void
+		- function setColumn(int, Vector2f) : void
+		- function setRow(int, Vector2f) : void
+
+		- static function inverse(Matrix3f) : Matrix3f
+		- static function multiply(Matrix3f, Matrix3f) : Matrix3f
+		- static function multiply(Matrix3f, Vector2f) : Vector2f
+		- static function multiply(Matrix3f, Vector3f) : Vector3f
+		- static function transpose(Matrix3f) : Matrix3f
+		
+		- static function identity() : Matrix3f
+		- static function rotation(float) : Matrix3f
+			- static func rotation(Matrix2f) : Matrix3f
+		- static function scale(Vector2f) : Matrix3f
+		- static function transformation(Vector2f, float, Vector2f) : Matrix3f
+		- static function translation(Vector2f) : Matrix3f
+		- static function view(Camera) : Matrix4f
+			- static func view(Vector2f, float) : Matrix4f
+		- static function zero() : Matrix3f
 	}
 	- class Matrix4f {
 		- variable matrix : float[][]
