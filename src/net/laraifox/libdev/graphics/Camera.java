@@ -1,5 +1,6 @@
 package net.laraifox.libdev.graphics;
 
+import net.laraifox.libdev.core.Transform3D;
 import net.laraifox.libdev.math.Matrix4f;
 import net.laraifox.libdev.math.Quaternion;
 import net.laraifox.libdev.math.Vector3f;

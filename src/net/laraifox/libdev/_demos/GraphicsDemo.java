@@ -1,11 +1,11 @@
 package net.laraifox.libdev._demos;
 
 import net.laraifox.lib.display.OpenGLDisplay;
+import net.laraifox.libdev.core.Transform3D;
 import net.laraifox.libdev.graphics.Camera;
 import net.laraifox.libdev.graphics.DataBuffer;
 import net.laraifox.libdev.graphics.IndexBuffer;
 import net.laraifox.libdev.graphics.Shader;
-import net.laraifox.libdev.graphics.Transform3D;
 import net.laraifox.libdev.graphics.VertexArray;
 import net.laraifox.libdev.graphics.VertexAttribPointer;
 import net.laraifox.libdev.math.Matrix4f;

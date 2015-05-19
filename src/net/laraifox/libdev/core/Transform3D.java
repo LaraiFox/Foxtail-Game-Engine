@@ -1,4 +1,4 @@
-package net.laraifox.libdev.graphics;
+package net.laraifox.libdev.core;
 
 import net.laraifox.libdev.math.Matrix4f;
 import net.laraifox.libdev.math.Quaternion;

@@ -2,7 +2,6 @@ package net.laraifox.libdev.core;
 
 import java.util.ArrayList;
 
-import net.laraifox.libdev.graphics.Transform3D;
 
 public class GameObject {
 	protected Transform3D transform;

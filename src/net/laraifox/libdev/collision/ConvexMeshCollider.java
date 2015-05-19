@@ -1,7 +1,7 @@
 package net.laraifox.libdev.collision;
 
 import net.laraifox.libdev.core.GameObject;
-import net.laraifox.libdev.graphics.Transform3D;
+import net.laraifox.libdev.core.Transform3D;
 import net.laraifox.libdev.interfaces.ICollidable;
 import net.laraifox.libdev.math.Vector3f;
 

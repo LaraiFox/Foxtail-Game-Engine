@@ -1,6 +1,6 @@
 package net.laraifox.libdev.geometry;
 
-import net.laraifox.libdev.graphics.Transform3D;
+import net.laraifox.libdev.core.Transform3D;
 import net.laraifox.libdev.graphics.Vertex3D;
 import net.laraifox.libdev.interfaces.IGeometricObject;
 import net.laraifox.libdev.math.Matrix4f;
