@@ -195,8 +195,6 @@ public class GraphicsDemo extends OpenGLDisplay {
 		// shader.setUniform("pr_matrix", Matrix4f.Identity());
 		shader.setUniform("pr_matrix", camera.getProjectionMatrix());
 
-		// TODO: try un-transposing both view and projection matrices and un-reversing the matrix multiplication order in the vertex shader;
-
 		// shader.setUniform("lightPosition", new Vector2f(Mouse.getX(), Mouse.getY()));
 
 		GL30.glBindVertexArray(vaoID);
