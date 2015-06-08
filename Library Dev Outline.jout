@@ -1,3 +1,45 @@
+#LIBRARY.OUTLINE {
+	- core {
+		- maths {
+			- matrices
+			o quaternions
+			o vectors
+		}
+		- transform
+	}
+	- graphics {
+		- camera
+		- geometric primitives {
+			- circle
+			- cube
+			- square
+			- sphere
+		}
+		- models
+		- renderer
+		- shaders {// Include a set of default shaders
+			- colorShader
+			- guiShader
+			- lightingShader
+			- textureShader
+		}
+		- sprites
+		o textures
+	}
+	- networking { // No idea how to do networking stuff yet! :c
+		- 
+	}
+	- physics {
+		- collision {
+			- colliders
+			- octrees
+			- quadtrees
+		}
+		- momentum // Not sure if angular momentum is different to linear momentum;
+		
+	}
+}
+
 #net.laraifox.collision {
 	- class AABBCollider [GameObject] : ICollidable {
 		- constructor AABBCollider(Transform3D, GameObject)
