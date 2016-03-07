@@ -76,7 +76,7 @@ public class Transform3D {
 	}
 
 	public void rotate(Vector3f axis, float theta) {
-		rotation = new Quaternion(axis, theta).multiply(rotation).normalize();
+		rotation = Quaternion.AxisAngle(axis, theta).multiply(rotation).normalize();
 	}
 
 	public void rotate(Quaternion quaternion) {
@@ -144,11 +144,11 @@ public class Transform3D {
 	}
 
 	public Vector3f getUpward() {
-		return rotation.getUpward();
+		return rotation.getUp();
 	}
 
 	public Vector3f getDownward() {
-		return rotation.getDownward();
+		return rotation.getDown();
 	}
 
 	public Vector3f getForward() {
@@ -156,7 +156,7 @@ public class Transform3D {
 	}
 
 	public Vector3f getBackward() {
-		return rotation.getBackward();
+		return rotation.getBack();
 	}
 
 	public void setRotation(float x, float y, float z, float w) {

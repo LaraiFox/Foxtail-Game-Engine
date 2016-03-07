@@ -26,14 +26,9 @@ public class Vector3f {
 	 */
 	public static final int COMPONENT_COUNT = 3;
 	/***
-	 * The size in bytes of each component in the vector.
-	 */
-	public static final int COMPONENT_SIZE = 4;
-
-	/***
 	 * The total size in bytes of all components in the vector.
 	 */
-	public static final int TOTAL_SIZE = COMPONENT_COUNT * COMPONENT_SIZE;
+	public static final int BYTE_COUNT = COMPONENT_COUNT * 4;
 
 	private float x, y, z;
 
@@ -68,6 +63,14 @@ public class Vector3f {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public Vector3f(Vector2f vector) {
+		this(vector.getX(), vector.getY(), 0.0f);
+	}
+	
+	public Vector3f(Vector2f vector, float z) {
+		this(vector.getX(), vector.getY(), z);
 	}
 
 	/**

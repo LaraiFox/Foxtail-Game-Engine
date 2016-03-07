@@ -56,16 +56,16 @@ public class Camera {
 			rotationAngle = -rotationAngle;
 
 		Vector3f rotationAxis = Vector3f.cross(new Vector3f(horizonalVector.getZ(), 0.0f, -horizonalVector.getX()), horizonalVector).normalize();
-		Quaternion yaw = new Quaternion(rotationAxis, rotationAngle).normalize();
+		Quaternion yaw = Quaternion.AxisAngle(rotationAxis, rotationAngle).normalize();
 
 		if (forwardVector.getY() != 0.0f) {
-			float pitchDot = Vector3f.dot(yaw.getBackward(), Vector3f.normalize(forwardVector));
+			float pitchDot = Vector3f.dot(yaw.getBack(), Vector3f.normalize(forwardVector));
 
 			float pitchAngle = (float) Math.toDegrees(Math.acos(pitchDot));
 			if (forwardVector.getY() < 0.0f)
 				pitchAngle = -pitchAngle;
 
-			Quaternion pitch = new Quaternion(yaw.getRight(), pitchAngle).normalize();
+			Quaternion pitch = Quaternion.AxisAngle(yaw.getRight(), pitchAngle).normalize();
 
 			transform.setRotation(pitch.multiply(yaw));
 		} else {
@@ -121,7 +121,7 @@ public class Camera {
 	}
 
 	public Vector3f getUpward() {
-		return transform.getRotation().getUpward();
+		return transform.getRotation().getUp();
 	}
 
 	public Vector3f getRight() {

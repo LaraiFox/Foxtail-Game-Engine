@@ -7,20 +7,39 @@ import net.laraifox.libdev.math.Vector3f;
 
 public class AABBCollider extends GameObject implements ICollidable {
 	public AABBCollider(float x, float y, float z, float width, float height, float length, GameObject parent) {
-		super(new Transform3D(new Vector3f(x, y, z), new Vector3f(width, height, length)), parent);
-	}
-
-	public AABBCollider(Transform3D transform, GameObject parent) {
-		super(transform, parent);
+		super(new Transform3D(new Vector3f(x, y, z), new Vector3f(width, height, length).abs()), parent);
 	}
 
 	public CollisionData collides(AABBCollider otherCollider) {
 		// TODO Auto-generated method stub
-		return null;
+
+		return this.collides(otherCollider, Vector3f.Zero(), Vector3f.Zero());
 	}
 
 	public CollisionData collides(AABBCollider otherCollider, Vector3f thisVelocity, Vector3f otherVelocity) {
-		// TODO Auto-generated method stub
+		Vector3f combinedVelocity = Vector3f.add(thisVelocity, otherVelocity);
+
+		if (combinedVelocity.length() == 0.0f) {
+			// The AABBColliders don't change position relative to each other so simple AABB collision checks are all that's needed
+
+			Vector3f thisHalfSize = Vector3f.scale(this.getTransform().getScale(), 0.5f);
+			Vector3f thisMin = Vector3f.subtract(this.getTransform().getTranslation(), thisHalfSize);
+			Vector3f thisMax = Vector3f.add(this.getTransform().getTranslation(), thisHalfSize);
+
+			Vector3f otherHalfSize = Vector3f.scale(otherCollider.getTransform().getScale(), 0.5f);
+			Vector3f otherMin = Vector3f.subtract(otherCollider.getTransform().getTranslation(), otherHalfSize);
+			Vector3f otherMax = Vector3f.add(otherCollider.getTransform().getTranslation(), otherHalfSize);
+
+			if (thisMax.getX() < otherMin.getX() || thisMax.getY() < otherMin.getY() || thisMax.getZ() < otherMin.getZ() || //
+				otherMax.getX() < thisMin.getX() || otherMax.getY() < thisMin.getY() || otherMax.getZ() < thisMin.getZ()) {
+				return new CollisionData(false, 1.0f, 0.0f, 0.0f, 0.0f, Vector3f.Zero());
+			} else {
+				return new CollisionData(true, 0.0f, 0.0f, 0.0f, 0.0f, Vector3f.Zero());
+			}
+		} else {
+			// The AABBColliders change position relative to each other so more complex collision checks with swept AABB are needed
+		}
+
 		return null;
 	}
 
