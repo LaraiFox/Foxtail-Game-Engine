@@ -23,14 +23,9 @@ public class Vector4f {
 	 */
 	public static final int COMPONENT_COUNT = 4;
 	/***
-	 * The size in bytes of each component in the vector.
-	 */
-	public static final int COMPONENT_SIZE = 4;
-
-	/***
 	 * The total size in bytes of all components in the vector.
 	 */
-	public static final int TOTAL_SIZE = COMPONENT_COUNT * COMPONENT_SIZE;
+	public static final int BYTE_COUNT = COMPONENT_COUNT * 4;
 
 	private float x, y, z, w;
 
@@ -66,6 +61,14 @@ public class Vector4f {
 		this.y = y;
 		this.z = z;
 		this.w = w;
+	}
+
+	public Vector4f(Vector3f vector) {
+		this(vector.getX(), vector.getY(), vector.getZ(), 0.0f);
+	}
+	
+	public Vector4f(Vector3f vector, float w) {
+		this(vector.getX(), vector.getY(), vector.getZ(), w);
 	}
 
 	/**
