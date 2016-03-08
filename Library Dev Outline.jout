@@ -1,4 +1,7 @@
 #LIBRARY.OUTLINE {
+	- audio {
+		
+	}
 	- core {
 		- maths {
 			- matrices
@@ -17,7 +20,7 @@
 		}
 		- models
 		- renderer
-		- shaders {// Include a set of default shaders
+		- shaders { // Include a set of default shaders
 			- colorShader
 			- guiShader
 			- lightingShader

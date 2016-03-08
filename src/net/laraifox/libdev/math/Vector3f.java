@@ -407,11 +407,9 @@ public class Vector3f {
 		return new Vector3f(vector).slerp(destination, value);
 	}
 
-	// public static Vector3f transform(Vector3f vector, Matrix4f matrix) {
-	// // TODO: Add functionality to this method;
-	//
-	// return new Vector3f(vector).transform(matrix);
-	// }
+	public static Vector3f transform(Vector3f vector, Matrix4f matrix) {
+		return new Vector3f(vector).transform(matrix);
+	}
 
 	public static float angle(Vector3f a, Vector3f b) {
 		return a.angle(b);
@@ -752,11 +750,9 @@ public class Vector3f {
 		return this.scale((float) Math.cos(theta)).add((RelativeVec.scale((float) Math.sin(theta))));
 	}
 
-	// public Vector3f transform(Matrix4f matrix) {
-	// // TODO: Add functionality to this method;
-	//
-	// return this;
-	// }
+	public Vector3f transform(Matrix4f matrix) {
+		return this.set(matrix.multiply(this));
+	}
 
 	public float angle(Vector3f vector) {
 		return (float) Math.toDegrees(Math.acos(this.dot(vector) / Vector3f.dot(Vector3f.normalize(this), Vector3f.normalize(vector))));
