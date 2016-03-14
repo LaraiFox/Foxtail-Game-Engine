@@ -6,7 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
-
 import net.laraifox.lib.math.MathHelper;
 import net.laraifox.libdev.interfaces.IGameManager;
 
@@ -29,7 +28,7 @@ public final class OpenGLDisplay {
 
 	protected PixelFormat pixelFormat;
 	protected ContextAttribs contextAttribs;
-
+	
 	private boolean initialized;
 	private boolean running;
 
