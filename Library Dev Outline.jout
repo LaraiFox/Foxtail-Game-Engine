@@ -170,6 +170,7 @@
 	- class GameScene {
 		- variable renderer : Renderer
 		- variable children : ArrayList<GameObject>
+		
 		- function addComponent(GameObject) : void
 		- function initialize() : void
 		- function update() : void
