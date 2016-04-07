@@ -211,12 +211,8 @@ public class Shader {
 		}
 	}
 
-	public void bindShader() {
+	public void bind() {
 		GL20.glUseProgram(id);
-	}
-
-	public void unbindShader() {
-		GL20.glUseProgram(0);
 	}
 
 	public void bindAttribLocation(int index, String name) {
@@ -249,5 +245,9 @@ public class Shader {
 
 	public void setUniform(String name, Matrix4f value, boolean transpose) {
 		GL20.glUniformMatrix4(uniforms.get(name), transpose, BufferUtils.createFloatBuffer(value, true));
+	}
+
+	public static void unbind() {
+		GL20.glUseProgram(0);
 	}
 }

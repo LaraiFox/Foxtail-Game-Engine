@@ -1,44 +1,48 @@
-#LIBRARY.OUTLINE {
-	- audio {
+#laraifox.foxtail.engine {
+	#laraifox.foxtail.audio {
+		- class AudioEngine {
+			
+		}
+	}
+	#laraifox.foxtail.core {
+		#net.laraifox.interfaces {}
+		#net.laraifox.math {}
+		#net.laraifox.utils {}
+	}
+	#laraifox.foxtail.network {
 		
 	}
-	- core {
-		- maths {
-			- matrices
-			o quaternions
-			o vectors
+	#laraifox.foxtail.physics {
+		- class PhysicsEngine {
+			
 		}
-		- transform
 	}
-	- graphics {
-		- camera
-		- geometric primitives {
-			- circle
-			- cube
-			- square
-			- sphere
+	#laraifox.foxtail.rendering {
+		- class RenderingEngine {
+			
 		}
-		- models
-		- renderer
-		- shaders { // Include a set of default shaders
-			- colorShader
-			- guiShader
-			- lightingShader
-			- textureShader
+		#laraifox.foxtail.rendering.geometry {
+			
 		}
-		- sprites
-		o textures
+		#laraifox.foxtail.rendering.models {
+				// 3D MODEL AND MESH CLASSES (PLUS LOADERS AND CONVERTERS?)
+		}
+		#laraifox.foxtail.rendering.shaders {
+				// BASIC 3D SHADERS
+			- extern VertexShader solidColorShader3D.vs
+			- extern FragmentShader solidColorShader3D.fs
+			- extern VertexShader textureShader3D.vs
+			- extern FragmentShader textureShader3D.fs
+			
+				// 3D LIGHTING SHADERS
+			- extern VertexShader cellShader3D.vs
+			- extern FragmentShader cellShader3D.fs
+			- extern VertexShader phongShader3D.vs
+			- extern FragmentShader phongShader3D.fs
+			
+		}
 	}
-	- networking { // No idea how to do networking stuff yet! :c
-		- 
-	}
-	- physics {
-		- collision {
-			- colliders
-			- octrees
-			- quadtrees
-		}
-		- momentum // Not sure if angular momentum is different to linear momentum;
+	#laraifox.foxtail.testing {
 		
 	}
 }

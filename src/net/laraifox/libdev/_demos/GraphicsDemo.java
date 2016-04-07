@@ -188,7 +188,7 @@ public class GraphicsDemo extends OpenGLDisplay {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
-		shader.bindShader();
+		shader.bind();
 		shader.setUniform("ml_matrix", Matrix4f.Identity());// Matrix4f.Translation((float) Math.sin(t), 0.0f, (float) Math.cos(t)));
 		// shader.setUniform("vw_matrix", Matrix4f.Identity());
 		shader.setUniform("vw_matrix", camera.getViewMatrix());
