@@ -1,12 +1,22 @@
 package net.laraifox.libdev;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.GL11;
+
+import net.laraifox.lib.display.OpenGLDisplay;
 import net.laraifox.libdev.math.Vector3f;
 
-import org.lwjgl.LWJGLException;
-
-public class LibDemoBoot {
+public class LibDemoBoot extends OpenGLDisplay {
+	Vector3f lerp = new Vector3f(-1, 0.5f, 0);
+	Vector3f nlerp = new Vector3f(-1, 0.25f, 0);
+	Vector3f slerp = new Vector3f(-1, 0, 0);
+	Vector3f movto = new Vector3f(-1, -0.5f, 0);
+	
 	public static void main(String[] args) throws LWJGLException {
-		testFunction();
+		LibDemoBoot test = new LibDemoBoot();
+		test.initialize();
+		test.start();
+		//		testFunction();
 
 		// OpenGLDisplay display = new GraphicsDemo();
 		// display.initialize();
@@ -50,5 +60,45 @@ public class LibDemoBoot {
 		System.out.println("");
 		System.out.println(longestLengthSqN + ", " + longestLengthSqP + "  Sq Lengths");
 		System.out.println(longestLengthN + ", " + longestLengthP + "  Lengths");
+	}
+
+	@Override
+	protected void cleanUp() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void initializeVariables() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void render() {
+//		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		
+		GL11.glPointSize(2.0f);
+
+		GL11.glBegin(GL11.GL_POINTS);
+		GL11.glVertex2f(lerp.getX(), lerp.getY());
+		GL11.glVertex2f(nlerp.getX(), nlerp.getY());
+		GL11.glVertex2f(slerp.getX(), slerp.getY());
+		GL11.glVertex2f(movto.getX(), movto.getY());
+		GL11.glEnd();
+	}
+
+	@Override
+	protected void tick() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void update(float arg0) {
+		lerp.lerp(new Vector3f(1, 0.5f, 0), 0.01f);
+		nlerp.nlerp(new Vector3f(1, 0.25f, 0), 0.01f);
+		slerp.slerp(new Vector3f(1, 0.0f, 0), 0.01f);
+		movto.moveTowards(new Vector3f(1, -0.5f, 0), 0.01f);
 	}
 }

@@ -8,6 +8,82 @@
 		}
 	}
 	#laraifox.foxtail.core {
+		- class GameObject {
+			- variable transform : Transform3D
+			- variable parent : GameObject
+			- variable children : ArrayList<GameObject>
+			- function addComponent(GameObject) : void
+			- function update() : void
+		}
+		- class GameScene {
+			- variable renderer : Renderer
+			- variable children : ArrayList<GameObject>
+			
+			- function addComponent(GameObject) : void
+			- function initialize() : void
+			- function update() : void
+			- function render() : void
+		}
+		- abstract class OpenGLDisplay {
+			- class UpdateThread [Thread] {
+				- constructor UpdateThread()
+				- constructor UpdateThread(String)
+				
+				- function run() : void @Override(Thread)
+			}
+			
+			- variable title : String
+			- variable width : float
+			- variable height : float
+			- variable fullscreen : boolean
+			- variable resizable : boolean
+			- variable vsync : boolean
+			- variable framerate : float
+			- variable tickrate : float
+			- variable updaterate : float
+			
+			- variable pixelFormat : PixelFormat
+			- variable contextAttribs : ContextAttribs
+			
+			- variable initialized : boolean
+			- variable running : boolean
+			
+			- variable updateThread : UpdateThread
+			- variable syncObjectNotified : boolean
+			- variable syncObject : Object
+			
+			- constructor OpenGLDisplay()
+			- constructor OpenGLDisplay(String)
+			- constructor OpenGLDisplay(String, float, float)
+			- constructor OpenGLDisplay(String, float, float, boolean)
+			- constructor OpenGLDisplay(String, float, float, boolean, boolean)
+			- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean)
+			- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean, float)
+			- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean, float, float)
+			
+			- function initialize() : void
+			- function start() : void
+			- function stop() : void
+			
+			- function renderLoop() : void
+			- function updateLoop() : void
+			
+			- abstract function onCleanUp() : void
+			- abstract function onInitialize() : void
+			- abstract function onRender() : void
+			- abstract function onTick() : void
+			- abstract function onUpdate(float) : void
+		}
+		- class Transform2D {
+			- variable position : Vector2f
+			- variable rotation : float
+			- variable scale : Vector2f
+		}
+		- class Transform3D {
+			- variable position : Vector3f
+			- variable rotation : Quaternion
+			- variable scale : Vector3f
+		}
 		#laraifox.foxtail.core.gui {
 			
 		}
@@ -779,6 +855,7 @@
 	}
 	#laraifox.foxtail.rendering {
 		- class RenderingEngine {
+			
 		}
 		#laraifox.foxtail.rendering.geometry {
 			// 
@@ -834,84 +911,6 @@
 	#end
 }
 
-#net.laraifox.core {
-	- class GameObject {
-		- variable transform : Transform3D
-		- variable parent : GameObject
-		- variable children : ArrayList<GameObject>
-		- function addComponent(GameObject) : void
-		- function update() : void
-	}
-	- class GameScene {
-		- variable renderer : Renderer
-		- variable children : ArrayList<GameObject>
-		
-		- function addComponent(GameObject) : void
-		- function initialize() : void
-		- function update() : void
-		- function render() : void
-	}
-	- abstract class OpenGLDisplay {
-		- class UpdateThread [Thread] {
-			- constructor UpdateThread()
-			- constructor UpdateThread(String)
-			
-			- function run() : void @Override(Thread)
-		}
-		
-		- variable title : String
-		- variable width : float
-		- variable height : float
-		- variable fullscreen : boolean
-		- variable resizable : boolean
-		- variable vsync : boolean
-		- variable framerate : float
-		- variable tickrate : float
-		- variable updaterate : float
-		
-		- variable pixelFormat : PixelFormat
-		- variable contextAttribs : ContextAttribs
-		
-		- variable initialized : boolean
-		- variable running : boolean
-		
-		- variable updateThread : UpdateThread
-		- variable syncObjectNotified : boolean
-		- variable syncObject : Object
-		
-		- constructor OpenGLDisplay()
-		- constructor OpenGLDisplay(String)
-		- constructor OpenGLDisplay(String, float, float)
-		- constructor OpenGLDisplay(String, float, float, boolean)
-		- constructor OpenGLDisplay(String, float, float, boolean, boolean)
-		- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean)
-		- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean, float)
-		- constructor OpenGLDisplay(String, float, float, boolean, boolean, boolean, float, float)
-		
-		- function initialize() : void
-		- function start() : void
-		- function stop() : void
-		
-		- function renderLoop() : void
-		- function updateLoop() : void
-		
-		- abstract function onCleanUp() : void
-		- abstract function onInitialize() : void
-		- abstract function onRender() : void
-		- abstract function onTick() : void
-		- abstract function onUpdate(float) : void
-	}
-	- class Transform2D {
-		- variable position : Vector2f
-		- variable rotation : float
-		- variable scale : Vector2f
-	}
-	- class Transform3D {
-		- variable position : Vector3f
-		- variable rotation : Quaternion
-		- variable scale : Vector3f
-	}
-}
 #net.laraifox.geometry {
 	- class GeomProjection1D {
 		- variable min : float
