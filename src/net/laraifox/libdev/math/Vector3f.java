@@ -28,7 +28,7 @@ public class Vector3f {
 	/***
 	 * The total size in bytes of all components in the vector.
 	 */
-	public static final int BYTE_COUNT = COMPONENT_COUNT * 4;
+	public static final int BYTE_COUNT = COMPONENT_COUNT * Float.BYTES;
 
 	private float x, y, z;
 
@@ -750,7 +750,7 @@ public class Vector3f {
 		float theta = (float) (Math.acos(dot) * value);
 		Vector3f RelativeVec = Vector3f.subtract(vector, Vector3f.scale(this, dot)).normalize();
 
-		return this.scale((float) Math.cos(theta)).add((RelativeVec.scale((float) Math.sin(theta))));
+		return this.scale((float) Math.cos(theta)).add(RelativeVec.scale((float) Math.sin(theta)));
 	}
 
 	public Vector3f transform(Matrix4f matrix) {

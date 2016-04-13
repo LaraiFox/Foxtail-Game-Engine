@@ -74,6 +74,19 @@
 			- abstract function onTick() : void
 			- abstract function onUpdate(float) : void
 		}
+		- class Profiler {
+			- static constant sample_map : HashMap<String, Long>
+			
+			- static variable logFile : String
+		
+			- static function beginSample(String) : void
+			- static function disable() : void
+			- static function enable() : void
+			- static function endSample() : void
+			
+			- static function getLogFile() : String
+			- static function setLogFile(String) : void
+		}
 		- class Transform2D {
 			- variable position : Vector2f
 			- variable rotation : float
@@ -216,13 +229,15 @@
 				
 				- function get() : Matrix4f
 				- function getData() : float[][]
-				- function getDataAt(int, int) : float
+				- function getData(int) : float
+				- function getData(int, int) : float
 				- function getColumn(int) : Vector4f
 				- function getRow(int) : Vector4f
 				
 				- function set(Matrix4f) : void
 				- function setData(float[][]) : void
-				- function setDataAt(int, int, float) : void
+				- function setData(int, float) : void
+				- function setData(int, int, float) : void
 				- function setColumn(int, Vector4f) : void
 				- function setRow(int, Vector4f) : void
 
@@ -234,23 +249,25 @@
 				
 				- static function identity() : Matrix4f
 				- static function lookAt(Vector3f, Vector3f) : Matrix4f
-				- static function orthoProjection(float, float, float, float, float, float) : Matrix4f
-				- static function perspectiveProjection(float, float, float, float) : Matrix4f
-					- static func perspectiveProjection(float, float, float, float, float) : Matrix4f
+				- static function projection(float, float, float, float) : Matrix4f
+					- static func projection(float, float, float, float, float) : Matrix4f
+					- static func projection(float, float, float, float, float, float) : Matrix4f
 				- static function rotation(Quaternion) : Matrix4f
 					- static func rotation(Vector3f, Vector3f) : Matrix4f
 					- static func rotation(Vector3f, float) : Matrix4f
 					- static func rotation(Matrix3f) : Matrix4f
 				- static function scale(Vector3f) : Matrix4f
 				- static function transformation(Vector3f, Quaternion, Vector3f) : Matrix4f
+					- static func transformation(Transform3D) : Matrix4f
 				- static function translation(Vector3f) : Matrix4f
 				- static function view(Camera) : Matrix4f
 					- static func view(Vector3f, Quaternion) : Matrix4f
+					- static func view(Vector3f, Vector3f) : Matrix4f
 				- static function zero() : Matrix4f
 			}
 			- class Quaternion {
-				- static constant componentCount : int(4)
-				- static constant byteCount : int(componentCount * 4)
+				- static constant component_count : int(4)
+				- static constant byte_count : int(component_count * 4)
 				
 				- variable w : float
 				- variable x : float
@@ -261,13 +278,20 @@
 				- constructor Quaternion(float, float, float, float)
 				- constructor Quaternion(Quaternion)
 				
+				- function add(Quaternion) : Quaternion
+				- function subtract(Quaternion) : Quaternion
+				- function multiply(Quaternion) : Quaternion
+					- func multiply(Vector3f) : Quaternion
+				- function divide(Quaternion) : Quaternion
+					- func divide(Vector3f) : Quaternion
+				
 				- function conjugate() : Quaternion
 				- function inverse() : Quaternion
 				- function lerp(Quaternion, float) : Quaternion
-				- function multiply(Quaternion) : Quaternion
 				- function nlerp(Quaternion, float) : Quaternion
 				- function normalize() : Quaternion
 				- function rotateTowards(Quaternion, float) : Quaternion
+				- function scale(float) : Quaternion
 				- function slerp(Quaternion, float) : Quaternion
 				
 				- function angle(Quaternion) : float
@@ -281,6 +305,7 @@
 				- function isIdentity() : boolean
 				- function isNormalized() : boolean
 				
+				- function toArray() : float[]
 				- function toString() : String @Override
 				
 				- function getLeft() : Vector3f

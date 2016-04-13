@@ -1,27 +1,29 @@
 package net.laraifox.libdev.math;
 
+// TODO: http://www.itu.dk/people/erikdam/DOWNLOAD/98-5.pdf
+
 public class Quaternion {
-	private float x, y, z, w;
+	private float w, x, y, z;
 
 	public Quaternion() {
+		this.w = 1.0f;
 		this.x = 0.0f;
 		this.y = 0.0f;
 		this.z = 0.0f;
-		this.w = 1.0f;
 	}
 
-	public Quaternion(float x, float y, float z, float w) {
+	public Quaternion(float w, float x, float y, float z) {
+		this.w = w;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.w = w;
 	}
 
 	public Quaternion(Quaternion quaternion) {
+		this.w = quaternion.getW();
 		this.x = quaternion.getX();
 		this.y = quaternion.getY();
 		this.z = quaternion.getZ();
-		this.w = quaternion.getW();
 	}
 
 	public static Quaternion AxisAngle(Vector3f axis, float angle) {
@@ -29,7 +31,7 @@ public class Quaternion {
 		float sine = (float) Math.sin(halfAngle);
 		float cosine = (float) Math.cos(halfAngle);
 
-		return new Quaternion(axis.getX() * sine, axis.getY() * sine, axis.getZ() * sine, cosine);
+		return new Quaternion(cosine, axis.getX() * sine, axis.getY() * sine, axis.getZ() * sine);
 	}
 
 	public static Quaternion Euler(float x, float y, float z) {
@@ -41,11 +43,35 @@ public class Quaternion {
 	}
 
 	public static Quaternion Identity() {
-		return new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+		return new Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	public static Quaternion LookAt(Vector3f forward, Vector3f up) {
 		return Quaternion.Identity();
+	}
+
+	public static Quaternion add(Quaternion left, Quaternion right) {
+		return new Quaternion(left).add(right);
+	}
+
+	public static Quaternion subtract(Quaternion left, Quaternion right) {
+		return new Quaternion(left).subtract(right);
+	}
+
+	public static Quaternion multiply(Quaternion left, Quaternion right) {
+		return new Quaternion(left).multiply(right);
+	}
+
+	public static Quaternion multiply(Quaternion left, Vector3f right) {
+		return new Quaternion(left).multiply(right);
+	}
+
+	public static Quaternion divide(Quaternion left, Quaternion right) {
+		return new Quaternion(left).divide(right);
+	}
+
+	public static Quaternion divide(Quaternion left, Vector3f right) {
+		return new Quaternion(left).divide(right);
 	}
 
 	public static Quaternion conjugate(Quaternion quaternion) {
@@ -60,14 +86,6 @@ public class Quaternion {
 		return new Quaternion(quaternion).lerp(destination, value);
 	}
 
-	public static Quaternion multiply(Quaternion left, Quaternion right) {
-		return new Quaternion(left).multiply(right);
-	}
-
-	public static Quaternion multiply(Quaternion quaternion, Vector3f vector) {
-		return new Quaternion(quaternion).multiply(vector);
-	}
-
 	public static Quaternion nlerp(Quaternion quaternion, Quaternion destination, float value) {
 		return new Quaternion(quaternion).nlerp(destination, value);
 	}
@@ -78,6 +96,10 @@ public class Quaternion {
 
 	public static Quaternion rotateTowards(Quaternion quaternion, Quaternion destination, float value) {
 		return new Quaternion(quaternion).rotateTowards(destination, value);
+	}
+
+	public static Quaternion scale(Quaternion quaternion, float scalar) {
+		return new Quaternion(quaternion).scale(scalar);
 	}
 
 	public static Quaternion slerp(Quaternion quaternion, Quaternion destination, float value) {
@@ -100,23 +122,11 @@ public class Quaternion {
 		return new Quaternion(quaternion).lengthSq();
 	}
 
-	public Quaternion conjugate() {
-		this.x = -this.x;
-		this.y = -this.y;
-		this.z = -this.z;
-
+	public Quaternion add(Quaternion quaternion) {
 		return this;
 	}
 
-	public Quaternion inverse() {
-		// TODO: Add functionality to this method!
-
-		return this;
-	}
-
-	public Quaternion lerp(Quaternion destination, float value) {
-		// TODO: Add functionality to this method!
-
+	public Quaternion subtract(Quaternion quaternion) {
 		return this;
 	}
 
@@ -142,10 +152,38 @@ public class Quaternion {
 		return new Quaternion(x_, y_, z_, w_);
 	}
 
-	public Quaternion nlerp(Quaternion destination, float value) {
+	public Quaternion divide(Quaternion quaternion) {
+		// TODO: Make this method modify the current object!
+
+		return this;
+	}
+
+	public Quaternion divide(Vector3f vector) {
+		// TODO: Make this method modify the current object!
+
+		return this;
+	}
+
+	public Quaternion conjugate() {
+		this.x = -this.x;
+		this.y = -this.y;
+		this.z = -this.z;
+
+		return this;
+	}
+
+	public Quaternion inverse() {
 		// TODO: Add functionality to this method!
 
 		return this;
+	}
+
+	public Quaternion lerp(Quaternion quaternion, float value) {
+		return this.add(Quaternion.subtract(quaternion, this).scale(value));
+	}
+
+	public Quaternion nlerp(Quaternion quaternion, float value) {
+		return this.lerp(quaternion, value).normalize();
 	}
 
 	public Quaternion normalize() {
@@ -165,6 +203,10 @@ public class Quaternion {
 		return this;
 	}
 
+	public Quaternion scale(float scalar) {
+		return this;
+	}
+
 	public Quaternion slerp(Quaternion destination, float value) {
 		// TODO: Add functionality to this method!
 
@@ -178,9 +220,7 @@ public class Quaternion {
 	}
 
 	public float dot(Quaternion quaternion) {
-		// TODO: Add functionality to this method!
-
-		return 0.0f;
+		return this.w * quaternion.w + this.x * quaternion.x + this.y * quaternion.y + this.z * quaternion.z;
 	}
 
 	public float length() {
@@ -188,7 +228,7 @@ public class Quaternion {
 	}
 
 	public float lengthSq() {
-		return x * x + y * y + z * z + w * w;
+		return w * w + x * x + y * y + z * z;
 	}
 
 	@Override
@@ -201,7 +241,7 @@ public class Quaternion {
 	}
 
 	public boolean isEqual(Quaternion other) {
-		return (this.x == other.getX() && this.y == other.getY() && this.z == other.getZ() && this.w == other.getW());
+		return (this.w == other.getW() && this.x == other.getX() && this.y == other.getY() && this.z == other.getZ());
 	}
 
 	public boolean isIdentity() {
@@ -216,7 +256,7 @@ public class Quaternion {
 
 	@Override
 	public String toString() {
-		return new String("[" + x + ", " + y + ", " + z + ", " + w + "]");
+		return new String("{" + w + ", [" + x + ", " + y + ", " + z + "] }");
 	}
 
 	public Matrix4f toRotationMatrix() {
@@ -255,6 +295,10 @@ public class Quaternion {
 		return new Quaternion(this);
 	}
 
+	public float getW() {
+		return w;
+	}
+
 	public float getX() {
 		return x;
 	}
@@ -267,15 +311,15 @@ public class Quaternion {
 		return z;
 	}
 
-	public float getW() {
-		return w;
-	}
-
 	public void set(Quaternion quaternion) {
+		this.w = quaternion.getW();
 		this.x = quaternion.getX();
 		this.y = quaternion.getY();
 		this.z = quaternion.getZ();
-		this.w = quaternion.getW();
+	}
+
+	public void setW(float w) {
+		this.w = w;
 	}
 
 	public void setX(float x) {
@@ -288,9 +332,5 @@ public class Quaternion {
 
 	public void setZ(float z) {
 		this.z = z;
-	}
-
-	public void setW(float w) {
-		this.w = w;
 	}
 }

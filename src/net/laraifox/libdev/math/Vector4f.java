@@ -25,7 +25,7 @@ public class Vector4f {
 	/***
 	 * The total size in bytes of all components in the vector.
 	 */
-	public static final int BYTE_COUNT = COMPONENT_COUNT * 4;
+	public static final int BYTE_COUNT = COMPONENT_COUNT * Float.BYTES;
 
 	private float x, y, z, w;
 
@@ -36,26 +36,10 @@ public class Vector4f {
 		this(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 
-	/**
-	 * Constructs a new vector setting all components to value.
-	 * 
-	 * @param value
-	 *            - the value used to set all components of the vector
-	 */
 	public Vector4f(float value) {
 		this(value, value, value, value);
 	}
 
-	/**
-	 * Constructs a new vector and sets the X, Y and Z components to the X, Y and Z parameters respectively.
-	 * 
-	 * @param x
-	 *            - the X coordinate of the vector
-	 * @param y
-	 *            - the Y coordinate of the vector
-	 * @param z
-	 *            - the Z coordinate of the vector
-	 */
 	public Vector4f(float x, float y, float z, float w) {
 		this.x = x;
 		this.y = y;
