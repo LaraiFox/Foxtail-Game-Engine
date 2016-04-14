@@ -907,13 +907,17 @@
 			// 3D MODEL AND MESH CLASSES (PLUS LOADERS AND CONVERTERS?)
 		}
 		#laraifox.foxtail.rendering.shaders {
-				// BASIC 3D SHADERS
-			- extern VertexShader "SolidColorShader.vs"
-			- extern FragmentShader "SolidColorShader.fs"
-			- extern VertexShader "TextureShader.vs"
-			- extern FragmentShader "TextureShader.fs"
+				// UNLIT 3D SHADERS
+			- extern VertexShader "SolidColorUnlitShader.vs"
+			- extern FragmentShader "SolidColorUnlitShader.fs"
+			- extern VertexShader "TextureUnlitShader.vs"
+			- extern FragmentShader "TextureUnlitShader.fs"
 			
 				// 3D LIGHTING SHADERS
+			- extern VertexShader "SolidColorLitShader.vs"
+			- extern FragmentShader "SolidColorLitShader.fs"
+			- extern VertexShader "TextureLitShader.vs"
+			- extern FragmentShader "TextureLitShader.fs"
 			- extern VertexShader "CellShader.vs"
 			- extern FragmentShader "CellShader.fs"
 			- extern VertexShader "PhongShader.vs"
