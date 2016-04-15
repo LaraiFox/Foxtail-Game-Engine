@@ -1,5 +1,7 @@
 #version 330
 
+#pragma include "includes/StandardVariables.h"
+
 uniform mat4 FOXTAIL_MODEL_MATRIX;
 uniform mat4 FOXTAIL_VIEW_MATRIX;
 uniform mat4 FOXTAIL_MVP_MATRIX;

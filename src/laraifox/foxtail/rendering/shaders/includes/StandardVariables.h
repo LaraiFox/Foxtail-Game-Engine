@@ -1,0 +1,8 @@
+uniform mat4 FOXTAIL_MODEL_MATRIX;
+uniform mat4 FOXTAIL_VIEW_MATRIX;
+uniform mat4 FOXTAIL_PROJECTION_MATRIX;
+
+uniform mat4 FOXTAIL_MV_MATRIX;
+uniform mat4 FOXTAIL_VP_MATRIX;
+
+uniform mat4 FOXTAIL_MVP_MATRIX;

@@ -2,7 +2,7 @@
 
 uniform vec4 in_Color;
 uniform float in_Reflectivity;
-uniform float in_ShineDamper;
+uniform float in_Roughness;
 
 in vec3 pass_ToCameraVector;
 in vec3 pass_ToLightVector;
@@ -17,7 +17,7 @@ void main() {
 	
 	float diffuseLight = max(dot(pass_VertexNormal, pass_ToLightVector), AMBIENT_LIGHT_LEVEL);
 	float specularLight = max(dot(reflectedLightDirection, pass_ToCameraVector), 0.0);
-	specularLight = pow(specularLight, in_ShineDamper);
+	specularLight = pow(specularLight, in_Roughness);
 	vec3 specularColor = specularLight * in_Reflectivity * vec3(1.0, 0.5, 0.5);
 
 	out_FragColor = in_Color * diffuseLight + vec4(specularColor, 1.0);

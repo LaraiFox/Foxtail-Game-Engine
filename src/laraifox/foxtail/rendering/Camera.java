@@ -120,7 +120,7 @@ public class Camera {
 		return transform.getRotation().getForward();
 	}
 
-	public Vector3f getUpward() {
+	public Vector3f getUp() {
 		return transform.getRotation().getUp();
 	}
 

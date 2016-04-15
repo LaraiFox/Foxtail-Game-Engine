@@ -1,20 +1,21 @@
-package laraifox.foxtail.testing;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+package laraifox.foxtail.testing.shadersandbox;
 
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.OpenGLDisplay;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
+import laraifox.foxtail.core.math.Quaternion;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.core.math.Vector4f;
 import laraifox.foxtail.rendering.Camera;
 import laraifox.foxtail.rendering.Shader;
 import laraifox.foxtail.rendering.models.Model;
 import laraifox.foxtail.rendering.models.ModelLoader;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 public class ShaderSandbox implements IGameManager {
 	private static final float[] CUBE_VERTICES = new float[] {
@@ -59,24 +60,32 @@ public class ShaderSandbox implements IGameManager {
 	};
 
 	private Camera camera;
-	private Model model_Cube;
-	private Model model_Dragon;
+	private Entity entity_Cube1;
+	private Entity entity_Bunny;
+	private Entity entity_Cube2;
+	private Entity entity_Dragon;
+
 	private Shader shader;
-	private Transform3D tranform_Cube;
-	private Transform3D tranform_Dragon;
 	private Vector3f velocity_Camera;
 
 	public void initialize(OpenGLDisplay display) {
 		this.camera = new Camera(new Transform3D(new Vector3f(0.0f, 1.0f, 0.0f)), Matrix4f.Projection(70.0f, Display.getWidth(), Display.getHeight(), 0.01f, 100.0f));
-		this.model_Cube = new Model(CUBE_VERTICES, CUBE_INDICES);
-		this.model_Dragon = ModelLoader.loadMesh("res/models/StanfordBunny.obj");
+
+		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.2f, 5.0f), ModelLoader.loadMesh("res/models/StanfordBunny.obj"), new Transform3D(
+				new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+
+		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.2f, 5.0f), ModelLoader.loadMesh("res/models/StanfordDragon.obj"), new Transform3D(
+				new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+
 		try {
 			this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/SolidColorLitShader.vs", "src/laraifox/foxtail/rendering/shaders/SolidColorLitShader.fs", false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.tranform_Cube = new Transform3D(new Vector3f(0.0f, -0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f));
-		this.tranform_Dragon = new Transform3D(new Vector3f(0.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f));
 		this.velocity_Camera = new Vector3f();
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -112,48 +121,45 @@ public class ShaderSandbox implements IGameManager {
 		final float ACCELERATION_SPEED = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 0.005f : 0.002f;
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && !Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			velocity_Camera.add(0.0f, -ACCELERATION_SPEED, 0.0f);
+			velocity_Camera.add(Vector3f.Up().scale(-ACCELERATION_SPEED));
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-			velocity_Camera.add(0.0f, ACCELERATION_SPEED, 0.0f);
+			velocity_Camera.add(Vector3f.Up().scale(ACCELERATION_SPEED));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A) && !Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			velocity_Camera.add(-ACCELERATION_SPEED, 0.0f, 0.0f);
+			velocity_Camera.add(camera.getRight().scale(-ACCELERATION_SPEED));
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D) && !Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			velocity_Camera.add(ACCELERATION_SPEED, 0.0f, 0.0f);
+			velocity_Camera.add(camera.getRight().scale(ACCELERATION_SPEED));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S) && !Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			velocity_Camera.add(0.0f, 0.0f, -ACCELERATION_SPEED);
+			velocity_Camera.add(camera.getForward().projectToPlane(Vector3f.Up()).normalize().scale(-ACCELERATION_SPEED));
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_W) && !Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			velocity_Camera.add(0.0f, 0.0f, ACCELERATION_SPEED);
+			velocity_Camera.add(camera.getForward().projectToPlane(Vector3f.Up()).normalize().scale(ACCELERATION_SPEED));
 		}
 
-		camera.translate(camera.getRight(), velocity_Camera.getX());
+		camera.translate(Vector3f.Right(), velocity_Camera.getX());
 		camera.translate(Vector3f.Up(), velocity_Camera.getY());
-		camera.translate(camera.getForward().projectToPlane(Vector3f.Up()).normalize(), velocity_Camera.getZ());
+		camera.translate(Vector3f.Forward(), velocity_Camera.getZ());
 		velocity_Camera.scale(0.95f);
 
-		tranform_Dragon.rotate(Vector3f.Up(), -delta * 0.5f);
+		entity_Cube1.update(delta);
+		entity_Bunny.update(delta);
+		entity_Cube2.update(delta);
+		entity_Dragon.update(delta);
 	}
 
 	public void render() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
 		shader.bind();
 
-		shader.setUniform("FOXTAIL_MODEL_MATRIX", tranform_Cube.getTransformationMatrix());
 		shader.setUniform("FOXTAIL_VIEW_MATRIX", camera.getViewMatrix());
-		shader.setUniform("FOXTAIL_MVP_MATRIX", camera.getViewProjectionMatrix().multiply(tranform_Cube.getTransformationMatrix()));
-		shader.setUniform("in_Color", new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
-		shader.setUniform("in_Reflectivity", 0.5f);
-		shader.setUniform("in_ShineDamper", 2.0f);
-		model_Cube.render();
 
-		shader.setUniform("FOXTAIL_MODEL_MATRIX", tranform_Dragon.getTransformationMatrix());
-		shader.setUniform("FOXTAIL_VIEW_MATRIX", camera.getViewMatrix());
-		shader.setUniform("FOXTAIL_MVP_MATRIX", camera.getViewProjectionMatrix().multiply(tranform_Dragon.getTransformationMatrix()));
-		shader.setUniform("in_Color", new Vector4f(1.0f, 0.64f, 0.39f, 1.0f));
-		shader.setUniform("in_Reflectivity", 0.2f);
-		shader.setUniform("in_ShineDamper", 10.0f);
-		model_Dragon.render();
+		Matrix4f viewProjectionMatrix = camera.getViewProjectionMatrix();
+
+		entity_Cube1.render(viewProjectionMatrix, shader);
+		entity_Bunny.render(viewProjectionMatrix, shader);
+
+		entity_Cube2.render(viewProjectionMatrix, shader);
+		entity_Dragon.render(viewProjectionMatrix, shader);
 	}
-
 }
