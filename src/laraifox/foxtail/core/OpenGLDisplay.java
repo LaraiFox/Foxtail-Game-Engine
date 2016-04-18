@@ -18,7 +18,7 @@ public final class OpenGLDisplay {
 	private static final boolean DEFAULT_VSYNC = false;
 	private static final int DEFAULT_FRAMERATE = 60;
 	private static final int DEFAULT_UPDATERATE = 60;
-	private static final int DEFAULT_TICKRATE = 1;
+	private static final int DEFAULT_TICKRATE = 2;
 
 	protected String title;
 	protected int width, height;

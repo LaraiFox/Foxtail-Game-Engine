@@ -691,7 +691,7 @@ public class Vector3f {
 		float rz = z * sineHalfTheta;
 		float rw = cosineHalfTheta;
 
-		Quaternion rotation = new Quaternion(rx, ry, rz, rw);
+		Quaternion rotation = new Quaternion(rw, rx, ry, rz);
 		Quaternion conjugate = Quaternion.conjugate(rotation);
 		Quaternion result = rotation.multiply(this).multiply(conjugate);
 

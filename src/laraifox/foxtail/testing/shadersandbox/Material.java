@@ -19,13 +19,13 @@ public class Material {
 	// private float opacityMask;
 	
 	private Vector4f color;
-	private float reflectivity;
-	private float roughness;
+	private float specularIntensity;
+	private float specularExponent;
 
-	public Material(Vector4f color, float reflectivity, float roughness) {
+	public Material(Vector4f color, float specularIntensity, float specularExponent) {
 		this.color = color;
-		this.reflectivity = reflectivity;
-		this.roughness = roughness;
+		this.specularIntensity = specularIntensity;
+		this.specularExponent = specularExponent;
 	}
 
 	public Vector4f getColor() {
@@ -36,19 +36,19 @@ public class Material {
 		this.color = color;
 	}
 
-	public float getReflectivity() {
-		return reflectivity;
+	public float getSpecularIntensity() {
+		return specularIntensity;
 	}
 
-	public void setReflectivity(float reflectivity) {
-		this.reflectivity = reflectivity;
+	public void setSpecularIntensity(float specularIntensity) {
+		this.specularIntensity = specularIntensity;
 	}
 
-	public float getRoughness() {
-		return roughness;
+	public float getSpecularExponent() {
+		return specularExponent;
 	}
 
-	public void setRoughness(float roughness) {
-		this.roughness = roughness;
+	public void setSpecularExponent(float specularExponent) {
+		this.specularExponent = specularExponent;
 	}
 }

@@ -28,10 +28,14 @@ public class Entity {
 		shader.setUniform("FOXTAIL_MODEL_MATRIX", transform.getTransformationMatrix());
 		shader.setUniform("FOXTAIL_MVP_MATRIX", viewProjectionMatrix.multiply(transform.getTransformationMatrix()));
 
-		shader.setUniform("in_Color", material.getColor());
-		shader.setUniform("in_Reflectivity", material.getReflectivity());
-		shader.setUniform("in_Roughness", material.getRoughness());
+		shader.setUniform("in_BaseColor", material.getColor());
+		shader.setUniform("in_SpecularIntensity", material.getSpecularIntensity());
+		shader.setUniform("in_SpecularExponent", material.getSpecularExponent());
 
 		model.render();
+	}
+
+	public void setMomentum(Transform3D momentum) {
+		this.momentum = momentum;
 	}
 }

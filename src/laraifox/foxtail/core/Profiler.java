@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Profiler {
 	private static class ProfilerSample {
-		private Long startTime, endTime;
+		private long startTime, endTime;
 
 		public ProfilerSample() {
 			this.startTime = System.nanoTime();
@@ -44,6 +44,15 @@ public class Profiler {
 		ProfilerSample sample = SAMPLE_MAP.get(name);
 		if (sample != null) {
 			sample.setEndTime();
+		}
+	}
+	
+	public static void logSamples() {
+		Logger.setMessageProvider("Sampler");
+		for (String sampleName : SAMPLE_MAP.keySet()) {
+			ProfilerSample sample = SAMPLE_MAP.get(sampleName);
+			
+			Logger.log("<" + sampleName + "> " + (int)(sample.getLength() / 1.0f)/1.0f, Logger.MESSAGE_LEVEL_DEBUG);
 		}
 	}
 

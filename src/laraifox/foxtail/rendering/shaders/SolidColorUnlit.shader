@@ -1,9 +1,9 @@
-Shader "Error" {
+Shader "LegacySolidColorUnlit" {
 	GLSLVertex
 		#version 330
-
-		#pragma include "/includes/StandardVariables.h"
 		
+		#pragma include "/includes/StandardVariables.h"
+
 		uniform mat4 FOXTAIL_MVP_MATRIX;
 
 		layout(location = 0) in vec3 in_VertexPosition;
@@ -14,12 +14,14 @@ Shader "Error" {
 	GLSLFragment
 		#version 330
 
+		uniform vec4 in_BaseColor;
+
 		layout(location = 0) out vec4 out_FragColor;
 
 		void main() {
-			out_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-		}	
+			out_FragColor = in_BaseColor;
+		}
 	GLSLEnd
 }
 	
-Fallback "legacy/Error.shader"
+Fallback "/legacy/SolidColorUnlit.shader"
