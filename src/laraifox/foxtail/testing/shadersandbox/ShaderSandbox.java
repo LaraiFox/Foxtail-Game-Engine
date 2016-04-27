@@ -2,11 +2,6 @@ package laraifox.foxtail.testing.shadersandbox;
 
 import java.io.IOException;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.OpenGLDisplay;
@@ -21,6 +16,11 @@ import laraifox.foxtail.rendering.Shader;
 import laraifox.foxtail.rendering.Texture2D;
 import laraifox.foxtail.rendering.models.Model;
 import laraifox.foxtail.rendering.models.ModelLoader;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 public class ShaderSandbox implements IGameManager {
 	private OpenGLDisplay display;
@@ -74,7 +74,7 @@ public class ShaderSandbox implements IGameManager {
 	private Entity entity_Dragon;
 
 	private Entity entity_Cube3;
-	
+
 	private Entity entity_Torus;
 	private Entity entity_SphereOrbitter1;
 	private Entity entity_SphereOrbitter2;
@@ -93,30 +93,32 @@ public class ShaderSandbox implements IGameManager {
 		final int SPHERE_COUNT = 10;
 		this.entity_Spheres = new Entity[SPHERE_COUNT * 2];
 		for (int i = 0; i < SPHERE_COUNT; i++) {
-			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -4.0f), new Vector3f(0.75f)), new Transform3D());
-			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -4.0f), new Vector3f(0.75f)), new Transform3D());
+			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f),
+					ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -4.0f), new Vector3f(0.75f)),
+					new Transform3D());
+			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f),
+					ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -4.0f), new Vector3f(0.75f)),
+					new Transform3D());
 		}
-		
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordBunny.obj"), new Transform3D(new Vector3f(-4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordDragon.obj"), new Transform3D(new Vector3f(4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
-		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f, -10.0f, 0.0f),
-				new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordBunny.obj"), new Transform3D(
+				new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordDragon.obj"), new Transform3D(
+				new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
-		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ModelLoader.loadMesh("res/models/Torus.obj"),
-				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(1.5f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), 2)));
-		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
-		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-				new Transform3D(new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
+		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f,
+				-10.0f, 0.0f), new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
+
+		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ModelLoader.loadMesh("res/models/Torus.obj"), new Transform3D(new Vector3f(
+				15.0f, 0.0f, 0.0f), new Vector3f(1.5f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), 2)));
+		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(
+				new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
+		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(
+				new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
 
 		try {
 			this.texture_Checker = Texture2D.getTextureFrom("res/textures/GreyscaleCheckerBoard.png");
@@ -140,18 +142,16 @@ public class ShaderSandbox implements IGameManager {
 	}
 
 	public void tick() {
-		Profiler.endSample("Second");
-		Profiler.logSamples();
-		Profiler.beginSample("Second");
 		Display.setTitle(display.getTitle() + " | FPS: " + display.getCurrentFPS());
 
+		Profiler.logSamples();
 		Logger.flush();
 	}
 
 	public void update(float delta) {
-		Profiler.logSamples();
-		Profiler.beginSample("Frametime");
-		
+		Profiler.beginSample("Frame Time");
+		Profiler.beginSample("Update Time");
+
 		if (Mouse.isGrabbed()) {
 			camera.rotate(Vector3f.Up(), Mouse.getDX() * 0.28f);
 			camera.rotate(camera.getRight(), -Mouse.getDY() * 0.28f);
@@ -198,20 +198,24 @@ public class ShaderSandbox implements IGameManager {
 		entity_Cube2.update(delta);
 		entity_Dragon.update(delta);
 
-		entity_Torus.setMomentum(new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), (float)Math.cos(Math.toRadians(angle * 2.0f)) * -1.8f)));
+		entity_Torus.setMomentum(new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle * 2.0f)) * -1.8f)));
 		entity_SphereOrbitter1.setMomentum(new Transform3D(Vector3f.Up().rotate(Vector3f.Right(), angle * 2).scale(0.1f)));
 		entity_SphereOrbitter2.setMomentum(new Transform3D(Vector3f.Down().rotate(Vector3f.Right(), -angle * 2).scale(0.1f)));
 
 		entity_Torus.update(delta);
 		entity_SphereOrbitter1.update(delta);
 		entity_SphereOrbitter2.update(delta);
+		
+		Profiler.endSample("Update Time");
 	}
 
 	private int angle = 0;
 
 	public void render() {
+		Profiler.beginSample("Render Time");
+
 		angle--;
-		
+
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		texture_Checker.bind();
@@ -223,36 +227,36 @@ public class ShaderSandbox implements IGameManager {
 		shader.setUniform("in_AmbientLight", new Vector3f(1.0f, 0.95f, 0.8f).scale(0.1f));
 
 		Vector3f direction = Vector3f.Down().rotate(Vector3f.Right(), -45.0f).rotate(Vector3f.Up(), (angle / 10.0f));
-		
+
 		shader.setUniform("in_DirectionalLight.base.color", new Vector3f(1.0f, 0.975f, 0.95f));
 		shader.setUniform("in_DirectionalLight.base.intensity", 1.2f);
 		shader.setUniform("in_DirectionalLight.direction", direction);
 
-		shader.setUniform("in_PointLights0.base.color", new Vector3f(0.0f, 0.1f, 1.0f));
-		shader.setUniform("in_PointLights0.base.intensity", 5.0f);
-		shader.setUniform("in_PointLights0.attenuation.constant", 0.0f);
-		shader.setUniform("in_PointLights0.attenuation.linear", 0.0f);
-		shader.setUniform("in_PointLights0.attenuation.exponent", 1.0f);
-		shader.setUniform("in_PointLights0.position", new Vector3f(15.0f, 3.0f, 0.0f));
-		shader.setUniform("in_PointLights0].range", 10.0f);
+		shader.setUniform("in_PointLights[0].base.color", new Vector3f(0.0f, 0.1f, 1.0f));
+		shader.setUniform("in_PointLights[0].base.intensity", 5.0f);
+		shader.setUniform("in_PointLights[0].attenuation.constant", 0.0f);
+		shader.setUniform("in_PointLights[0].attenuation.linear", 0.0f);
+		shader.setUniform("in_PointLights[0].attenuation.exponent", 1.0f);
+		shader.setUniform("in_PointLights[0].position", new Vector3f(15.0f, 3.0f, 0.0f));
+		shader.setUniform("in_PointLights[0].range", 10.0f);
 
-		shader.setUniform("in_PointLights1.base.color", new Vector3f(0.0f, 0.1f, 1.0f));
-		shader.setUniform("in_PointLights1.base.intensity", 5.0f);
-		shader.setUniform("in_PointLights1.attenuation.constant", 0.0f);
-		shader.setUniform("in_PointLights1.attenuation.linear", 0.0f);
-		shader.setUniform("in_PointLights1.attenuation.exponent", 1.0f);
-		shader.setUniform("in_PointLights1.position", new Vector3f(15.0f, -3.0f, 0.0f));
-		shader.setUniform("in_PointLights1.range", 10.0f);
+		shader.setUniform("in_PointLights[1].base.color", new Vector3f(0.0f, 0.1f, 1.0f));
+		shader.setUniform("in_PointLights[1].base.intensity", 5.0f);
+		shader.setUniform("in_PointLights[1].attenuation.constant", 0.0f);
+		shader.setUniform("in_PointLights[1].attenuation.linear", 0.0f);
+		shader.setUniform("in_PointLights[1].attenuation.exponent", 1.0f);
+		shader.setUniform("in_PointLights[1].position", new Vector3f(15.0f, -3.0f, 0.0f));
+		shader.setUniform("in_PointLights[1].range", 10.0f);
 
-		shader.setUniform("in_PointLights2.base.color", new Vector3f(0.0f, 1.0f, 0.0f));
-		shader.setUniform("in_PointLights2.base.intensity", 5.0f);
-		shader.setUniform("in_PointLights2.attenuation.constant", 0.0f);
-		shader.setUniform("in_PointLights2.attenuation.linear", 0.0f);
-		shader.setUniform("in_PointLights2.attenuation.exponent", 1.0f);
-		shader.setUniform("in_PointLights2.position", new Vector3f(0.0f, 0.0f, 5.0f + (float)Math.sin(Math.toRadians(angle)) * 4.0f));
-		shader.setUniform("in_PointLights2.range", 10.0f);
-		
-//		tempPointLight1.base.color = vec3(0.0, 0.1, 1.0);
+		shader.setUniform("in_PointLights[2].base.color", new Vector3f(0.0f, 1.0f, 0.0f));
+		shader.setUniform("in_PointLights[2].base.intensity", 5.0f);
+		shader.setUniform("in_PointLights[2].attenuation.constant", 0.0f);
+		shader.setUniform("in_PointLights[2].attenuation.linear", 0.0f);
+		shader.setUniform("in_PointLights[2].attenuation.exponent", 1.0f);
+		shader.setUniform("in_PointLights[2].position", new Vector3f(0.0f, 0.0f, 5.0f + (float) Math.sin(Math.toRadians(angle)) * 4.0f));
+		shader.setUniform("in_PointLights[2].range", 10.0f);
+
+		// tempPointLight1.base.color = vec3(0.0, 0.1, 1.0);
 		// tempPointLight1.base.intensity = 1.5;
 		// tempPointLight1.attenuation.constant = 0.0;
 		// tempPointLight1.attenuation.linear = 0.0;
@@ -268,7 +272,7 @@ public class ShaderSandbox implements IGameManager {
 
 		entity_Cube1.render(viewProjectionMatrix, shader);
 		entity_Cube2.render(viewProjectionMatrix, shader);
-		
+
 		entity_Torus.render(viewProjectionMatrix, shader);
 		entity_SphereOrbitter1.render(viewProjectionMatrix, shader);
 		entity_SphereOrbitter2.render(viewProjectionMatrix, shader);
@@ -280,6 +284,7 @@ public class ShaderSandbox implements IGameManager {
 
 		entity_Cube3.render(viewProjectionMatrix, shader);
 
-		Profiler.endSample("Frametime");
+		Profiler.endSample("Render Time");
+		Profiler.endSample("Frame Time");
 	}
 }

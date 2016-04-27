@@ -60,14 +60,7 @@ Shader "TexturedPhong" {
 		#define MAX_POINT_LIGHTS 8
 		
 		uniform DirectionalLight in_DirectionalLight;
-		uniform PointLight in_PointLights0;
-		uniform PointLight in_PointLights1;
-		uniform PointLight in_PointLights2;
-		uniform PointLight in_PointLights3;
-		uniform PointLight in_PointLights4;
-		uniform PointLight in_PointLights5;
-		uniform PointLight in_PointLights6;
-		uniform PointLight in_PointLights7;
+		uniform PointLight[MAX_POINT_LIGHTS] in_PointLights;
 		
 		uniform vec4 in_BaseColor;
 		uniform vec3 in_AmbientLight;
@@ -165,27 +158,11 @@ Shader "TexturedPhong" {
 			totalLight += calculateDirectionalLight(in_DirectionalLight, surfaceNormal);
 			// totalLight += calculatePointLight(tempPointLight1, surfaceNormal);
 			// totalLight += calculatePointLight(tempPointLight2, surfaceNormal);
-			if (in_PointLights0.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights0, surfaceNormal);
-			if (in_PointLights1.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights1, surfaceNormal);
-			if (in_PointLights2.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights2, surfaceNormal);
-			if (in_PointLights3.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights3, surfaceNormal);
-			if (in_PointLights4.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights4, surfaceNormal);
-			if (in_PointLights5.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights5, surfaceNormal);
-			if (in_PointLights6.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights6, surfaceNormal);
-			if (in_PointLights7.base.intensity > 0.0) 
-				totalLight += calculatePointLight(in_PointLights7, surfaceNormal);
-			// for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
-				// if (in_PointLights[i].base.intensity > 0.0) {
-					// totalLight += calculatePointLight(in_PointLights[i], surfaceNormal);
-				// }
-			// }
+			for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+				if (in_PointLights[i].base.intensity > 0.0) {
+					totalLight += calculatePointLight(in_PointLights[i], surfaceNormal);
+				}
+			}
 			totalLight = max(totalLight, vec4(in_AmbientLight, 1.0));
 			
 			out_FragColor = color * totalLight;

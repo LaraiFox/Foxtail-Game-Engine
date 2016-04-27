@@ -52,7 +52,7 @@ public class Profiler {
 		for (String sampleName : SAMPLE_MAP.keySet()) {
 			ProfilerSample sample = SAMPLE_MAP.get(sampleName);
 			
-			Logger.log("<" + sampleName + "> " + (int)(sample.getLength() / 1.0f)/1.0f, Logger.MESSAGE_LEVEL_DEBUG);
+			Logger.log("<" + sampleName + "> " + (int)(sample.getLength() / 10000.0f)/100.0f + " ms", Logger.MESSAGE_LEVEL_DEBUG);
 		}
 	}
 
