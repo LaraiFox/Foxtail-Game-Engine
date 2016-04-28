@@ -8,48 +8,103 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GLContext;
 
+import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.math.Vector4f;
 
 public class Texture2D {
+	private static final TextureFilter DEFAULT_TEXTURE_FILTER = new TextureFilter();
 	private static final int BYTES_PER_PIXEL = 4;
 
 	private int textureID;
 	private int width, height;
 
-	public Texture2D() {
-		this(0, 0, 0);
+	public Texture2D(String filepath) {
+		this(filepath, DEFAULT_TEXTURE_FILTER);
+	}
+
+	public Texture2D(String filepath, TextureFilter textureFilter) {
+		try {
+			BufferedImage image = ImageIO.read(new File(filepath));
+
+			this.width = image.getWidth();
+			this.height = image.getHeight();
+
+			int[] pixels = new int[image.getWidth() * image.getHeight()];
+			image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+
+			ByteBuffer buffer = BufferUtils.createByteBuffer(pixels.length * BYTES_PER_PIXEL);
+			for (int i = 0; i < pixels.length; i++) {
+				int pixel = pixels[i];
+
+				buffer.put((byte) ((pixel >> 16) & 0xFF));
+				buffer.put((byte) ((pixel >> 8) & 0xFF));
+				buffer.put((byte) (pixel & 0xFF));
+				buffer.put((byte) ((pixel >> 24) & 0xFF));
+			}
+
+			buffer.flip();
+
+			this.textureID = GL11.glGenTextures();
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
+			textureFilter.apply(GL11.GL_TEXTURE_2D);
+			if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+				textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR || //
+				textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+				textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR) {
+				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+				if (textureFilter.getGLTextureAnisotropy() > 0.0f) {
+					if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
+						float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
+						float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+						if (textureAnisotropy > supportedAnisotropy) {
+							Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+							textureAnisotropy = supportedAnisotropy;
+						}
+
+						GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, textureAnisotropy);
+					} else {
+						Logger.log("Anisotropic filtering is not supported!", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 	public Texture2D(Vector4f color) {
-		int[] pixels = new int[] {
-				(int) (color.getX() * 0xFF), (int) (color.getY() * 0xFF), (int) (color.getZ() * 0xFF), (int) (color.getW() * 0xFF)
-		};
-
-		this.textureID = Texture2D.generateTexture(Texture2D.createByteBuffer(pixels), 1, 1);
 		this.width = 1;
 		this.height = 1;
-	}
 
-	public Texture2D(Texture2D texture) {
-		this(texture.getTextureID(), texture.getWidth(), texture.getHeight());
-	}
+		ByteBuffer buffer = BufferUtils.createByteBuffer(BYTES_PER_PIXEL);
+		buffer.put((byte) (color.getX() * 0xFF));
+		buffer.put((byte) (color.getY() * 0xFF));
+		buffer.put((byte) (color.getZ() * 0xFF));
+		buffer.put((byte) (color.getW() * 0xFF));
 
-	private Texture2D(int textureID, int width, int height) {
-		this.textureID = textureID;
-		this.width = width;
-		this.height = height;
+		buffer.flip();
+
+		this.textureID = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+		DEFAULT_TEXTURE_FILTER.apply(GL11.GL_TEXTURE_2D);
 	}
 
 	public void bind() {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-	}
-
-	public void setTexture(Texture2D texture) {
-		this.textureID = texture.getTextureID();
-		this.width = texture.getWidth();
-		this.height = texture.getHeight();
 	}
 
 	public int getTextureID() {
@@ -62,55 +117,5 @@ public class Texture2D {
 
 	public int getHeight() {
 		return height;
-	}
-
-	public static Texture2D getTextureFrom(BufferedImage image) {
-		int[] pixels = new int[image.getWidth() * image.getHeight()];
-		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-		return Texture2D.getTextureFrom(pixels, image.getWidth(), image.getHeight());
-	}
-
-	public static Texture2D getTextureFrom(ByteBuffer buffer, int width, int height) {
-		return new Texture2D(Texture2D.generateTexture(buffer, width, height), width, height);
-	}
-
-	public static Texture2D getTextureFrom(int[] pixels, int width, int height) {
-		return Texture2D.getTextureFrom(Texture2D.createByteBuffer(pixels), width, height);
-	}
-
-	public static Texture2D getTextureFrom(String filename) throws IOException {
-		return Texture2D.getTextureFrom(ImageIO.read(new File(filename)));
-	}
-
-	private static ByteBuffer createByteBuffer(int[] pixels) {
-		ByteBuffer buffer = BufferUtils.createByteBuffer(pixels.length * BYTES_PER_PIXEL);
-		for (int i = 0; i < pixels.length; i++) {
-			int pixel = pixels[i];
-
-			buffer.put((byte) ((pixel >> 16) & 0xFF));
-			buffer.put((byte) ((pixel >> 8) & 0xFF));
-			buffer.put((byte) (pixel & 0xFF));
-			buffer.put((byte) ((pixel >> 24) & 0xFF));
-		}
-
-		buffer.flip();
-
-		return buffer;
-	}
-
-	private static int generateTexture(ByteBuffer buffer, int width, int height) {
-		int textureID = GL11.glGenTextures();
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-		return textureID;
 	}
 }

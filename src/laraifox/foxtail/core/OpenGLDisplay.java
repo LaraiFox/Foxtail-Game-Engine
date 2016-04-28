@@ -5,6 +5,7 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.PixelFormat;
 
 import laraifox.foxtail.core.math.MathUtils;
@@ -83,11 +84,11 @@ public final class OpenGLDisplay {
 
 		this.gameManager = gameManager;
 
-		try {
-			this.initialize();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-		}
+		//		try {
+		//			this.initialize();
+		//		} catch (LWJGLException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 	public final void initialize() throws LWJGLException {
@@ -103,10 +104,15 @@ public final class OpenGLDisplay {
 		Display.setVSyncEnabled(vSyncEnabled);
 		Display.create(pixelFormat, contextAttribs);
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		Logger.log("Supported OpenGL Version: " + GL11.glGetString(GL11.GL_VERSION), "System", Logger.MESSAGE_LEVEL_DEFAULT);
+		Logger.log("Supported Shading Language Version: " + GL11.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION), "System", Logger.MESSAGE_LEVEL_DEFAULT);
+
+		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEFAULT);
+
+		//		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		//		GL11.glLoadIdentity();
+		//		GL11.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+		//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		gameManager.initialize(this);
 	}
@@ -145,14 +151,15 @@ public final class OpenGLDisplay {
 			}
 
 			if (targetDisplayMode == null) {
-				System.out.println("Failed to find value mode: " + width + "x" + height + " fs=" + fullscreen);
-				return;
+				Logger.log("Failed to find compatible " + (fullscreen ? "fullscreen" : "windowed") + " display mode: " + width + "x" + height + ".", "Display", Logger.MESSAGE_LEVEL_ERROR);
+				System.exit(1);
 			}
 
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
 		} catch (LWJGLException e) {
-			System.out.println("Unable to setup mode " + width + "x" + height + " fullscreen=" + fullscreen + e);
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -194,7 +201,7 @@ public final class OpenGLDisplay {
 
 			if (currentTime - previousUpdate >= nanosecondsPerUpdate) {
 				previousUpdate += nanosecondsPerUpdate;
-				float delta = (float) (currentTime - previousDeltaTime) / (float) nanosecondsPerUpdate;
+				float delta = (float) (currentTime - previousDeltaTime) / (MathUtils.MILLIARD / 60.0f);
 				previousDeltaTime = currentTime;
 				update(delta);
 				updates++;
@@ -202,8 +209,6 @@ public final class OpenGLDisplay {
 
 			render();
 			frames++;
-
-			Display.update();
 			Display.sync(framerate);
 		}
 
@@ -231,6 +236,8 @@ public final class OpenGLDisplay {
 
 	private final void render() {
 		gameManager.render();
+
+		Display.update();
 	}
 
 	public final String getTitle() {
