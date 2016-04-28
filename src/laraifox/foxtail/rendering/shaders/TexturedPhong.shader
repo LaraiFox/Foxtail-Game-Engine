@@ -136,28 +136,8 @@ Shader "TexturedPhong" {
 				color *= textureColor;
 			}
 			
-			// PointLight tempPointLight1;
-			// tempPointLight1.base.color = vec3(0.0, 0.1, 1.0);
-			// tempPointLight1.base.intensity = 1.5;
-			// tempPointLight1.attenuation.constant = 0.0;
-			// tempPointLight1.attenuation.linear = 0.0;
-			// tempPointLight1.attenuation.exponent = 0.2;
-			// tempPointLight1.position = vec3(15.0, 3.0, 0.0);
-			// tempPointLight1.range = 15.0;
-			
-			// PointLight tempPointLight2;
-			// tempPointLight2.base.color = vec3(0.0, 0.1, 1.0);
-			// tempPointLight2.base.intensity = 1.5;
-			// tempPointLight2.attenuation.constant = 0.0;
-			// tempPointLight2.attenuation.linear = 0.0;
-			// tempPointLight2.attenuation.exponent = 0.2;
-			// tempPointLight2.position = vec3(15.0, -3.0, 0.0);
-			// tempPointLight2.range = 15.0;
-			
 			vec3 surfaceNormal = normalize(pass_VertexNormal);
 			totalLight += calculateDirectionalLight(in_DirectionalLight, surfaceNormal);
-			// totalLight += calculatePointLight(tempPointLight1, surfaceNormal);
-			// totalLight += calculatePointLight(tempPointLight2, surfaceNormal);
 			for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
 				if (in_PointLights[i].base.intensity > 0.0) {
 					totalLight += calculatePointLight(in_PointLights[i], surfaceNormal);

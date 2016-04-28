@@ -4,7 +4,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
 import laraifox.foxtail.core.math.MathUtils;
@@ -83,11 +82,11 @@ public final class OpenGLDisplay {
 
 		this.gameManager = gameManager;
 
-		try {
-			this.initialize();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-		}
+		//		try {
+		//			this.initialize();
+		//		} catch (LWJGLException e) {
+		//			e.printStackTrace();
+		//		}
 	}
 
 	public final void initialize() throws LWJGLException {
@@ -103,10 +102,10 @@ public final class OpenGLDisplay {
 		Display.setVSyncEnabled(vSyncEnabled);
 		Display.create(pixelFormat, contextAttribs);
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		//		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		//		GL11.glLoadIdentity();
+		//		GL11.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+		//		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		gameManager.initialize(this);
 	}
@@ -194,7 +193,7 @@ public final class OpenGLDisplay {
 
 			if (currentTime - previousUpdate >= nanosecondsPerUpdate) {
 				previousUpdate += nanosecondsPerUpdate;
-				float delta = (float) (currentTime - previousDeltaTime) / (float) nanosecondsPerUpdate;
+				float delta = (float) (currentTime - previousDeltaTime) / (MathUtils.MILLIARD / 60.0f);
 				previousDeltaTime = currentTime;
 				update(delta);
 				updates++;
@@ -202,8 +201,6 @@ public final class OpenGLDisplay {
 
 			render();
 			frames++;
-
-			Display.update();
 			Display.sync(framerate);
 		}
 
@@ -231,6 +228,8 @@ public final class OpenGLDisplay {
 
 	private final void render() {
 		gameManager.render();
+
+		Display.update();
 	}
 
 	public final String getTitle() {

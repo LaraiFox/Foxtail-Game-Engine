@@ -7,7 +7,9 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import laraifox.foxtail.core.math.Matrix4f;
+import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
+import laraifox.foxtail.core.math.Vector4f;
 import laraifox.foxtail.rendering.Vertex;
 
 public class BufferUtils {
@@ -60,6 +62,42 @@ public class BufferUtils {
 	public static FloatBuffer createFloatBuffer(float[] data, boolean flipped) {
 		FloatBuffer buffer = createFloatBuffer(data.length);
 		buffer.put(data);
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
+	public static FloatBuffer createFloatBuffer(Vector2f value, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(Vector2f.COMPONENT_COUNT);
+		buffer.put(value.getX());
+		buffer.put(value.getY());
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
+	public static FloatBuffer createFloatBuffer(Vector3f value, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(Vector3f.COMPONENT_COUNT);
+		buffer.put(value.getX());
+		buffer.put(value.getY());
+		buffer.put(value.getZ());
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
+	public static FloatBuffer createFloatBuffer(Vector4f value, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(Vector4f.COMPONENT_COUNT);
+		buffer.put(value.getX());
+		buffer.put(value.getY());
+		buffer.put(value.getZ());
+		buffer.put(value.getW());
 
 		if (flipped)
 			buffer.flip();

@@ -1,26 +1,43 @@
 package laraifox.foxtail.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Profiler {
 	private static class ProfilerSample {
-		private long startTime, endTime;
+		private ArrayList<Long> startTime, endTime;
+		private int samples;
 
 		public ProfilerSample() {
-			this.startTime = System.nanoTime();
+			this.startTime = new ArrayList<Long>();
+			this.endTime = new ArrayList<Long>();
+			this.samples = 0;
+
+			this.addSample();
+		}
+
+		public void addSample() {
+			startTime.add(System.nanoTime());
+			endTime.add(System.nanoTime());
+			samples++;
 		}
 
 		public long getLength() {
-			return this.endTime - this.startTime;
+			long total = 0;
+			for (int i = 0; i < samples; i++) {
+				total += endTime.get(i) - startTime.get(i);
+			}
+
+			return total / (samples);
 		}
 
 		public void setStartTime() {
-			this.startTime = System.nanoTime();
+			startTime.set(samples - 1, System.nanoTime());
 		}
 
 		public void setEndTime() {
-			this.endTime = System.nanoTime();
+			endTime.set(samples - 1, System.nanoTime());
 		}
 	}
 
@@ -40,20 +57,31 @@ public class Profiler {
 		}
 	}
 
+	public static void beginMultiSample(String name) {
+		ProfilerSample sample = SAMPLE_MAP.get(name);
+		if (sample == null) {
+			sample = new ProfilerSample();
+			SAMPLE_MAP.put(name, sample);
+		} else {
+			sample.addSample();
+		}
+	}
+
 	public static void endSample(String name) {
 		ProfilerSample sample = SAMPLE_MAP.get(name);
 		if (sample != null) {
 			sample.setEndTime();
 		}
 	}
-	
+
 	public static void logSamples() {
-		Logger.setMessageProvider("Sampler");
 		for (String sampleName : SAMPLE_MAP.keySet()) {
 			ProfilerSample sample = SAMPLE_MAP.get(sampleName);
-			
-			Logger.log("<" + sampleName + "> " + (int)(sample.getLength() / 10000.0f)/100.0f + " ms", Logger.MESSAGE_LEVEL_DEBUG);
+
+			Logger.log("<" + sampleName + "> " + (int) (sample.getLength() / 10000.0f) / 100.0f + " ms", "Profiler", Logger.MESSAGE_LEVEL_DEBUG);
 		}
+		
+		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEBUG);
 	}
 
 	public static long getSampleLength(String name) {

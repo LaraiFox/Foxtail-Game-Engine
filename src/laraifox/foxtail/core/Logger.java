@@ -61,10 +61,10 @@ public class Logger {
 	private static final List<LoggedMessage> MESSAGE_LOG = new ArrayList<LoggedMessage>();
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 	private static final int ERROR_MESSAGE_LEVEL = MESSAGE_LEVEL_ERROR;
+	private static String DEFAULT_SENDER_NAME = new String("UNKNOWN");
 
 	private static int requiredMessageLevel = MESSAGE_LEVEL_DEFAULT;
 	private static boolean immediateLogging = true;
-	private static String currentMessageProvider = new String("Main");
 
 	public static void initialize(int requiredMessageLevel, boolean immediateLogging) {
 		Logger.MESSAGE_LOG.clear();
@@ -94,21 +94,17 @@ public class Logger {
 		}
 	}
 
-	public static void log(String message) {
-		log(message, MESSAGE_LEVEL_DEFAULT);
+	public static void lineBreak() {
+		lineBreak(MESSAGE_LEVEL_DEFAULT);
 	}
 
-	public static void log(String message, int messageLevel) {
+	public static void lineBreak(int messageLevel) {
 		if (messageLevel < requiredMessageLevel) {
 			return;
 		} else if (immediateLogging) {
-			if (messageLevel < Logger.ERROR_MESSAGE_LEVEL) {
-				System.out.println(formatMessage(message, messageLevel));
-			} else {
-				System.err.println(formatMessage(message, messageLevel));
-			}
+			System.out.println();
 		} else {
-			LoggedMessage loggedMessage = new LoggedMessage(formatMessage(message, messageLevel), messageLevel);
+			LoggedMessage loggedMessage = new LoggedMessage("", messageLevel);
 
 			MESSAGE_LOG.add(loggedMessage);
 
@@ -118,18 +114,46 @@ public class Logger {
 		}
 	}
 
-	private static String formatMessage(String message, int messageLevel) {
+	public static void log(String message) {
+		log(message, DEFAULT_SENDER_NAME, MESSAGE_LEVEL_DEFAULT);
+	}
+
+	public static void log(String message, String sender) {
+		log(message, sender, MESSAGE_LEVEL_DEFAULT);
+	}
+
+	public static void log(String message, int messageLevel) {
+		log(message, DEFAULT_SENDER_NAME, MESSAGE_LEVEL_DEFAULT);
+	}
+
+	public static void log(String message, String sender, int messageLevel) {
+		if (messageLevel < requiredMessageLevel) {
+			return;
+		} else if (immediateLogging) {
+			if (messageLevel < Logger.ERROR_MESSAGE_LEVEL) {
+				System.out.println(formatMessage(message, sender, messageLevel));
+			} else {
+				System.err.println(formatMessage(message, sender, messageLevel));
+			}
+		} else {
+			LoggedMessage loggedMessage = new LoggedMessage(formatMessage(message, sender, messageLevel), messageLevel);
+
+			MESSAGE_LOG.add(loggedMessage);
+
+			if (messageLevel > MESSAGE_LEVEL_DEFAULT) {
+				Logger.flush(true);
+			}
+		}
+	}
+
+	private static String formatMessage(String message, String sender, int messageLevel) {
 		StringBuilder result = new StringBuilder();
 
 		result.append("[" + DATE_FORMAT.format(new Date()) + "]");
-		result.append("[" + currentMessageProvider + "]");
+		result.append("[" + sender + "]");
 		result.append("[" + MESSAGE_LEVEL_STRING[messageLevel] + "]");
 		result.append(": " + message);
 
 		return result.toString();
-	}
-
-	public static void setMessageProvider(String provider) {
-		Logger.currentMessageProvider = provider;
 	}
 }

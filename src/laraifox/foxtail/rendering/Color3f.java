@@ -37,21 +37,21 @@ public class Color3f {
 		this(value, value, value);
 	}
 
-	public Color3f(Vector3f vector) {
-		this(vector.getX(), vector.getY(), vector.getZ());
-	}
-
 	public Color3f(float r, float g, float b) {
 		this.r = r;
 		this.g = g;
 		this.b = b;
 	}
 
+	public Color3f(Vector3f vector) {
+		this(vector.getX(), vector.getY(), vector.getZ());
+	}
+
 	public Color3f(Color3f color) {
 		this(color.getRed(), color.getGreen(), color.getBlue());
 	}
 
-	public void glBindColor() {
+	public void bind() {
 		GL11.glColor3f(this.r, this.g, this.b);
 	}
 

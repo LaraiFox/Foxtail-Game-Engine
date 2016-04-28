@@ -3,6 +3,7 @@ package laraifox.foxtail.rendering;
 import org.lwjgl.opengl.GL11;
 
 import laraifox.foxtail.core.math.MathUtils;
+import laraifox.foxtail.core.math.Vector4f;
 
 public class Color4f {
 	/***
@@ -51,11 +52,15 @@ public class Color4f {
 		this.a = a;
 	}
 
+	public Color4f(Vector4f vector) {
+		this(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
+	}
+
 	public Color4f(Color4f color) {
 		this(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	}
 
-	public void glBindColor() {
+	public void bind() {
 		GL11.glColor4f(this.r, this.g, this.b, this.a);
 	}
 

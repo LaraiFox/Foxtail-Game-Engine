@@ -38,4 +38,8 @@ public class Entity {
 	public void setMomentum(Transform3D momentum) {
 		this.momentum = momentum;
 	}
+
+	public void setTransform(Transform3D transform) {
+		this.transform = transform;
+	}
 }
