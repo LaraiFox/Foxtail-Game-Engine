@@ -7,14 +7,14 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import laraifox.foxtail.core.Logger;
+import laraifox.foxtail.core.math.Vector4f;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
-
-import laraifox.foxtail.core.Logger;
-import laraifox.foxtail.core.math.Vector4f;
 
 public class Texture2D {
 	private static final TextureFilter DEFAULT_TEXTURE_FILTER = new TextureFilter();
@@ -49,38 +49,25 @@ public class Texture2D {
 
 			buffer.flip();
 
-			this.textureID = GL11.glGenTextures();
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-
-			textureFilter.apply(GL11.GL_TEXTURE_2D);
-			if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
-				textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR || //
-				textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
-				textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR) {
-				GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-				if (textureFilter.getGLTextureAnisotropy() > 0.0f) {
-					if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
-						float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
-						float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-						if (textureAnisotropy > supportedAnisotropy) {
-							Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
-							textureAnisotropy = supportedAnisotropy;
-						}
-
-						GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, textureAnisotropy);
-					} else {
-						Logger.log("Anisotropic filtering is not supported!", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
-					}
-				}
-			}
+			this.createTexture(buffer, textureFilter);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	public Texture2D(ByteBuffer buffer, int width, int height) {
+		this.width = width;
+		this.height = height;
+
+		this.createTexture(buffer, DEFAULT_TEXTURE_FILTER);
+	}
+
+	public Texture2D(ByteBuffer buffer, int width, int height, TextureFilter textureFilter) {
+		this.width = width;
+		this.height = height;
+
+		this.createTexture(buffer, textureFilter);
 	}
 
 	public Texture2D(Vector4f color) {
@@ -95,12 +82,38 @@ public class Texture2D {
 
 		buffer.flip();
 
+		this.createTexture(buffer, DEFAULT_TEXTURE_FILTER);
+	}
+
+	private void createTexture(ByteBuffer buffer, TextureFilter textureFilter) {
 		this.textureID = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-		DEFAULT_TEXTURE_FILTER.apply(GL11.GL_TEXTURE_2D);
+		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
+		textureFilter.apply(GL11.GL_TEXTURE_2D);
+		if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+			textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR || //
+			textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+			textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR) {
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			if (textureFilter.getGLTextureAnisotropy() > 0.0f) {
+				if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
+					float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
+					float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+					if (textureAnisotropy > supportedAnisotropy) {
+						Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+						textureAnisotropy = supportedAnisotropy;
+					}
+
+					GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, textureAnisotropy);
+				} else {
+					Logger.log("Anisotropic filtering is not supported!", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+				}
+			}
+		}
 	}
 
 	public void bind() {

@@ -31,7 +31,7 @@ public class ModelLoader {
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 
 		for (int i = 0; i < indexedModel.getPositions().size(); i++) {
-			vertices.add(new Vertex(indexedModel.getPositions().get(i), indexedModel.getTexCoords().get(i), indexedModel.getNormals().get(i), new Vector3f()));
+			vertices.add(new Vertex(indexedModel.getPositions().get(i), indexedModel.getTexCoords().get(i), indexedModel.getNormals().get(i), new Vector3f(), new Vector3f()));
 		}
 		Vertex[] vertexData = new Vertex[vertices.size()];
 		vertices.toArray(vertexData);

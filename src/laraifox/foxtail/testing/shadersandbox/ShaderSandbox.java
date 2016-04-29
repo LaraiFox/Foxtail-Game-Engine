@@ -1,10 +1,6 @@
 package laraifox.foxtail.testing.shadersandbox;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
+import java.nio.ByteBuffer;
 
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.Logger;
@@ -12,6 +8,7 @@ import laraifox.foxtail.core.OpenGLDisplay;
 import laraifox.foxtail.core.Profiler;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
+import laraifox.foxtail.core.math.PerlinNoiseGenerator;
 import laraifox.foxtail.core.math.Quaternion;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.core.math.Vector4f;
@@ -22,40 +19,47 @@ import laraifox.foxtail.rendering.TextureFilter;
 import laraifox.foxtail.rendering.models.Model;
 import laraifox.foxtail.rendering.models.ModelLoader;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+
 public class ShaderSandbox implements IGameManager {
 	private OpenGLDisplay display;
 
 	private static final float[] CUBE_VERTICES = new float[] {
 			// LEFT SIDE VERTICES { 0, 1, 2, 0, 2, 2 }
-			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (0)
-			-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (1)
-			-0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (2)
-			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (3)
+			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (0)
+			-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (1)
+			-0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (2)
+			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (3)
 			// RIGHT SIDE VERTICES
-			0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (4)
-			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (5)
-			0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (6)
-			0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (7)
+			0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (4)
+			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (5)
+			0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (6)
+			0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (7)
 			// BOTTOM SIDE VERTICES
-			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (8)
-			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (9)
-			0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (10)
-			-0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (11)
+			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (8)
+			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (9)
+			0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (10)
+			-0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (11)
 			// TOP SIDE VERTICES
-			-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (12)
-			0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (13)
-			0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (14)
-			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (15)
+			-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (12)
+			0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (13)
+			0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (14)
+			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (15)
 			// BACK SIDE VERTICES
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // (16)
-			0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // (17)
-			0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // (18)
-			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // (19)
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (16)
+			0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (17)
+			0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (18)
+			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (19)
 			// FRONT SIDE VERTICES
-			0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // (20)
-			-0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // (21)
-			-0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // (22)
-			0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // (23)
+			0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (20)
+			-0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (21)
+			-0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (22)
+			0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, // (23)
 	};
 	private static final int[] CUBE_INDICES = new int[] {
 			0, 1, 2, 0, 2, 3, // LEFT FACE
@@ -81,6 +85,7 @@ public class ShaderSandbox implements IGameManager {
 
 	private Texture2D texture_Checker;
 	private Texture2D texture_Blank;
+	private Texture2D texture_Perlin;
 
 	private Shader shader;
 	private Vector3f velocity_Camera;
@@ -93,30 +98,32 @@ public class ShaderSandbox implements IGameManager {
 		final int SPHERE_COUNT = 10;
 		this.entity_Spheres = new Entity[SPHERE_COUNT * 2];
 		for (int i = 0; i < SPHERE_COUNT; i++) {
-			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -4.0f), new Vector3f(0.75f)), new Transform3D());
-			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -4.0f), new Vector3f(0.75f)), new Transform3D());
+			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f),
+					ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -4.0f), new Vector3f(0.75f)),
+					new Transform3D());
+			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f),
+					ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -4.0f), new Vector3f(0.75f)),
+					new Transform3D());
 		}
 
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordBunny.obj"), new Transform3D(new Vector3f(-4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordDragon.obj"), new Transform3D(new Vector3f(4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordBunny.obj"), new Transform3D(
+				new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ModelLoader.loadMesh("res/models/StanfordDragon.obj"), new Transform3D(
+				new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
-		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f, -10.0f, 0.0f),
-				new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
+		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Model(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f,
+				-10.0f, 0.0f), new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
 
-		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ModelLoader.loadMesh("res/models/Torus.obj"), new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f),
-				new Vector3f(1.5f)), new Transform3D());
-		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(15.0f, 0.0f,
-				0.0f), new Vector3f(0.75f)), new Transform3D());
-		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(new Vector3f(15.0f, 0.0f,
-				5.75f), new Vector3f(0.75f)), new Transform3D());
+		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ModelLoader.loadMesh("res/models/Torus.obj"), new Transform3D(new Vector3f(
+				15.0f, 0.0f, 0.0f), new Vector3f(1.5f)), new Transform3D());
+		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(
+				new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
+		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ModelLoader.loadMesh("res/models/Sphere.obj"), new Transform3D(
+				new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
 
 		TextureFilter textureFilter = new TextureFilter();
 		textureFilter.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
@@ -125,6 +132,32 @@ public class ShaderSandbox implements IGameManager {
 
 		this.texture_Checker = new Texture2D("res/textures/GreyscaleCheckerBoard.png", textureFilter);
 		this.texture_Blank = new Texture2D("res/textures/Blank.png", textureFilter);
+
+		PerlinNoiseGenerator png = new PerlinNoiseGenerator(0);
+		final int PERLIN_TEXTURE_RES = 512;
+		int[] perlinPixels = new int[PERLIN_TEXTURE_RES * PERLIN_TEXTURE_RES];
+		for (int i = 0; i < PERLIN_TEXTURE_RES; i++) {
+			for (int j = 0; j < PERLIN_TEXTURE_RES; j++) {
+				perlinPixels[i + j * PERLIN_TEXTURE_RES] = (int) (png.octavePerlin(i / 128.0f, j / 2.0f, 0, 1, 0.25f) * 255.0f);
+			}
+		}
+
+		ByteBuffer perlinBuffer = BufferUtils.createByteBuffer(perlinPixels.length * 4);
+		for (int i = 0; i < perlinPixels.length; i++) {
+			perlinBuffer.put((byte) perlinPixels[i]);
+			perlinBuffer.put((byte) perlinPixels[i]);
+			perlinBuffer.put((byte) perlinPixels[i]);
+			perlinBuffer.put((byte) 0xFF);
+		}
+
+		perlinBuffer.flip();
+
+		TextureFilter textureFilter2 = new TextureFilter();
+		textureFilter2.setGLTextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR);
+		textureFilter2.setGLTextureMagFilter(GL11.GL_LINEAR);
+		textureFilter2.setGLTextureAnisotropy(2.0f);
+
+		this.texture_Perlin = new Texture2D(perlinBuffer, PERLIN_TEXTURE_RES, PERLIN_TEXTURE_RES, textureFilter2);
 
 		try {
 			this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/TexturedPhong.shader", true);
@@ -140,6 +173,21 @@ public class ShaderSandbox implements IGameManager {
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL13.GL_MULTISAMPLE);
+
+		Logger.log("Model 'StanfordBunny.obj' size: " + entity_Bunny.getModelSize());
+		Logger.log("Model 'StanfordDragon.obj' size: " + entity_Dragon.getModelSize());
+		Logger.log("Model 'Cube' size: " + entity_Cube1.getModelSize());
+		Logger.log("Model 'Sphere.obj' size: " + entity_Spheres[0].getModelSize());
+		Logger.log("Model 'Torus.obj' size: " + entity_Torus.getModelSize());
+
+		int totalModelDataSize = 0;
+		totalModelDataSize += entity_Bunny.getModelSize();
+		totalModelDataSize += entity_Dragon.getModelSize();
+		totalModelDataSize += entity_Torus.getModelSize();
+		totalModelDataSize += entity_Spheres[0].getModelSize() * (entity_Spheres.length + 2);
+		totalModelDataSize += entity_Cube1.getModelSize() * 3;
+
+		Logger.log("Total model data size: " + totalModelDataSize);
 	}
 
 	public void cleanUp() {
@@ -150,7 +198,7 @@ public class ShaderSandbox implements IGameManager {
 		Display.setTitle(display.getTitle() + " | FPS: " + display.getCurrentFPS());
 
 		Profiler.logSamples();
-		
+
 		Logger.flush();
 	}
 
@@ -204,13 +252,14 @@ public class ShaderSandbox implements IGameManager {
 		entity_Cube2.update(delta);
 		entity_Dragon.update(delta);
 
-		//		entity_Torus.setMomentum(new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle * 2.0f)) * -1.8f * delta)));
-		//		entity_SphereOrbitter1.setMomentum(new Transform3D(Vector3f.Up().rotate(Vector3f.Right(), angle * 2).scale(0.1f * delta)));
-		//		entity_SphereOrbitter2.setMomentum(new Transform3D(Vector3f.Down().rotate(Vector3f.Right(), -angle * 2).scale(0.1f * delta)));
+		// entity_Torus.setMomentum(new Transform3D(Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle * 2.0f)) * -1.8f * delta)));
+		// entity_SphereOrbitter1.setMomentum(new Transform3D(Vector3f.Up().rotate(Vector3f.Right(), angle * 2).scale(0.1f * delta)));
+		// entity_SphereOrbitter2.setMomentum(new Transform3D(Vector3f.Down().rotate(Vector3f.Right(), -angle * 2).scale(0.1f * delta)));
 
-		entity_Torus.setTransform(new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle - 35.0f)) * 60.0f), new Vector3f(
-				1.5f)));
-		entity_SphereOrbitter1.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f + (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f, //
+		entity_Torus.setTransform(new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle - 35.0f)) * 60.0f),
+				new Vector3f(1.5f)));
+		entity_SphereOrbitter1.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f
+			+ (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f, //
 				(float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f - (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f - 2.75f), new Vector3f(0.75f)));
 		entity_SphereOrbitter2.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(angle)) * 2.0f + (float) Math.sin(Math.toRadians(angle)) * 2.0f, //
 				(float) Math.cos(Math.toRadians(angle)) * 2.0f - (float) Math.sin(Math.toRadians(angle)) * 2.0f + 2.75f), new Vector3f(0.75f)));
@@ -241,7 +290,7 @@ public class ShaderSandbox implements IGameManager {
 
 		Vector3f direction = Vector3f.Down().rotate(Vector3f.Right(), -45.0f).rotate(Vector3f.Up(), (angle / 10.0f));
 
-		//		shader.setUniform("in_DirectionalLight.base.color", new Vector3f(1.0f, 0.975f, 0.95f));
+		// shader.setUniform("in_DirectionalLight.base.color", new Vector3f(1.0f, 0.975f, 0.95f));
 		shader.setUniform("in_DirectionalLight.base.color", new Vector3f(0.8f, 0.8f, 1.0f));
 		shader.setUniform("in_DirectionalLight.base.intensity", 1.2f);
 		shader.setUniform("in_DirectionalLight.direction", direction);
@@ -287,6 +336,8 @@ public class ShaderSandbox implements IGameManager {
 
 		entity_Bunny.render(viewProjectionMatrix, shader);
 		entity_Dragon.render(viewProjectionMatrix, shader);
+
+		texture_Perlin.bind();
 
 		entity_Cube3.render(viewProjectionMatrix, shader);
 

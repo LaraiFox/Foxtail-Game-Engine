@@ -136,6 +136,10 @@ public class BufferUtils {
 			buffer.put(value.getTangent().getX());
 			buffer.put(value.getTangent().getY());
 			buffer.put(value.getTangent().getZ());
+
+			buffer.put(value.getBinormal().getX());
+			buffer.put(value.getBinormal().getY());
+			buffer.put(value.getBinormal().getZ());
 		}
 
 		if (flipped)

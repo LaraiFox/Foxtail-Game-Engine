@@ -42,4 +42,8 @@ public class Entity {
 	public void setTransform(Transform3D transform) {
 		this.transform = transform;
 	}
+
+	public int getModelSize() {
+		return model.getByteCount();
+	}
 }

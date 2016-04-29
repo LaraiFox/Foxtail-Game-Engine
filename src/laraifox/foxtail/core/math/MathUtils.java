@@ -52,7 +52,7 @@ public class MathUtils {
 		return a + (b - a) * value;
 	}
 
-	public static int nextPowerOf2(int i) {
+	public static int nextPowerOfTwo(int i) {
 		i -= 1;
 		i |= (i >> 1);
 		i |= (i >> 2);
