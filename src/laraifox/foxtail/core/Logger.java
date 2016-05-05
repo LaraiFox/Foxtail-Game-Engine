@@ -123,7 +123,7 @@ public class Logger {
 	}
 
 	public static void log(String message, int messageLevel) {
-		log(message, DEFAULT_SENDER_NAME, MESSAGE_LEVEL_DEFAULT);
+		log(message, DEFAULT_SENDER_NAME, messageLevel);
 	}
 
 	public static void log(String message, String sender, int messageLevel) {

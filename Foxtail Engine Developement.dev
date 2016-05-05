@@ -882,6 +882,33 @@
 		- class RenderingEngine {
 			
 		}
+		- class VertexArray {
+			- variable id : int
+			- variable elements : boolean
+			
+			- constructor VertexArray()
+			- constructor VertexArray(FloatBuffer)
+			
+			- function addIndexBuffer(IntBuffer) : void
+				- func addIndexBuffer(int[]) : void
+			- function addVertexBuffer(FloatBuffer) : void
+				- func addVertexBuffer(Vertex[]) : void
+				- func addVertexBuffer(float[]) : void
+			- function bind() : void
+			- function render() : void
+			
+			- static function unbind() : void
+		}
+		- class VertexBuffer {
+			- variable id : int
+		}
+		- class IndexBuffer {
+			- variable id : int
+		}
+		- class FrameBuffer {
+			- variable id : int
+		}
+		
 		#laraifox.foxtail.rendering.geometry {
 			// 
 			- class Circle : IGeometricShape {

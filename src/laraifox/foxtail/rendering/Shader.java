@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import laraifox.foxtail.AssetLoader;
 import laraifox.foxtail.core.BufferUtils;
-import laraifox.foxtail.core.FileUtils;
 import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.core.math.Vector4f;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 public class Shader {
 	private class GLSLStruct {
@@ -35,6 +35,8 @@ public class Shader {
 
 	private int id;
 
+	private String shaderName;
+
 	private Shader() {
 		this.uniforms = new HashMap<String, Integer>();
 		this.checkedUniforms = new ArrayList<String>();
@@ -43,7 +45,7 @@ public class Shader {
 	public Shader(String vertexFilepath, String fragmentFilepath, boolean bindAttributes) throws Exception {
 		this();
 
-		this.createShader(vertexFilepath, fragmentFilepath, FileUtils.readFile(new File(vertexFilepath)), FileUtils.readFile(new File(fragmentFilepath)), bindAttributes);
+		this.createShader(vertexFilepath, fragmentFilepath, AssetLoader.loadFile(vertexFilepath), AssetLoader.loadFile(fragmentFilepath), bindAttributes);
 	}
 
 	public Shader(String shaderFilepath, boolean bindAttributes) {
@@ -62,7 +64,9 @@ public class Shader {
 	}
 
 	private int createShader(String shaderFilepath, boolean bindAttributes) throws IOException {
-		String shaderSrc = FileUtils.readFile(new File(shaderFilepath));
+		String shaderSrc = AssetLoader.loadFile(shaderFilepath);
+
+		this.shaderName = shaderSrc.substring(shaderSrc.indexOf("\"") + 1, shaderSrc.indexOf("\"", shaderSrc.indexOf("\"") + 1));
 
 		int vertexIndex = shaderSrc.indexOf("\n", shaderSrc.indexOf("GLSLVertex"));
 		int vertexEnd = shaderSrc.indexOf("GLSLFragment");
@@ -75,7 +79,7 @@ public class Shader {
 			String fallbackPath = shaderSrc.substring(shaderSrc.indexOf("\"", shaderSrc.indexOf("Fallback")) + 1, shaderSrc.indexOf("\n", shaderSrc.indexOf("Fallback")) - 1);
 
 			if (fallbackPath.isEmpty()) {
-				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), Logger.MESSAGE_LEVEL_ERROR);
+				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
 
 				return this.createShader("src/laraifox/foxtail/rendering/shaders/Error.shader", bindAttributes);
 				// throw new RuntimeException("Shader '" + shaderFilepath + "' failed to compile and has no fallback!\n" + e.getMessage());
@@ -83,7 +87,7 @@ public class Shader {
 				fallbackPath = System.getProperty("file.separator") + fallbackPath;
 			}
 
-			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), Logger.MESSAGE_LEVEL_ERROR);
+			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
 			// System.out.println("[WARNING] Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.");
 
 			return this.createShader(new File(shaderFilepath).getParent() + fallbackPath, bindAttributes);
@@ -146,8 +150,8 @@ public class Shader {
 		int currentAttribIndex = 0;
 		int attributeStartLocation = shaderSrc.indexOf(ATTRIBUTE_KEYWORD);
 		while (attributeStartLocation != -1) {
-			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))) {
+			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';' || !Character.isWhitespace(
+					shaderSrc.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -236,8 +240,8 @@ public class Shader {
 
 		int structStartLocation = shaderSrc.indexOf(STRUCT_KEYWORD);
 		while (structStartLocation != -1) {
-			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(structStartLocation + STRUCT_KEYWORD.length()))) {
+			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';' || !Character.isWhitespace(shaderSrc
+					.charAt(structStartLocation + STRUCT_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -305,8 +309,8 @@ public class Shader {
 
 		int uniformStartLocation = shaderSrc.indexOf(UNIFORM_KEYWORD);
 		while (uniformStartLocation != -1) {
-			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))) {
+			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';' || !Character.isWhitespace(
+					shaderSrc.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -335,7 +339,7 @@ public class Shader {
 					int arraySizeVariableEnd = arraySizeVariableStart + 1;
 					while (Character.isDigit(shaderSrc.charAt(arraySizeVariableEnd)))
 						arraySizeVariableEnd++;
-					
+
 					String arraySizeVariable = shaderSrc.substring(arraySizeVariableStart, arraySizeVariableEnd);
 
 					arraySize = Integer.valueOf(arraySizeVariable);
@@ -364,7 +368,7 @@ public class Shader {
 					int arraySizeVariableEnd = arraySizeVariableStart + 1;
 					while (Character.isDigit(shaderSrc.charAt(arraySizeVariableEnd)))
 						arraySizeVariableEnd++;
-					
+
 					String arraySizeVariable = shaderSrc.substring(arraySizeVariableStart, arraySizeVariableEnd);
 
 					arraySize = Integer.valueOf(arraySizeVariable);
@@ -493,7 +497,7 @@ public class Shader {
 	private boolean checkUniform(String name, Integer uniformLocation) {
 		if (uniformLocation == null) {
 			if (logUnrecognizedUniformCalls) {
-				Logger.log("Uniform '" + name + "' is unrecognized.", Logger.MESSAGE_LEVEL_DEBUG);
+				Logger.log("Uniform '" + name + "' is unrecognized.", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_DEBUG);
 				if (!checkedUniforms.contains(name)) {
 					checkedUniforms.add(name);
 				}

@@ -7,14 +7,14 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
-import laraifox.foxtail.core.Logger;
-import laraifox.foxtail.core.math.Vector4f;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
+
+import laraifox.foxtail.core.Logger;
+import laraifox.foxtail.core.math.Vector4f;
 
 public class Texture2D {
 	private static final TextureFilter DEFAULT_TEXTURE_FILTER = new TextureFilter();
@@ -85,13 +85,16 @@ public class Texture2D {
 		this.createTexture(buffer, DEFAULT_TEXTURE_FILTER);
 	}
 
+	@Override
+	public void finalize() {
+		//		GL11.glDeleteTextures(textureID);
+	}
+
 	private void createTexture(ByteBuffer buffer, TextureFilter textureFilter) {
 		this.textureID = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
 		textureFilter.apply(GL11.GL_TEXTURE_2D);
 		if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
@@ -114,6 +117,8 @@ public class Texture2D {
 				}
 			}
 		}
+
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 
 	public void bind() {

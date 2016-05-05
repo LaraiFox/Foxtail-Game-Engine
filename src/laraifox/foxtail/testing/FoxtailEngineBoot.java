@@ -8,10 +8,6 @@ import static org.lwjgl.opencl.CL10.CL_DEVICE_TYPE_GPU;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import laraifox.foxtail.core.Logger;
-import laraifox.foxtail.core.OpenGLDisplay;
-import laraifox.foxtail.testing.shadersandbox.ShaderSandbox;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opencl.CL;
 import org.lwjgl.opencl.CL10;
@@ -24,13 +20,31 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.PixelFormat;
 
+import laraifox.foxtail.core.Logger;
+import laraifox.foxtail.core.OpenGLDisplay;
+import laraifox.foxtail.testing.shadersandbox.ShaderSandbox;
+
 public class FoxtailEngineBoot {
 	private static int MAX_MULTISAMPLES;
 
 	public static void main(String[] args) {
+		Logger.initialize(Logger.MESSAGE_LEVEL_DEBUG, false);
+
+		if (FoxtailEngineBoot.class.getResource("FoxtailEngineBoot.class").toString().startsWith("jar")) {
+			Logger.log("Program is running from jar file!", "System", Logger.MESSAGE_LEVEL_DEBUG);
+		} else {
+			Logger.log("Program is running from workspace!", "System", Logger.MESSAGE_LEVEL_DEBUG);
+			//			AssetLoader.useIndevPrefix = true;
+		}
+
+		Logger.lineBreak();
+		Logger.flush(true);
+
 		try {
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+
 			Display.setDisplayMode(new DisplayMode(0, 0));
+			Display.setFullscreen(false);
 			Display.create();
 
 			MAX_MULTISAMPLES = GL11.glGetInteger(GL30.GL_MAX_SAMPLES);
@@ -39,8 +53,6 @@ public class FoxtailEngineBoot {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-
-		// Logger.initialize(Logger.MESSAGE_LEVEL_DEBUG, false);
 
 		try {
 			CL.create();
@@ -59,8 +71,8 @@ public class FoxtailEngineBoot {
 				Logger.log("\tDevice #" + deviceIndex + "(" + getDeviceType(device.getInfoInt(CL10.CL_DEVICE_TYPE)) + "): " + device.getInfoString(CL10.CL_DEVICE_NAME), "System",
 						Logger.MESSAGE_LEVEL_DEFAULT);
 
-				Logger.log("Compute Units:  " + device.getInfoInt(CL10.CL_DEVICE_MAX_COMPUTE_UNITS) + " @ " + device.getInfoInt(CL10.CL_DEVICE_MAX_CLOCK_FREQUENCY) + " MHz",
-						"System", Logger.MESSAGE_LEVEL_DEFAULT);
+				Logger.log("Compute Units:  " + device.getInfoInt(CL10.CL_DEVICE_MAX_COMPUTE_UNITS) + " @ " + device.getInfoInt(CL10.CL_DEVICE_MAX_CLOCK_FREQUENCY) + " MHz", "System",
+						Logger.MESSAGE_LEVEL_DEFAULT);
 
 				Logger.log("Max Work Group: " + device.getInfoInt(CL10.CL_DEVICE_MAX_WORK_GROUP_SIZE), "System", Logger.MESSAGE_LEVEL_DEFAULT);
 

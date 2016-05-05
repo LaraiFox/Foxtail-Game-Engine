@@ -108,7 +108,8 @@ public final class OpenGLDisplay {
 		Logger.log("Supported Shading Language Version: " + GL11.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION), "System", Logger.MESSAGE_LEVEL_DEFAULT);
 
 		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEFAULT);
-		
+		Logger.flush(true);
+
 		//		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		//		GL11.glLoadIdentity();
 		//		GL11.glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);

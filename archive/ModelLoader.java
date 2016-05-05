@@ -6,6 +6,10 @@ import laraifox.foxtail.core.ArrayUtils;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.rendering.Vertex;
 
+/**
+ * @deprecated use {@link AssetLoader} instead.
+ */
+@Deprecated
 public class ModelLoader {
 	public static Model loadMesh(String filename) {
 		String[] splitArray = filename.split("\\.");

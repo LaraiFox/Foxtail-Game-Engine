@@ -22,7 +22,7 @@ public class OBJModel {
 	private boolean hasTexCoords;
 	private boolean hasNormals;
 
-	public OBJModel(String filename) {
+	public OBJModel(BufferedReader reader) {
 		this.positions = new ArrayList<Vector3f>();
 		this.texCoords = new ArrayList<Vector2f>();
 		this.normals = new ArrayList<Vector3f>();
@@ -31,13 +31,10 @@ public class OBJModel {
 		this.hasTexCoords = false;
 		this.hasNormals = false;
 
-		BufferedReader meshReader = null;
-
 		try {
-			meshReader = new BufferedReader(new FileReader(filename));
 			String line = new String();
 
-			while ((line = meshReader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split(" ");
 				tokens = removeEmptyStrings(tokens);
 
@@ -58,7 +55,7 @@ public class OBJModel {
 				}
 			}
 
-			meshReader.close();
+			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

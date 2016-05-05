@@ -699,13 +699,7 @@ public class Vector2f {
 	}
 
 	public boolean isZero() {
-		return this.isEqual(Vector2f.Zero());
-	}
-
-	public float[] toArray() {
-		return new float[] {
-				this.x, this.y
-		};
+		return (this.x == 0.0f && this.y == 0.0f);
 	}
 
 	@Override
@@ -726,25 +720,44 @@ public class Vector2f {
 			throw new ArrayIndexOutOfBoundsException("No component exists at index " + i + ".");
 	}
 
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 
-	public float getY() {
+	public final float getY() {
 		return y;
 	}
 
-	public Vector2f getXY() {
+	public final Vector2f getXX() {
+		return new Vector2f(x, x);
+	}
+
+	public final Vector2f getXY() {
 		return new Vector2f(x, y);
 	}
 
-	public Vector2f getYX() {
+	public final Vector2f getYX() {
 		return new Vector2f(y, x);
 	}
 
+	public final Vector2f getYY() {
+		return new Vector2f(y, y);
+	}
+
 	public Vector2f set(Vector2f vector) {
-		this.x = vector.getX();
-		this.y = vector.getY();
+		return this.set(vector.getX(), vector.getY());
+	}
+
+	public Vector2f set(float x, float y) {
+		this.x = x;
+		this.y = y;
+
+		return this;
+	}
+
+	public Vector2f set(float[] values) {
+		this.x = values[COMPONENT_INDEX_X];
+		this.y = values[COMPONENT_INDEX_Y];
 
 		return this;
 	}
@@ -772,28 +785,6 @@ public class Vector2f {
 
 	public Vector2f setY(float y) {
 		this.y = y;
-
-		return this;
-	}
-
-	public Vector2f setXY(Vector2f vector) {
-		return this.setXY(vector.getX(), vector.getY());
-	}
-
-	public Vector2f setXY(float x, float y) {
-		this.x = x;
-		this.y = y;
-
-		return this;
-	}
-
-	public Vector2f setYX(Vector2f vector) {
-		return this.setYX(vector.getX(), vector.getY());
-	}
-
-	public Vector2f setYX(float y, float x) {
-		this.y = y;
-		this.x = x;
 
 		return this;
 	}

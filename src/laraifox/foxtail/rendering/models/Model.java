@@ -3,13 +3,13 @@ package laraifox.foxtail.rendering.models;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import laraifox.foxtail.core.BufferUtils;
-import laraifox.foxtail.rendering.Vertex;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import laraifox.foxtail.core.BufferUtils;
+import laraifox.foxtail.rendering.Vertex;
 
 public class Model {
 	private int vaoID;
@@ -24,7 +24,7 @@ public class Model {
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length);
 	}
 
-	private void createModel(IntBuffer indexBuffer, FloatBuffer vertexBuffer, int indexCount, int vertexCount) {
+	protected void createModel(IntBuffer indexBuffer, FloatBuffer vertexBuffer, int indexCount, int vertexCount) {
 		this.vaoID = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(vaoID);
 

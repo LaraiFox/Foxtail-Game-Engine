@@ -1,6 +1,6 @@
 package laraifox.foxtail.core;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class ArrayUtils {
 	public static int[] toIntArray(Integer[] data) {
@@ -9,27 +9,20 @@ public class ArrayUtils {
 			result[i] = data[i].intValue();
 		return result;
 	}
-	
-	public static <T> T[] concat(T[] a, T[] b) {
-		T[] result = Arrays.copyOf(a, a.length + b.length);
-		System.arraycopy(b, 0, result, a.length, b.length);
 
-		return result;
+	public static int[] listToIntArray(List<Integer> list) {
+		int[] array = new int[list.size()];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = list.get(i);
+		}
+		return array;
 	}
 
-	public static <T> T[] concatAll(T[] a, T[]... r) {
-		int totalLength = a.length;
-		for (T[] array : r) {
-			totalLength += array.length;
+	public static float[] listToFloatArray(List<Float> list) {
+		float[] array = new float[list.size()];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = list.get(i);
 		}
-
-		T[] result = Arrays.copyOf(a, totalLength);
-		int offset = a.length;
-		for (T[] array : r) {
-			System.arraycopy(array, 0, result, offset, array.length);
-			offset += array.length;
-		}
-
-		return result;
+		return array;
 	}
 }

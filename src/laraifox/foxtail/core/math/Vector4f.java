@@ -50,7 +50,7 @@ public class Vector4f {
 	public Vector4f(Vector3f vector) {
 		this(vector.getX(), vector.getY(), vector.getZ(), 0.0f);
 	}
-	
+
 	public Vector4f(Vector3f vector, float w) {
 		this(vector.getX(), vector.getY(), vector.getZ(), w);
 	}
@@ -571,13 +571,7 @@ public class Vector4f {
 	}
 
 	public boolean isZero() {
-		return this.isEqual(Vector4f.Zero());
-	}
-
-	public float[] toArray() {
-		return new float[] {
-				this.x, this.y, this.z, this.w
-		};
+		return (this.x == 0.0f && this.y == 0.0f && this.z == 0.0f && this.w == 0.0f);
 	}
 
 	@Override
@@ -585,8 +579,10 @@ public class Vector4f {
 		return new String("[ " + x + ", " + y + ", " + z + ", " + w + " ]");
 	}
 
-	public Vector4f get() {
-		return new Vector4f(this);
+	public float[] get() {
+		return new float[] {
+				x, y, z, w
+		};
 	}
 
 	public float get(int i) {
@@ -602,27 +598,1384 @@ public class Vector4f {
 			throw new ArrayIndexOutOfBoundsException("No component exists at index " + i + ".");
 	}
 
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 
-	public float getY() {
+	public final float getY() {
 		return y;
 	}
 
-	public float getZ() {
+	public final float getZ() {
 		return z;
 	}
 
-	public float getW() {
+	public final float getW() {
 		return w;
 	}
 
+	public final Vector2f getXX() {
+		return new Vector2f(x, x);
+	}
+
+	public final Vector2f getXY() {
+		return new Vector2f(x, y);
+	}
+
+	public final Vector2f getXZ() {
+		return new Vector2f(x, z);
+	}
+
+	public final Vector2f getXW() {
+		return new Vector2f(x, w);
+	}
+
+	public final Vector2f getYX() {
+		return new Vector2f(y, x);
+	}
+
+	public final Vector2f getYY() {
+		return new Vector2f(y, y);
+	}
+
+	public final Vector2f getYZ() {
+		return new Vector2f(y, z);
+	}
+
+	public final Vector2f getYW() {
+		return new Vector2f(y, w);
+	}
+
+	public final Vector2f getZX() {
+		return new Vector2f(z, x);
+	}
+
+	public final Vector2f getZY() {
+		return new Vector2f(z, y);
+	}
+
+	public final Vector2f getZZ() {
+		return new Vector2f(z, z);
+	}
+
+	public final Vector2f getZW() {
+		return new Vector2f(z, w);
+	}
+
+	public final Vector2f getWX() {
+		return new Vector2f(w, x);
+	}
+
+	public final Vector2f getWY() {
+		return new Vector2f(w, y);
+	}
+
+	public final Vector2f getWZ() {
+		return new Vector2f(w, z);
+	}
+
+	public final Vector2f getWW() {
+		return new Vector2f(w, w);
+	}
+
+	public final Vector3f getXXX() {
+		return new Vector3f(x, x, x);
+	}
+
+	public final Vector3f getXXY() {
+		return new Vector3f(x, x, y);
+	}
+
+	public final Vector3f getXXZ() {
+		return new Vector3f(x, x, z);
+	}
+
+	public final Vector3f getXXW() {
+		return new Vector3f(x, x, w);
+	}
+
+	public final Vector3f getXYX() {
+		return new Vector3f(x, y, x);
+	}
+
+	public final Vector3f getXYY() {
+		return new Vector3f(x, y, y);
+	}
+
+	public final Vector3f getXYZ() {
+		return new Vector3f(x, y, z);
+	}
+
+	public final Vector3f getXYW() {
+		return new Vector3f(x, y, w);
+	}
+
+	public final Vector3f getXZX() {
+		return new Vector3f(x, z, x);
+	}
+
+	public final Vector3f getXZY() {
+		return new Vector3f(x, z, y);
+	}
+
+	public final Vector3f getXZZ() {
+		return new Vector3f(x, z, z);
+	}
+
+	public final Vector3f getXZW() {
+		return new Vector3f(x, z, w);
+	}
+
+	public final Vector3f getXWX() {
+		return new Vector3f(x, w, x);
+	}
+
+	public final Vector3f getXWY() {
+		return new Vector3f(x, w, y);
+	}
+
+	public final Vector3f getXWZ() {
+		return new Vector3f(x, w, z);
+	}
+
+	public final Vector3f getXWW() {
+		return new Vector3f(x, w, w);
+	}
+
+	public final Vector3f getYXX() {
+		return new Vector3f(y, x, x);
+	}
+
+	public final Vector3f getYXY() {
+		return new Vector3f(y, x, y);
+	}
+
+	public final Vector3f getYXZ() {
+		return new Vector3f(y, x, z);
+	}
+
+	public final Vector3f getYXW() {
+		return new Vector3f(y, x, w);
+	}
+
+	public final Vector3f getYYX() {
+		return new Vector3f(y, y, x);
+	}
+
+	public final Vector3f getYYY() {
+		return new Vector3f(y, y, y);
+	}
+
+	public final Vector3f getYYZ() {
+		return new Vector3f(y, y, z);
+	}
+
+	public final Vector3f getYYW() {
+		return new Vector3f(y, y, w);
+	}
+
+	public final Vector3f getYZX() {
+		return new Vector3f(y, z, x);
+	}
+
+	public final Vector3f getYZY() {
+		return new Vector3f(y, z, y);
+	}
+
+	public final Vector3f getYZZ() {
+		return new Vector3f(y, z, z);
+	}
+
+	public final Vector3f getYZW() {
+		return new Vector3f(y, z, w);
+	}
+
+	public final Vector3f getYWX() {
+		return new Vector3f(y, w, x);
+	}
+
+	public final Vector3f getYWY() {
+		return new Vector3f(y, w, y);
+	}
+
+	public final Vector3f getYWZ() {
+		return new Vector3f(y, w, z);
+	}
+
+	public final Vector3f getYWW() {
+		return new Vector3f(y, w, w);
+	}
+
+	public final Vector3f getZXX() {
+		return new Vector3f(z, x, x);
+	}
+
+	public final Vector3f getZXY() {
+		return new Vector3f(z, x, y);
+	}
+
+	public final Vector3f getZXZ() {
+		return new Vector3f(z, x, z);
+	}
+
+	public final Vector3f getZXW() {
+		return new Vector3f(z, x, w);
+	}
+
+	public final Vector3f getZYX() {
+		return new Vector3f(z, y, x);
+	}
+
+	public final Vector3f getZYY() {
+		return new Vector3f(z, y, y);
+	}
+
+	public final Vector3f getZYZ() {
+		return new Vector3f(z, y, z);
+	}
+
+	public final Vector3f getZYW() {
+		return new Vector3f(z, y, w);
+	}
+
+	public final Vector3f getZZX() {
+		return new Vector3f(z, z, x);
+	}
+
+	public final Vector3f getZZY() {
+		return new Vector3f(z, z, y);
+	}
+
+	public final Vector3f getZZZ() {
+		return new Vector3f(z, z, z);
+	}
+
+	public final Vector3f getZZW() {
+		return new Vector3f(z, z, w);
+	}
+
+	public final Vector3f getZWX() {
+		return new Vector3f(z, w, x);
+	}
+
+	public final Vector3f getZWY() {
+		return new Vector3f(z, w, y);
+	}
+
+	public final Vector3f getZWZ() {
+		return new Vector3f(z, w, z);
+	}
+
+	public final Vector3f getZWW() {
+		return new Vector3f(z, w, w);
+	}
+
+	public final Vector3f getWXX() {
+		return new Vector3f(w, x, x);
+	}
+
+	public final Vector3f getWXY() {
+		return new Vector3f(w, x, y);
+	}
+
+	public final Vector3f getWXZ() {
+		return new Vector3f(w, x, z);
+	}
+
+	public final Vector3f getWXW() {
+		return new Vector3f(w, x, w);
+	}
+
+	public final Vector3f getWYX() {
+		return new Vector3f(w, y, x);
+	}
+
+	public final Vector3f getWYY() {
+		return new Vector3f(w, y, y);
+	}
+
+	public final Vector3f getWYZ() {
+		return new Vector3f(w, y, z);
+	}
+
+	public final Vector3f getWYW() {
+		return new Vector3f(w, y, w);
+	}
+
+	public final Vector3f getWZX() {
+		return new Vector3f(w, z, x);
+	}
+
+	public final Vector3f getWZY() {
+		return new Vector3f(w, z, y);
+	}
+
+	public final Vector3f getWZZ() {
+		return new Vector3f(w, z, z);
+	}
+
+	public final Vector3f getWZW() {
+		return new Vector3f(w, z, w);
+	}
+
+	public final Vector3f getWWX() {
+		return new Vector3f(w, w, x);
+	}
+
+	public final Vector3f getWWY() {
+		return new Vector3f(w, w, y);
+	}
+
+	public final Vector3f getWWZ() {
+		return new Vector3f(w, w, z);
+	}
+
+	public final Vector3f getWWW() {
+		return new Vector3f(w, w, w);
+	}
+
+	public final Vector4f getXXXX() {
+		return new Vector4f(x, x, x, x);
+	}
+
+	public final Vector4f getXXXY() {
+		return new Vector4f(x, x, x, y);
+	}
+
+	public final Vector4f getXXXZ() {
+		return new Vector4f(x, x, x, z);
+	}
+
+	public final Vector4f getXXXW() {
+		return new Vector4f(x, x, x, w);
+	}
+
+	public final Vector4f getXXYX() {
+		return new Vector4f(x, x, y, x);
+	}
+
+	public final Vector4f getXXYY() {
+		return new Vector4f(x, x, y, y);
+	}
+
+	public final Vector4f getXXYZ() {
+		return new Vector4f(x, x, y, z);
+	}
+
+	public final Vector4f getXXYW() {
+		return new Vector4f(x, x, y, w);
+	}
+
+	public final Vector4f getXXZX() {
+		return new Vector4f(x, x, z, x);
+	}
+
+	public final Vector4f getXXZY() {
+		return new Vector4f(x, x, z, y);
+	}
+
+	public final Vector4f getXXZZ() {
+		return new Vector4f(x, x, z, z);
+	}
+
+	public final Vector4f getXXZW() {
+		return new Vector4f(x, x, z, w);
+	}
+
+	public final Vector4f getXXWX() {
+		return new Vector4f(x, x, w, x);
+	}
+
+	public final Vector4f getXXWY() {
+		return new Vector4f(x, x, w, y);
+	}
+
+	public final Vector4f getXXWZ() {
+		return new Vector4f(x, x, w, z);
+	}
+
+	public final Vector4f getXXWW() {
+		return new Vector4f(x, x, w, w);
+	}
+
+	public final Vector4f getXYXX() {
+		return new Vector4f(x, y, x, x);
+	}
+
+	public final Vector4f getXYXY() {
+		return new Vector4f(x, y, x, y);
+	}
+
+	public final Vector4f getXYXZ() {
+		return new Vector4f(x, y, x, z);
+	}
+
+	public final Vector4f getXYXW() {
+		return new Vector4f(x, y, x, w);
+	}
+
+	public final Vector4f getXYYX() {
+		return new Vector4f(x, y, y, x);
+	}
+
+	public final Vector4f getXYYY() {
+		return new Vector4f(x, y, y, y);
+	}
+
+	public final Vector4f getXYYZ() {
+		return new Vector4f(x, y, y, z);
+	}
+
+	public final Vector4f getXYYW() {
+		return new Vector4f(x, y, y, w);
+	}
+
+	public final Vector4f getXYZX() {
+		return new Vector4f(x, y, z, x);
+	}
+
+	public final Vector4f getXYZY() {
+		return new Vector4f(x, y, z, y);
+	}
+
+	public final Vector4f getXYZZ() {
+		return new Vector4f(x, y, z, z);
+	}
+
+	public final Vector4f getXYZW() {
+		return new Vector4f(x, y, z, w);
+	}
+
+	public final Vector4f getXYWX() {
+		return new Vector4f(x, y, w, x);
+	}
+
+	public final Vector4f getXYWY() {
+		return new Vector4f(x, y, w, y);
+	}
+
+	public final Vector4f getXYWZ() {
+		return new Vector4f(x, y, w, z);
+	}
+
+	public final Vector4f getXYWW() {
+		return new Vector4f(x, y, w, w);
+	}
+
+	public final Vector4f getXZXX() {
+		return new Vector4f(x, z, x, x);
+	}
+
+	public final Vector4f getXZXY() {
+		return new Vector4f(x, z, x, y);
+	}
+
+	public final Vector4f getXZXZ() {
+		return new Vector4f(x, z, x, z);
+	}
+
+	public final Vector4f getXZXW() {
+		return new Vector4f(x, z, x, w);
+	}
+
+	public final Vector4f getXZYX() {
+		return new Vector4f(x, z, y, x);
+	}
+
+	public final Vector4f getXZYY() {
+		return new Vector4f(x, z, y, y);
+	}
+
+	public final Vector4f getXZYZ() {
+		return new Vector4f(x, z, y, z);
+	}
+
+	public final Vector4f getXZYW() {
+		return new Vector4f(x, z, y, w);
+	}
+
+	public final Vector4f getXZZX() {
+		return new Vector4f(x, z, z, x);
+	}
+
+	public final Vector4f getXZZY() {
+		return new Vector4f(x, z, z, y);
+	}
+
+	public final Vector4f getXZZZ() {
+		return new Vector4f(x, z, z, z);
+	}
+
+	public final Vector4f getXZZW() {
+		return new Vector4f(x, z, z, w);
+	}
+
+	public final Vector4f getXZWX() {
+		return new Vector4f(x, z, w, x);
+	}
+
+	public final Vector4f getXZWY() {
+		return new Vector4f(x, z, w, y);
+	}
+
+	public final Vector4f getXZWZ() {
+		return new Vector4f(x, z, w, z);
+	}
+
+	public final Vector4f getXZWW() {
+		return new Vector4f(x, z, w, w);
+	}
+
+	public final Vector4f getXWXX() {
+		return new Vector4f(x, w, x, x);
+	}
+
+	public final Vector4f getXWXY() {
+		return new Vector4f(x, w, x, y);
+	}
+
+	public final Vector4f getXWXZ() {
+		return new Vector4f(x, w, x, z);
+	}
+
+	public final Vector4f getXWXW() {
+		return new Vector4f(x, w, x, w);
+	}
+
+	public final Vector4f getXWYX() {
+		return new Vector4f(x, w, y, x);
+	}
+
+	public final Vector4f getXWYY() {
+		return new Vector4f(x, w, y, y);
+	}
+
+	public final Vector4f getXWYZ() {
+		return new Vector4f(x, w, y, z);
+	}
+
+	public final Vector4f getXWYW() {
+		return new Vector4f(x, w, y, w);
+	}
+
+	public final Vector4f getXWZX() {
+		return new Vector4f(x, w, z, x);
+	}
+
+	public final Vector4f getXWZY() {
+		return new Vector4f(x, w, z, y);
+	}
+
+	public final Vector4f getXWZZ() {
+		return new Vector4f(x, w, z, z);
+	}
+
+	public final Vector4f getXWZW() {
+		return new Vector4f(x, w, z, w);
+	}
+
+	public final Vector4f getXWWX() {
+		return new Vector4f(x, w, w, x);
+	}
+
+	public final Vector4f getXWWY() {
+		return new Vector4f(x, w, w, y);
+	}
+
+	public final Vector4f getXWWZ() {
+		return new Vector4f(x, w, w, z);
+	}
+
+	public final Vector4f getXWWW() {
+		return new Vector4f(x, w, w, w);
+	}
+
+	public final Vector4f getYXXX() {
+		return new Vector4f(y, x, x, x);
+	}
+
+	public final Vector4f getYXXY() {
+		return new Vector4f(y, x, x, y);
+	}
+
+	public final Vector4f getYXXZ() {
+		return new Vector4f(y, x, x, z);
+	}
+
+	public final Vector4f getYXXW() {
+		return new Vector4f(y, x, x, w);
+	}
+
+	public final Vector4f getYXYX() {
+		return new Vector4f(y, x, y, x);
+	}
+
+	public final Vector4f getYXYY() {
+		return new Vector4f(y, x, y, y);
+	}
+
+	public final Vector4f getYXYZ() {
+		return new Vector4f(y, x, y, z);
+	}
+
+	public final Vector4f getYXYW() {
+		return new Vector4f(y, x, y, w);
+	}
+
+	public final Vector4f getYXZX() {
+		return new Vector4f(y, x, z, x);
+	}
+
+	public final Vector4f getYXZY() {
+		return new Vector4f(y, x, z, y);
+	}
+
+	public final Vector4f getYXZZ() {
+		return new Vector4f(y, x, z, z);
+	}
+
+	public final Vector4f getYXZW() {
+		return new Vector4f(y, x, z, w);
+	}
+
+	public final Vector4f getYXWX() {
+		return new Vector4f(y, x, w, x);
+	}
+
+	public final Vector4f getYXWY() {
+		return new Vector4f(y, x, w, y);
+	}
+
+	public final Vector4f getYXWZ() {
+		return new Vector4f(y, x, w, z);
+	}
+
+	public final Vector4f getYXWW() {
+		return new Vector4f(y, x, w, w);
+	}
+
+	public final Vector4f getYYXX() {
+		return new Vector4f(y, y, x, x);
+	}
+
+	public final Vector4f getYYXY() {
+		return new Vector4f(y, y, x, y);
+	}
+
+	public final Vector4f getYYXZ() {
+		return new Vector4f(y, y, x, z);
+	}
+
+	public final Vector4f getYYXW() {
+		return new Vector4f(y, y, x, w);
+	}
+
+	public final Vector4f getYYYX() {
+		return new Vector4f(y, y, y, x);
+	}
+
+	public final Vector4f getYYYY() {
+		return new Vector4f(y, y, y, y);
+	}
+
+	public final Vector4f getYYYZ() {
+		return new Vector4f(y, y, y, z);
+	}
+
+	public final Vector4f getYYYW() {
+		return new Vector4f(y, y, y, w);
+	}
+
+	public final Vector4f getYYZX() {
+		return new Vector4f(y, y, z, x);
+	}
+
+	public final Vector4f getYYZY() {
+		return new Vector4f(y, y, z, y);
+	}
+
+	public final Vector4f getYYZZ() {
+		return new Vector4f(y, y, z, z);
+	}
+
+	public final Vector4f getYYZW() {
+		return new Vector4f(y, y, z, w);
+	}
+
+	public final Vector4f getYYWX() {
+		return new Vector4f(y, y, w, x);
+	}
+
+	public final Vector4f getYYWY() {
+		return new Vector4f(y, y, w, y);
+	}
+
+	public final Vector4f getYYWZ() {
+		return new Vector4f(y, y, w, z);
+	}
+
+	public final Vector4f getYYWW() {
+		return new Vector4f(y, y, w, w);
+	}
+
+	public final Vector4f getYZXX() {
+		return new Vector4f(y, z, x, x);
+	}
+
+	public final Vector4f getYZXY() {
+		return new Vector4f(y, z, x, y);
+	}
+
+	public final Vector4f getYZXZ() {
+		return new Vector4f(y, z, x, z);
+	}
+
+	public final Vector4f getYZXW() {
+		return new Vector4f(y, z, x, w);
+	}
+
+	public final Vector4f getYZYX() {
+		return new Vector4f(y, z, y, x);
+	}
+
+	public final Vector4f getYZYY() {
+		return new Vector4f(y, z, y, y);
+	}
+
+	public final Vector4f getYZYZ() {
+		return new Vector4f(y, z, y, z);
+	}
+
+	public final Vector4f getYZYW() {
+		return new Vector4f(y, z, y, w);
+	}
+
+	public final Vector4f getYZZX() {
+		return new Vector4f(y, z, z, x);
+	}
+
+	public final Vector4f getYZZY() {
+		return new Vector4f(y, z, z, y);
+	}
+
+	public final Vector4f getYZZZ() {
+		return new Vector4f(y, z, z, z);
+	}
+
+	public final Vector4f getYZZW() {
+		return new Vector4f(y, z, z, w);
+	}
+
+	public final Vector4f getYZWX() {
+		return new Vector4f(y, z, w, x);
+	}
+
+	public final Vector4f getYZWY() {
+		return new Vector4f(y, z, w, y);
+	}
+
+	public final Vector4f getYZWZ() {
+		return new Vector4f(y, z, w, z);
+	}
+
+	public final Vector4f getYZWW() {
+		return new Vector4f(y, z, w, w);
+	}
+
+	public final Vector4f getYWXX() {
+		return new Vector4f(y, w, x, x);
+	}
+
+	public final Vector4f getYWXY() {
+		return new Vector4f(y, w, x, y);
+	}
+
+	public final Vector4f getYWXZ() {
+		return new Vector4f(y, w, x, z);
+	}
+
+	public final Vector4f getYWXW() {
+		return new Vector4f(y, w, x, w);
+	}
+
+	public final Vector4f getYWYX() {
+		return new Vector4f(y, w, y, x);
+	}
+
+	public final Vector4f getYWYY() {
+		return new Vector4f(y, w, y, y);
+	}
+
+	public final Vector4f getYWYZ() {
+		return new Vector4f(y, w, y, z);
+	}
+
+	public final Vector4f getYWYW() {
+		return new Vector4f(y, w, y, w);
+	}
+
+	public final Vector4f getYWZX() {
+		return new Vector4f(y, w, z, x);
+	}
+
+	public final Vector4f getYWZY() {
+		return new Vector4f(y, w, z, y);
+	}
+
+	public final Vector4f getYWZZ() {
+		return new Vector4f(y, w, z, z);
+	}
+
+	public final Vector4f getYWZW() {
+		return new Vector4f(y, w, z, w);
+	}
+
+	public final Vector4f getYWWX() {
+		return new Vector4f(y, w, w, x);
+	}
+
+	public final Vector4f getYWWY() {
+		return new Vector4f(y, w, w, y);
+	}
+
+	public final Vector4f getYWWZ() {
+		return new Vector4f(y, w, w, z);
+	}
+
+	public final Vector4f getYWWW() {
+		return new Vector4f(y, w, w, w);
+	}
+
+	public final Vector4f getZXXX() {
+		return new Vector4f(z, x, x, x);
+	}
+
+	public final Vector4f getZXXY() {
+		return new Vector4f(z, x, x, y);
+	}
+
+	public final Vector4f getZXXZ() {
+		return new Vector4f(z, x, x, z);
+	}
+
+	public final Vector4f getZXXW() {
+		return new Vector4f(z, x, x, w);
+	}
+
+	public final Vector4f getZXYX() {
+		return new Vector4f(z, x, y, x);
+	}
+
+	public final Vector4f getZXYY() {
+		return new Vector4f(z, x, y, y);
+	}
+
+	public final Vector4f getZXYZ() {
+		return new Vector4f(z, x, y, z);
+	}
+
+	public final Vector4f getZXYW() {
+		return new Vector4f(z, x, y, w);
+	}
+
+	public final Vector4f getZXZX() {
+		return new Vector4f(z, x, z, x);
+	}
+
+	public final Vector4f getZXZY() {
+		return new Vector4f(z, x, z, y);
+	}
+
+	public final Vector4f getZXZZ() {
+		return new Vector4f(z, x, z, z);
+	}
+
+	public final Vector4f getZXZW() {
+		return new Vector4f(z, x, z, w);
+	}
+
+	public final Vector4f getZXWX() {
+		return new Vector4f(z, x, w, x);
+	}
+
+	public final Vector4f getZXWY() {
+		return new Vector4f(z, x, w, y);
+	}
+
+	public final Vector4f getZXWZ() {
+		return new Vector4f(z, x, w, z);
+	}
+
+	public final Vector4f getZXWW() {
+		return new Vector4f(z, x, w, w);
+	}
+
+	public final Vector4f getZYXX() {
+		return new Vector4f(z, y, x, x);
+	}
+
+	public final Vector4f getZYXY() {
+		return new Vector4f(z, y, x, y);
+	}
+
+	public final Vector4f getZYXZ() {
+		return new Vector4f(z, y, x, z);
+	}
+
+	public final Vector4f getZYXW() {
+		return new Vector4f(z, y, x, w);
+	}
+
+	public final Vector4f getZYYX() {
+		return new Vector4f(z, y, y, x);
+	}
+
+	public final Vector4f getZYYY() {
+		return new Vector4f(z, y, y, y);
+	}
+
+	public final Vector4f getZYYZ() {
+		return new Vector4f(z, y, y, z);
+	}
+
+	public final Vector4f getZYYW() {
+		return new Vector4f(z, y, y, w);
+	}
+
+	public final Vector4f getZYZX() {
+		return new Vector4f(z, y, z, x);
+	}
+
+	public final Vector4f getZYZY() {
+		return new Vector4f(z, y, z, y);
+	}
+
+	public final Vector4f getZYZZ() {
+		return new Vector4f(z, y, z, z);
+	}
+
+	public final Vector4f getZYZW() {
+		return new Vector4f(z, y, z, w);
+	}
+
+	public final Vector4f getZYWX() {
+		return new Vector4f(z, y, w, x);
+	}
+
+	public final Vector4f getZYWY() {
+		return new Vector4f(z, y, w, y);
+	}
+
+	public final Vector4f getZYWZ() {
+		return new Vector4f(z, y, w, z);
+	}
+
+	public final Vector4f getZYWW() {
+		return new Vector4f(z, y, w, w);
+	}
+
+	public final Vector4f getZZXX() {
+		return new Vector4f(z, z, x, x);
+	}
+
+	public final Vector4f getZZXY() {
+		return new Vector4f(z, z, x, y);
+	}
+
+	public final Vector4f getZZXZ() {
+		return new Vector4f(z, z, x, z);
+	}
+
+	public final Vector4f getZZXW() {
+		return new Vector4f(z, z, x, w);
+	}
+
+	public final Vector4f getZZYX() {
+		return new Vector4f(z, z, y, x);
+	}
+
+	public final Vector4f getZZYY() {
+		return new Vector4f(z, z, y, y);
+	}
+
+	public final Vector4f getZZYZ() {
+		return new Vector4f(z, z, y, z);
+	}
+
+	public final Vector4f getZZYW() {
+		return new Vector4f(z, z, y, w);
+	}
+
+	public final Vector4f getZZZX() {
+		return new Vector4f(z, z, z, x);
+	}
+
+	public final Vector4f getZZZY() {
+		return new Vector4f(z, z, z, y);
+	}
+
+	public final Vector4f getZZZZ() {
+		return new Vector4f(z, z, z, z);
+	}
+
+	public final Vector4f getZZZW() {
+		return new Vector4f(z, z, z, w);
+	}
+
+	public final Vector4f getZZWX() {
+		return new Vector4f(z, z, w, x);
+	}
+
+	public final Vector4f getZZWY() {
+		return new Vector4f(z, z, w, y);
+	}
+
+	public final Vector4f getZZWZ() {
+		return new Vector4f(z, z, w, z);
+	}
+
+	public final Vector4f getZZWW() {
+		return new Vector4f(z, z, w, w);
+	}
+
+	public final Vector4f getZWXX() {
+		return new Vector4f(z, w, x, x);
+	}
+
+	public final Vector4f getZWXY() {
+		return new Vector4f(z, w, x, y);
+	}
+
+	public final Vector4f getZWXZ() {
+		return new Vector4f(z, w, x, z);
+	}
+
+	public final Vector4f getZWXW() {
+		return new Vector4f(z, w, x, w);
+	}
+
+	public final Vector4f getZWYX() {
+		return new Vector4f(z, w, y, x);
+	}
+
+	public final Vector4f getZWYY() {
+		return new Vector4f(z, w, y, y);
+	}
+
+	public final Vector4f getZWYZ() {
+		return new Vector4f(z, w, y, z);
+	}
+
+	public final Vector4f getZWYW() {
+		return new Vector4f(z, w, y, w);
+	}
+
+	public final Vector4f getZWZX() {
+		return new Vector4f(z, w, z, x);
+	}
+
+	public final Vector4f getZWZY() {
+		return new Vector4f(z, w, z, y);
+	}
+
+	public final Vector4f getZWZZ() {
+		return new Vector4f(z, w, z, z);
+	}
+
+	public final Vector4f getZWZW() {
+		return new Vector4f(z, w, z, w);
+	}
+
+	public final Vector4f getZWWX() {
+		return new Vector4f(z, w, w, x);
+	}
+
+	public final Vector4f getZWWY() {
+		return new Vector4f(z, w, w, y);
+	}
+
+	public final Vector4f getZWWZ() {
+		return new Vector4f(z, w, w, z);
+	}
+
+	public final Vector4f getZWWW() {
+		return new Vector4f(z, w, w, w);
+	}
+
+	public final Vector4f getWXXX() {
+		return new Vector4f(w, x, x, x);
+	}
+
+	public final Vector4f getWXXY() {
+		return new Vector4f(w, x, x, y);
+	}
+
+	public final Vector4f getWXXZ() {
+		return new Vector4f(w, x, x, z);
+	}
+
+	public final Vector4f getWXXW() {
+		return new Vector4f(w, x, x, w);
+	}
+
+	public final Vector4f getWXYX() {
+		return new Vector4f(w, x, y, x);
+	}
+
+	public final Vector4f getWXYY() {
+		return new Vector4f(w, x, y, y);
+	}
+
+	public final Vector4f getWXYZ() {
+		return new Vector4f(w, x, y, z);
+	}
+
+	public final Vector4f getWXYW() {
+		return new Vector4f(w, x, y, w);
+	}
+
+	public final Vector4f getWXZX() {
+		return new Vector4f(w, x, z, x);
+	}
+
+	public final Vector4f getWXZY() {
+		return new Vector4f(w, x, z, y);
+	}
+
+	public final Vector4f getWXZZ() {
+		return new Vector4f(w, x, z, z);
+	}
+
+	public final Vector4f getWXZW() {
+		return new Vector4f(w, x, z, w);
+	}
+
+	public final Vector4f getWXWX() {
+		return new Vector4f(w, x, w, x);
+	}
+
+	public final Vector4f getWXWY() {
+		return new Vector4f(w, x, w, y);
+	}
+
+	public final Vector4f getWXWZ() {
+		return new Vector4f(w, x, w, z);
+	}
+
+	public final Vector4f getWXWW() {
+		return new Vector4f(w, x, w, w);
+	}
+
+	public final Vector4f getWYXX() {
+		return new Vector4f(w, y, x, x);
+	}
+
+	public final Vector4f getWYXY() {
+		return new Vector4f(w, y, x, y);
+	}
+
+	public final Vector4f getWYXZ() {
+		return new Vector4f(w, y, x, z);
+	}
+
+	public final Vector4f getWYXW() {
+		return new Vector4f(w, y, x, w);
+	}
+
+	public final Vector4f getWYYX() {
+		return new Vector4f(w, y, y, x);
+	}
+
+	public final Vector4f getWYYY() {
+		return new Vector4f(w, y, y, y);
+	}
+
+	public final Vector4f getWYYZ() {
+		return new Vector4f(w, y, y, z);
+	}
+
+	public final Vector4f getWYYW() {
+		return new Vector4f(w, y, y, w);
+	}
+
+	public final Vector4f getWYZX() {
+		return new Vector4f(w, y, z, x);
+	}
+
+	public final Vector4f getWYZY() {
+		return new Vector4f(w, y, z, y);
+	}
+
+	public final Vector4f getWYZZ() {
+		return new Vector4f(w, y, z, z);
+	}
+
+	public final Vector4f getWYZW() {
+		return new Vector4f(w, y, z, w);
+	}
+
+	public final Vector4f getWYWX() {
+		return new Vector4f(w, y, w, x);
+	}
+
+	public final Vector4f getWYWY() {
+		return new Vector4f(w, y, w, y);
+	}
+
+	public final Vector4f getWYWZ() {
+		return new Vector4f(w, y, w, z);
+	}
+
+	public final Vector4f getWYWW() {
+		return new Vector4f(w, y, w, w);
+	}
+
+	public final Vector4f getWZXX() {
+		return new Vector4f(w, z, x, x);
+	}
+
+	public final Vector4f getWZXY() {
+		return new Vector4f(w, z, x, y);
+	}
+
+	public final Vector4f getWZXZ() {
+		return new Vector4f(w, z, x, z);
+	}
+
+	public final Vector4f getWZXW() {
+		return new Vector4f(w, z, x, w);
+	}
+
+	public final Vector4f getWZYX() {
+		return new Vector4f(w, z, y, x);
+	}
+
+	public final Vector4f getWZYY() {
+		return new Vector4f(w, z, y, y);
+	}
+
+	public final Vector4f getWZYZ() {
+		return new Vector4f(w, z, y, z);
+	}
+
+	public final Vector4f getWZYW() {
+		return new Vector4f(w, z, y, w);
+	}
+
+	public final Vector4f getWZZX() {
+		return new Vector4f(w, z, z, x);
+	}
+
+	public final Vector4f getWZZY() {
+		return new Vector4f(w, z, z, y);
+	}
+
+	public final Vector4f getWZZZ() {
+		return new Vector4f(w, z, z, z);
+	}
+
+	public final Vector4f getWZZW() {
+		return new Vector4f(w, z, z, w);
+	}
+
+	public final Vector4f getWZWX() {
+		return new Vector4f(w, z, w, x);
+	}
+
+	public final Vector4f getWZWY() {
+		return new Vector4f(w, z, w, y);
+	}
+
+	public final Vector4f getWZWZ() {
+		return new Vector4f(w, z, w, z);
+	}
+
+	public final Vector4f getWZWW() {
+		return new Vector4f(w, z, w, w);
+	}
+
+	public final Vector4f getWWXX() {
+		return new Vector4f(w, w, x, x);
+	}
+
+	public final Vector4f getWWXY() {
+		return new Vector4f(w, w, x, y);
+	}
+
+	public final Vector4f getWWXZ() {
+		return new Vector4f(w, w, x, z);
+	}
+
+	public final Vector4f getWWXW() {
+		return new Vector4f(w, w, x, w);
+	}
+
+	public final Vector4f getWWYX() {
+		return new Vector4f(w, w, y, x);
+	}
+
+	public final Vector4f getWWYY() {
+		return new Vector4f(w, w, y, y);
+	}
+
+	public final Vector4f getWWYZ() {
+		return new Vector4f(w, w, y, z);
+	}
+
+	public final Vector4f getWWYW() {
+		return new Vector4f(w, w, y, w);
+	}
+
+	public final Vector4f getWWZX() {
+		return new Vector4f(w, w, z, x);
+	}
+
+	public final Vector4f getWWZY() {
+		return new Vector4f(w, w, z, y);
+	}
+
+	public final Vector4f getWWZZ() {
+		return new Vector4f(w, w, z, z);
+	}
+
+	public final Vector4f getWWZW() {
+		return new Vector4f(w, w, z, w);
+	}
+
+	public final Vector4f getWWWX() {
+		return new Vector4f(w, w, w, x);
+	}
+
+	public final Vector4f getWWWY() {
+		return new Vector4f(w, w, w, y);
+	}
+
+	public final Vector4f getWWWZ() {
+		return new Vector4f(w, w, w, z);
+	}
+
+	public final Vector4f getWWWW() {
+		return new Vector4f(w, w, w, w);
+	}
+
 	public Vector4f set(Vector4f vector) {
-		this.x = vector.getX();
-		this.y = vector.getY();
-		this.z = vector.getZ();
-		this.w = vector.getW();
+		return this.set(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
+	}
+
+	public Vector4f set(float x, float y, float z, float w) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
+
+		return this;
+	}
+
+	public Vector4f set(float[] values) {
+		this.x = values[COMPONENT_INDEX_X];
+		this.y = values[COMPONENT_INDEX_Y];
+		this.z = values[COMPONENT_INDEX_Z];
+		this.w = values[COMPONENT_INDEX_W];
 
 		return this;
 	}
@@ -669,5 +2022,4 @@ public class Vector4f {
 
 		return this;
 	}
-
 }
