@@ -1,4 +1,4 @@
-package laraifox.foxtail.testing.fontRendering;
+package laraifox.foxtail.testing.thinmatrixfont;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL30;
 
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.rendering.Shader;
-import laraifox.foxtail.testing.fontMeshCreator.FontType;
-import laraifox.foxtail.testing.fontMeshCreator.GUIText;
 import laraifox.foxtail.testing.shadersandbox.ShaderSandbox;
 
 public class TextManager {

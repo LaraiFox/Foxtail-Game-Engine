@@ -1,11 +1,10 @@
-package laraifox.foxtail.testing.fontMeshCreator;
+package laraifox.foxtail.testing.thinmatrixfont;
 
 import org.lwjgl.opengl.GL30;
 
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector3f;
-import laraifox.foxtail.testing.fontRendering.TextManager;
 
 /**
  * Represents a piece of text in the game.
@@ -20,7 +19,7 @@ public class GUIText {
 
 	private int textMeshVao;
 	private int vertexCount;
-	private Vector3f colour = new Vector3f(1f, 1f, 1f);
+	private Vector3f colour = new Vector3f(0f, 0f, 0f);
 
 	private Transform3D transform;
 	private float lineMaxSize;
@@ -89,7 +88,7 @@ public class GUIText {
 	 *            - blue value, between 0 and 1.
 	 */
 	public void setColour(float r, float g, float b) {
-		colour.setXYZ(r, g, b);
+		colour.set(r, g, b);
 	}
 
 	/**

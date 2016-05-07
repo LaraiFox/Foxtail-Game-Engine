@@ -1,7 +1,6 @@
 package laraifox.foxtail.rendering.models;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 import laraifox.foxtail.core.math.Vector2f;
@@ -97,6 +96,8 @@ public class OBJModel {
 			result.getNormals().add(currentNormal);
 			result.getIndices().add(i);
 		}
+		
+		result.calculateTangents();
 
 		return result;
 	}
@@ -109,7 +110,7 @@ public class OBJModel {
 
 		if (values.length > 1) {
 			// TODO: Add support for multiple meshes inside a single model;
-			if (!values[1].isEmpty() && values[1] != null) {
+			if (values[1] != null && !values[1].isEmpty()) {
 				hasTexCoords = true;
 				result.texCoordIndex = Integer.parseInt(values[1]) - 1;
 			} else {
@@ -117,7 +118,7 @@ public class OBJModel {
 			}
 
 			if (values.length > 2) {
-				if (!values[2].isEmpty() && values[2] != null) {
+				if (values[2] != null && !values[2].isEmpty()) {
 					hasNormals = true;
 					result.normalIndex = Integer.parseInt(values[2]) - 1;
 				} else {

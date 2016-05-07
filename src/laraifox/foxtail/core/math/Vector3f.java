@@ -68,7 +68,7 @@ public class Vector3f {
 	public Vector3f(Vector2f vector) {
 		this(vector.getX(), vector.getY(), 0.0f);
 	}
-	
+
 	public Vector3f(Vector2f vector, float z) {
 		this(vector.getX(), vector.getY(), z);
 	}
@@ -81,6 +81,10 @@ public class Vector3f {
 	 *            - the vector to be copied
 	 */
 	public Vector3f(Vector3f vector) {
+		this(vector.getX(), vector.getY(), vector.getZ());
+	}
+
+	public Vector3f(org.lwjgl.util.vector.Vector3f vector) {
 		this(vector.getX(), vector.getY(), vector.getZ());
 	}
 
@@ -754,7 +758,7 @@ public class Vector3f {
 	}
 
 	public Vector3f transform(Matrix4f matrix) {
-		return this.set(matrix.multiply(this));
+		return this.set(matrix.multiply(this, 1.0f).getXYZ());
 	}
 
 	public float angle(Vector3f vector) {
@@ -805,13 +809,7 @@ public class Vector3f {
 	}
 
 	public boolean isZero() {
-		return this.isEqual(Vector3f.Zero());
-	}
-
-	public float[] toArray() {
-		return new float[] {
-				this.x, this.y, this.z
-		};
+		return (this.x == 0.0f && this.y == 0.0f && this.z == 0.0f);
 	}
 
 	@Override
@@ -819,8 +817,10 @@ public class Vector3f {
 		return new String("[ " + x + ", " + y + ", " + z + " ]");
 	}
 
-	public Vector3f get() {
-		return new Vector3f(this);
+	public float[] get() {
+		return new float[] {
+				x, y, z
+		};
 	}
 
 	public float get(int i) {
@@ -834,70 +834,178 @@ public class Vector3f {
 			throw new ArrayIndexOutOfBoundsException("No component exists at index " + i + ".");
 	}
 
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 
-	public float getY() {
+	public final float getY() {
 		return y;
 	}
 
-	public float getZ() {
+	public final float getZ() {
 		return z;
 	}
 
-	public Vector2f getXY() {
+	public final Vector2f getXX() {
+		return new Vector2f(x, x);
+	}
+
+	public final Vector2f getXY() {
 		return new Vector2f(x, y);
 	}
 
-	public Vector2f getXZ() {
+	public final Vector2f getXZ() {
 		return new Vector2f(x, z);
 	}
 
-	public Vector2f getYX() {
+	public final Vector2f getYX() {
 		return new Vector2f(y, x);
 	}
 
-	public Vector2f getYZ() {
+	public final Vector2f getYY() {
+		return new Vector2f(y, y);
+	}
+
+	public final Vector2f getYZ() {
 		return new Vector2f(y, z);
 	}
 
-	public Vector2f getZX() {
+	public final Vector2f getZX() {
 		return new Vector2f(z, x);
 	}
 
-	public Vector2f getZY() {
+	public final Vector2f getZY() {
 		return new Vector2f(z, y);
 	}
 
-	public Vector3f getXYZ() {
+	public final Vector2f getZZ() {
+		return new Vector2f(z, z);
+	}
+
+	public final Vector3f getXXX() {
+		return new Vector3f(x, x, x);
+	}
+
+	public final Vector3f getXXY() {
+		return new Vector3f(x, x, y);
+	}
+
+	public final Vector3f getXXZ() {
+		return new Vector3f(x, x, z);
+	}
+
+	public final Vector3f getXYX() {
+		return new Vector3f(x, y, x);
+	}
+
+	public final Vector3f getXYY() {
+		return new Vector3f(x, y, y);
+	}
+
+	public final Vector3f getXYZ() {
 		return new Vector3f(x, y, z);
 	}
 
-	public Vector3f getXZY() {
+	public final Vector3f getXZX() {
+		return new Vector3f(x, z, x);
+	}
+
+	public final Vector3f getXZY() {
 		return new Vector3f(x, z, y);
 	}
 
-	public Vector3f getYXZ() {
+	public final Vector3f getXZZ() {
+		return new Vector3f(x, z, z);
+	}
+
+	public final Vector3f getYXX() {
+		return new Vector3f(y, x, x);
+	}
+
+	public final Vector3f getYXY() {
+		return new Vector3f(y, x, y);
+	}
+
+	public final Vector3f getYXZ() {
 		return new Vector3f(y, x, z);
 	}
 
-	public Vector3f getYZX() {
+	public final Vector3f getYYX() {
+		return new Vector3f(y, y, x);
+	}
+
+	public final Vector3f getYYY() {
+		return new Vector3f(y, y, y);
+	}
+
+	public final Vector3f getYYZ() {
+		return new Vector3f(y, y, z);
+	}
+
+	public final Vector3f getYZX() {
 		return new Vector3f(y, z, x);
 	}
 
-	public Vector3f getZXY() {
+	public final Vector3f getYZY() {
+		return new Vector3f(y, z, y);
+	}
+
+	public final Vector3f getYZZ() {
+		return new Vector3f(y, z, z);
+	}
+
+	public final Vector3f getZXX() {
+		return new Vector3f(z, x, x);
+	}
+
+	public final Vector3f getZXY() {
 		return new Vector3f(z, x, y);
 	}
 
-	public Vector3f getZYX() {
+	public final Vector3f getZXZ() {
+		return new Vector3f(z, x, z);
+	}
+
+	public final Vector3f getZYX() {
 		return new Vector3f(z, y, x);
 	}
 
+	public final Vector3f getZYY() {
+		return new Vector3f(z, y, y);
+	}
+
+	public final Vector3f getZYZ() {
+		return new Vector3f(z, y, z);
+	}
+
+	public final Vector3f getZZX() {
+		return new Vector3f(z, z, x);
+	}
+
+	public final Vector3f getZZY() {
+		return new Vector3f(z, z, y);
+	}
+
+	public final Vector3f getZZZ() {
+		return new Vector3f(z, z, z);
+	}
+
 	public Vector3f set(Vector3f vector) {
-		this.x = vector.getX();
-		this.y = vector.getY();
-		this.z = vector.getZ();
+		return this.set(vector.getX(), vector.getY(), vector.getZ());
+	}
+
+	public Vector3f set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+
+		return this;
+	}
+
+	public Vector3f set(float[] values) {
+		this.x = values[COMPONENT_INDEX_X];
+		this.y = values[COMPONENT_INDEX_Y];
+		this.z = values[COMPONENT_INDEX_Z];
 
 		return this;
 	}
@@ -933,144 +1041,6 @@ public class Vector3f {
 
 	public Vector3f setZ(float z) {
 		this.z = z;
-
-		return this;
-	}
-
-	public Vector3f setXY(Vector2f vector) {
-		return this.setXY(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setXY(float x, float y) {
-		this.x = x;
-		this.y = y;
-
-		return this;
-	}
-
-	public Vector3f setXZ(Vector2f vector) {
-		return this.setXZ(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setXZ(float x, float z) {
-		this.x = x;
-		this.z = z;
-
-		return this;
-	}
-
-	public Vector3f setYX(Vector2f vector) {
-		return this.setYX(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setYX(float y, float x) {
-		this.y = y;
-		this.x = x;
-
-		return this;
-	}
-
-	public Vector3f setYZ(Vector2f vector) {
-		return this.setYZ(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setYZ(float y, float z) {
-		this.y = y;
-		this.z = z;
-
-		return this;
-	}
-
-	public Vector3f setZX(Vector2f vector) {
-		return this.setZX(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setZX(float z, float x) {
-		this.z = z;
-		this.x = x;
-
-		return this;
-	}
-
-	public Vector3f setZY(Vector2f vector) {
-		return this.setZY(vector.getX(), vector.getY());
-	}
-
-	public Vector3f setZY(float z, float y) {
-		this.z = z;
-		this.y = y;
-
-		return this;
-	}
-
-	public Vector3f setXYZ(Vector3f vector) {
-		return this.setXYZ(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setXYZ(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-
-		return this;
-	}
-
-	public Vector3f setXZY(Vector3f vector) {
-		return this.setXZY(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setXZY(float x, float z, float y) {
-		this.x = x;
-		this.z = z;
-		this.y = y;
-
-		return this;
-	}
-
-	public Vector3f setYXZ(Vector3f vector) {
-		return this.setYXZ(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setYXZ(float y, float x, float z) {
-		this.y = y;
-		this.x = x;
-		this.z = z;
-
-		return this;
-	}
-
-	public Vector3f setYZX(Vector3f vector) {
-		return this.setYZX(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setYZX(float y, float z, float x) {
-		this.y = y;
-		this.z = z;
-		this.x = x;
-
-		return this;
-	}
-
-	public Vector3f setZXY(Vector3f vector) {
-		return this.setZXY(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setZXY(float z, float x, float y) {
-		this.z = z;
-		this.x = x;
-		this.y = y;
-
-		return this;
-	}
-
-	public Vector3f setZYX(Vector3f vector) {
-		return this.setZYX(vector.getX(), vector.getY(), vector.getZ());
-	}
-
-	public Vector3f setZYX(float z, float y, float x) {
-		this.z = z;
-		this.y = y;
-		this.x = x;
 
 		return this;
 	}

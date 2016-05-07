@@ -2,7 +2,7 @@ Shader "TexturedPhong" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/StandardVariables.h"
+		#pragma include "/includes/Standard.inc"
 		
 		uniform mat4 FOXTAIL_MODEL_MATRIX;
 		uniform mat4 FOXTAIL_VIEW_MATRIX;
@@ -31,6 +31,8 @@ Shader "TexturedPhong" {
 		}
 	GLSLFragment
 		#version 330
+
+		#pragma include "/includes/Material.inc"
 		
 		struct BaseLight {
 			vec3 color;

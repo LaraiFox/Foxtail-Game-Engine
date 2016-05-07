@@ -1,4 +1,4 @@
-package laraifox.foxtail.testing.fontMeshCreator;
+package laraifox.foxtail.testing.thinmatrixfont;
 
 import java.io.File;
 import java.nio.FloatBuffer;

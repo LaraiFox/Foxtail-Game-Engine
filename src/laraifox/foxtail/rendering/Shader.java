@@ -48,6 +48,10 @@ public class Shader {
 		this.createShader(vertexFilepath, fragmentFilepath, AssetLoader.loadFile(vertexFilepath), AssetLoader.loadFile(fragmentFilepath), bindAttributes);
 	}
 
+	public Shader(String shaderFilepath) {
+		this(shaderFilepath, false);
+	}
+
 	public Shader(String shaderFilepath, boolean bindAttributes) {
 		this();
 
@@ -404,9 +408,10 @@ public class Shader {
 		int uniformLocation = GL20.glGetUniformLocation(id, uniformName);
 
 		if (uniformLocation == 0xFFFFFFFF) {
-			System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
-			new Exception().printStackTrace();
-			System.exit(1);
+			Logger.log("Uniform '" + uniformName + "' is not used in shader and has been removed!", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_WARNING);
+//			System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
+//			new Exception().printStackTrace();
+//			System.exit(1);
 		}
 
 		uniforms.put(uniformName, uniformLocation);
@@ -511,5 +516,9 @@ public class Shader {
 
 	public static void unbind() {
 		GL20.glUseProgram(0);
+	}
+
+	public void cleanUp() {
+		GL20.glDeleteProgram(id);
 	}
 }

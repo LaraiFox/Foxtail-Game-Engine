@@ -2,10 +2,10 @@ package laraifox.foxtail.rendering.geometry;
 
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.rendering.Vertex;
-import laraifox.foxtail.rendering.models.Model;
+import laraifox.foxtail.rendering.models.Mesh;
 
 public interface IGeometricObject {
-	public Model getModel();
+	public Mesh getModel();
 
 	public Vertex[] getVertices();
 

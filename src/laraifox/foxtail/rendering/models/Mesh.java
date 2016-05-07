@@ -11,16 +11,16 @@ import org.lwjgl.opengl.GL30;
 import laraifox.foxtail.core.BufferUtils;
 import laraifox.foxtail.rendering.Vertex;
 
-public class Model {
+public class Mesh {
 	private int vaoID;
-	private int count;
+	public int count;
 	private int byteCount;
 
-	public Model(float[] vertices, int[] indices) {
+	public Mesh(float[] vertices, int[] indices) {
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length / Vertex.COMPONENT_COUNT);
 	}
 
-	public Model(Vertex[] vertices, int[] indices) {
+	public Mesh(Vertex[] vertices, int[] indices) {
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length);
 	}
 
@@ -47,6 +47,10 @@ public class Model {
 		this.byteCount = indexCount * Integer.BYTES + vertexCount * Vertex.BYTE_COUNT;
 	}
 
+	public void draw() {
+		GL11.glDrawElements(GL11.GL_TRIANGLES, count, GL11.GL_UNSIGNED_INT, 0);
+	}
+
 	public void render() {
 		GL30.glBindVertexArray(vaoID);
 
@@ -63,6 +67,10 @@ public class Model {
 		GL20.glDisableVertexAttribArray(3);
 
 		GL30.glBindVertexArray(0);
+	}
+
+	public int getID() {
+		return vaoID;
 	}
 
 	public int getByteCount() {

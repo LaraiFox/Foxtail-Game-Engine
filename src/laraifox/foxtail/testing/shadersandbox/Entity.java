@@ -3,17 +3,17 @@ package laraifox.foxtail.testing.shadersandbox;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.rendering.Shader;
-import laraifox.foxtail.rendering.models.Model;
+import laraifox.foxtail.rendering.models.Mesh;
 
 public class Entity {
 	private Material material;
-	private Model model;
+	private Mesh mesh;
 	private Transform3D transform;
 	private Transform3D momentum;
 
-	public Entity(Material material, Model model, Transform3D transform, Transform3D momentum) {
+	public Entity(Material material, Mesh model, Transform3D transform, Transform3D momentum) {
 		this.material = material;
-		this.model = model;
+		this.mesh = model;
 		this.transform = transform;
 		this.momentum = momentum;
 	}
@@ -26,13 +26,13 @@ public class Entity {
 		shader.bind();
 
 		shader.setUniform("FOXTAIL_MODEL_MATRIX", transform.getTransformationMatrix());
-		shader.setUniform("FOXTAIL_MVP_MATRIX", viewProjectionMatrix.multiply(transform.getTransformationMatrix()));
+		shader.setUniform("FOXTAIL_MVP_MATRIX", Matrix4f.multiply(viewProjectionMatrix, transform.getTransformationMatrix()));
 
 		shader.setUniform("in_BaseColor", material.getColor());
 		shader.setUniform("in_SpecularIntensity", material.getSpecularIntensity());
 		shader.setUniform("in_SpecularExponent", material.getSpecularExponent());
 
-		model.render();
+		mesh.render();
 	}
 
 	public void setMomentum(Transform3D momentum) {
@@ -43,7 +43,23 @@ public class Entity {
 		this.transform = transform;
 	}
 
-	public int getModelSize() {
-		return model.getByteCount();
+	public int getMeshSize() {
+		return mesh.getByteCount();
+	}
+
+	public int getMeshID() {
+		return mesh.getID();
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public Transform3D getTransform() {
+		return transform;
+	}
+
+	public int getMeshVertexCount() {
+		return mesh.count;
 	}
 }

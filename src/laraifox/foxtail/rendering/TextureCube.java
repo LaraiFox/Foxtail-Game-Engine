@@ -17,13 +17,12 @@ import org.lwjgl.opengl.GLContext;
 import laraifox.foxtail.core.Logger;
 
 public class TextureCube {
-	private static final TextureFilter DEFAULT_TEXTURE_FILTER = new TextureFilter();
 	private static final int BYTES_PER_PIXEL = 4;
 
 	private int textureID;
 
 	public TextureCube(String[] filepaths) {
-		this(filepaths, DEFAULT_TEXTURE_FILTER);
+		this(filepaths, TextureFilter.DEFAULT_FILTER);
 	}
 
 	public TextureCube(String[] filepaths, TextureFilter textureFilter) {
@@ -53,7 +52,8 @@ public class TextureCube {
 
 				buffer.flip();
 
-				GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+				GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, textureFilter.getGLTextureInternalFormat(), width, height, 0, textureFilter.getGLTextureFormat(), GL11.GL_UNSIGNED_BYTE,
+						buffer);
 			}
 
 			textureFilter.apply(GL13.GL_TEXTURE_CUBE_MAP);
@@ -74,7 +74,7 @@ public class TextureCube {
 
 						GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, textureAnisotropy);
 					} else {
-						Logger.log("Anisotropic filtering is not supported!", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+						Logger.log("Anisotropic filtering is not supported!", "TextureCube", Logger.MESSAGE_LEVEL_WARNING);
 					}
 				}
 			}
@@ -86,7 +86,25 @@ public class TextureCube {
 		}
 	}
 
+	public static void unbind() {
+		Texture2D.unbind(0);
+	}
+
+	public static void unbind(int i) {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
+		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, 0);
+	}
+
 	public void bind() {
+		this.bind(0);
+	}
+
+	public void bind(int i) {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, textureID);
+	}
+
+	public void cleanUp() {
+		GL11.glDeleteTextures(textureID);
 	}
 }

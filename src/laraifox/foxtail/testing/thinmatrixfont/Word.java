@@ -1,4 +1,4 @@
-package laraifox.foxtail.testing.fontMeshCreator;
+package laraifox.foxtail.testing.thinmatrixfont;
 
 import java.util.ArrayList;
 import java.util.List;

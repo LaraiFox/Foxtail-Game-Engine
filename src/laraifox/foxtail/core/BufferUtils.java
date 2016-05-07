@@ -6,6 +6,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import laraifox.foxtail.core.math.Matrix2f;
+import laraifox.foxtail.core.math.Matrix3f;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
@@ -59,6 +61,16 @@ public class BufferUtils {
 		return createByteBuffer(size * Float.BYTES).asFloatBuffer();
 	}
 
+	public static FloatBuffer createFloatBuffer(float value, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(1);
+		buffer.put(value);
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
 	public static FloatBuffer createFloatBuffer(float[] data, boolean flipped) {
 		FloatBuffer buffer = createFloatBuffer(data.length);
 		buffer.put(data);
@@ -80,11 +92,38 @@ public class BufferUtils {
 		return buffer;
 	}
 
+	public static FloatBuffer createFloatBuffer(Vector2f[] values, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(values.length * Vertex.BYTE_COUNT);
+		for (Vector2f value : values) {
+			buffer.put(value.getX());
+			buffer.put(value.getY());
+		}
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
 	public static FloatBuffer createFloatBuffer(Vector3f value, boolean flipped) {
 		FloatBuffer buffer = createFloatBuffer(Vector3f.COMPONENT_COUNT);
 		buffer.put(value.getX());
 		buffer.put(value.getY());
 		buffer.put(value.getZ());
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
+	public static FloatBuffer createFloatBuffer(Vector3f[] values, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(values.length * Vertex.BYTE_COUNT);
+		for (Vector3f value : values) {
+			buffer.put(value.getX());
+			buffer.put(value.getY());
+			buffer.put(value.getZ());
+		}
 
 		if (flipped)
 			buffer.flip();
@@ -105,12 +144,13 @@ public class BufferUtils {
 		return buffer;
 	}
 
-	public static FloatBuffer createFloatBuffer(Vector3f[] values, boolean flipped) {
+	public static FloatBuffer createFloatBuffer(Vector4f[] values, boolean flipped) {
 		FloatBuffer buffer = createFloatBuffer(values.length * Vertex.BYTE_COUNT);
-		for (Vector3f value : values) {
+		for (Vector4f value : values) {
 			buffer.put(value.getX());
 			buffer.put(value.getY());
 			buffer.put(value.getZ());
+			buffer.put(value.getW());
 		}
 
 		if (flipped)
@@ -148,13 +188,29 @@ public class BufferUtils {
 		return buffer;
 	}
 
+	public static FloatBuffer createFloatBuffer(Matrix2f matrix, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(Matrix2f.COMPONENT_COUNT);
+		buffer.put(matrix.getData());
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
+	public static FloatBuffer createFloatBuffer(Matrix3f matrix, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(Matrix3f.COMPONENT_COUNT);
+		buffer.put(matrix.getData());
+
+		if (flipped)
+			buffer.flip();
+
+		return buffer;
+	}
+
 	public static FloatBuffer createFloatBuffer(Matrix4f matrix, boolean flipped) {
-		FloatBuffer buffer = createFloatBuffer(16);
-		for (int j = 0; j < 4; j++) {
-			for (int i = 0; i < 4; i++) {
-				buffer.put(matrix.getDataAt(i, j));
-			}
-		}
+		FloatBuffer buffer = createFloatBuffer(Matrix4f.COMPONENT_COUNT);
+		buffer.put(matrix.getData());
 
 		if (flipped)
 			buffer.flip();

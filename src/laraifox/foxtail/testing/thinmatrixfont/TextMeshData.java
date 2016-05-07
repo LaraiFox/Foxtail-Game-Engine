@@ -1,4 +1,4 @@
-package laraifox.foxtail.testing.fontMeshCreator;
+package laraifox.foxtail.testing.thinmatrixfont;
 
 /**
  * Stores the vertex data for all the quads on which a text will be rendered.
