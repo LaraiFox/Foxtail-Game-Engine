@@ -10,6 +10,10 @@ import laraifox.foxtail.core.BufferUtils;
 import laraifox.foxtail.core.math.Vector4f;
 
 public class TextureFilter {
+	public static final TextureFilter DEFAULT_FILTER = new TextureFilter();
+	
+	private int glTextureFormat;
+	private int glTextureInternalFormat;
 	private int glDepthStencilTextureMode;
 	private int glTextureBaseLevel;
 	private Vector4f glTextureBorderColor;
@@ -31,14 +35,16 @@ public class TextureFilter {
 	private float glTextureAnisotropy;
 
 	public TextureFilter() {
-		this(GL11.GL_DEPTH_COMPONENT, 0, Vector4f.Zero(), GL11.GL_ALWAYS, GL11.GL_NONE, 0.0f, //
+		this(GL11.GL_RGBA, GL11.GL_RGBA, GL11.GL_DEPTH_COMPONENT, 0, Vector4f.Zero(), GL11.GL_ALWAYS, GL11.GL_NONE, 0.0f, //
 				GL11.GL_LINEAR, GL11.GL_LINEAR, -1000, 1000, 1000, GL11.GL_RED, GL11.GL_GREEN, GL11.GL_BLUE, //
 				GL11.GL_ALPHA, GL11.GL_REPEAT, GL11.GL_REPEAT, GL11.GL_REPEAT, 0.0f);
 	}
 
-	public TextureFilter(int glDepthStencilTextureMode, int glTextureBaseLevel, Vector4f glTextureBorderColor, int glTextureCompareFunc, int glTextureCompareMode, float glTextureLODBias,
+	public TextureFilter(int glTextureFormat, int glTextureInternalFormat, int glDepthStencilTextureMode, int glTextureBaseLevel, Vector4f glTextureBorderColor, int glTextureCompareFunc, int glTextureCompareMode, float glTextureLODBias,
 			int glTextureMinFilter, int glTextureMagFilter, int glTextureMinLOD, int glTextureMaxLOD, int glTextureMaxLevel, int glTextureSwizzleR, int glTextureSwizzleG, int glTextureSwizzleB,
 			int glTextureSwizzleA, int glTextureWrapS, int glTextureWrapT, int glTextureWrapR, float glTextureAnisotropy) {
+		this.glTextureFormat = glTextureFormat;
+		this.glTextureInternalFormat = glTextureInternalFormat;		
 		this.glDepthStencilTextureMode = glDepthStencilTextureMode;
 		this.glTextureBaseLevel = glTextureBaseLevel;
 		this.glTextureBorderColor = glTextureBorderColor;
@@ -79,6 +85,14 @@ public class TextureFilter {
 		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, glTextureWrapS);
 		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, glTextureWrapT);
 		GL11.glTexParameteri(target, GL12.GL_TEXTURE_WRAP_R, glTextureWrapR);
+	}
+
+	public int getGLTextureFormat() {
+		return glTextureFormat;
+	}
+
+	public int getGLTextureInternalFormat() {
+		return glTextureInternalFormat;
 	}
 
 	public int getGLDepthStencilTextureMode() {
@@ -155,6 +169,16 @@ public class TextureFilter {
 
 	public float getGLTextureAnisotropy() {
 		return glTextureAnisotropy;
+	}
+
+	public TextureFilter setGLTextureFormat(int glTextureFormat) {
+		this.glTextureFormat = glTextureFormat;
+		return this;
+	}
+
+	public TextureFilter setGLTextureInternalFormat(int glTextureInternalFormat) {
+		this.glTextureInternalFormat = glTextureInternalFormat;
+		return this;
 	}
 
 	public TextureFilter setGLDepthStencilTextureMode(int glDepthStencilTextureMode) {

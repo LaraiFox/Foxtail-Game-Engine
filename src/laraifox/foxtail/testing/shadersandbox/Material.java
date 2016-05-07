@@ -10,9 +10,9 @@ public class Material {
 	// private Texture2D emissiveTexture;
 	// private Texture2D normalTexture;
 	//
-	// private float metalic;
-	// private float specular;
-	// private float roughness;
+	// private Texture2D metalicTexture;
+	// private Texture2D specularTexture;
+	// private Texture2D roughnessTexture;
 	//
 	// private float opacity;
 	// private float opacitySubSurfaceMaterial;

@@ -1,7 +1,9 @@
 package laraifox.foxtail.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Profiler {
@@ -75,12 +77,16 @@ public class Profiler {
 	}
 
 	public static void logSamples() {
-		for (String sampleName : SAMPLE_MAP.keySet()) {
+		List<String> sampleList = new ArrayList<String>(SAMPLE_MAP.keySet());
+		Collections.sort(sampleList);
+		for (String sampleName : sampleList) {
 			ProfilerSample sample = SAMPLE_MAP.get(sampleName);
 
 			Logger.log("<" + sampleName + "> " + (int) (sample.getLength() / 10000.0f) / 100.0f + " ms", "Profiler", Logger.MESSAGE_LEVEL_DEBUG);
 		}
-		
+
+		SAMPLE_MAP.clear();
+
 		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEBUG);
 	}
 

@@ -71,6 +71,10 @@ public class Vector2f {
 		this(vector.getX(), vector.getY());
 	}
 
+	public Vector2f(org.lwjgl.util.vector.Vector2f vector) {
+		this(vector.getX(), vector.getY());
+	}
+
 	/***
 	 * Creates and returns a new vector of length zero.
 	 * 

@@ -2,7 +2,7 @@ Shader "LegacySolidColorUnlit" {
 	GLSLVertex
 		#version 330
 		
-		#pragma include "/includes/StandardVariables.h"
+		#pragma include "/includes/Standard.h"
 
 		uniform mat4 FOXTAIL_MVP_MATRIX;
 

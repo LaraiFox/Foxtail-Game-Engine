@@ -2,7 +2,7 @@ Shader "TexturedUnlit2D" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/StandardVariables.h"
+		#pragma include "/includes/Standard.inc"
 	
 		uniform mat4 FOXTAIL_PROJECTION_MATRIX;
 		

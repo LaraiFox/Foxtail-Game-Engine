@@ -66,6 +66,10 @@ public class Vector4f {
 		this(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
 	}
 
+	public Vector4f(org.lwjgl.util.vector.Vector4f vector) {
+		this(vector.getX(), vector.getY(), vector.getZ(), vector.getW());
+	}
+
 	/***
 	 * Creates and returns a new vector of length zero.
 	 * 

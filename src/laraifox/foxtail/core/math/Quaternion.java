@@ -6,10 +6,7 @@ public class Quaternion {
 	private float w, x, y, z;
 
 	public Quaternion() {
-		this.w = 1.0f;
-		this.x = 0.0f;
-		this.y = 0.0f;
-		this.z = 0.0f;
+		this(1.0f, 0.0f, 0.0f, 0.0f);
 	}
 
 	public Quaternion(float w, float x, float y, float z) {
@@ -20,10 +17,11 @@ public class Quaternion {
 	}
 
 	public Quaternion(Quaternion quaternion) {
-		this.w = quaternion.getW();
-		this.x = quaternion.getX();
-		this.y = quaternion.getY();
-		this.z = quaternion.getZ();
+		this(quaternion.getW(), quaternion.getX(), quaternion.getY(), quaternion.getZ());
+	}
+
+	public Quaternion(org.lwjgl.util.vector.Quaternion quaternion) {
+		this(quaternion.getW(), quaternion.getX(), quaternion.getY(), quaternion.getZ());
 	}
 
 	public static Quaternion AxisAngle(Vector3f axis, float angle) {
@@ -259,13 +257,13 @@ public class Quaternion {
 		return new String("{" + w + ", [" + x + ", " + y + ", " + z + "] }");
 	}
 
-	public Matrix4f toRotationMatrix() {
-		Vector3f forward = new Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
-		Vector3f up = new Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
-		Vector3f right = new Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
-
-		return Matrix4f.Rotation(forward, up, right);
-	}
+	//	public Matrix4f toRotationMatrix() {
+	//		Vector3f forward = new Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
+	//		Vector3f up = new Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
+	//		Vector3f right = new Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
+	//
+	//		return Matrix4f.Rotation(forward, up, right);
+	//	}
 
 	public Vector3f getLeft() {
 		return Vector3f.Left().rotate(this);

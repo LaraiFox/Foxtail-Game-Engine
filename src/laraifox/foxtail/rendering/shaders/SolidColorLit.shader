@@ -2,7 +2,7 @@ Shader "SolidColorLit" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/StandardVariables.h"
+		#pragma include "/includes/Standard.h"
 
 		uniform mat4 FOXTAIL_MODEL_MATRIX;
 		uniform mat4 FOXTAIL_VIEW_MATRIX;

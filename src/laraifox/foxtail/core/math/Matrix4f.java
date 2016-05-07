@@ -2,7 +2,17 @@ package laraifox.foxtail.core.math;
 
 import java.text.DecimalFormat;
 
-public class Matrix4f_new {
+/**
+ * An array of 16 floating point numbers representing a 4x4 matrix in column major order. Representation of how the matrix is numbered is below.<br>
+ * [ 0, 4, 8, 12 ]<br>
+ * [ 1, 5, 9, 13 ]<br>
+ * [ 2, 6, 10, 14 ]<br>
+ * [ 3, 7, 11, 15 ]<br>
+ * 
+ * @author Larai Fox
+ *
+ */
+public class Matrix4f {
 	public static final int WIDTH = 4;
 	public static final int HEIGHT = 4;
 
@@ -10,38 +20,45 @@ public class Matrix4f_new {
 
 	public static final int BYTE_COUNT = COMPONENT_COUNT * Float.BYTES;
 
-	// TODO: Matrix seems to use the wrong coordinate system specifically for the getDataAt and setDataAt functions. (x and y coords are reversed)!!!
 	private float[] data;
-	private float[][] data_old;
 
-	public Matrix4f_new() {
+	public Matrix4f() {
 		this.data = new float[COMPONENT_COUNT];
 	}
 
-	public Matrix4f_new(float[] values) {
+	public Matrix4f(float[] values) {
 		this.data = new float[COMPONENT_COUNT];
 		for (int i = 0; i < Matrix4f.COMPONENT_COUNT; i++) {
 			this.data[i] = values[i];
 		}
 	}
 
-	public Matrix4f_new(Matrix4f matrix) {
+	public Matrix4f(Matrix4f matrix) {
 		this.data = new float[COMPONENT_COUNT];
 		for (int i = 0; i < Matrix4f.COMPONENT_COUNT; i++) {
 			this.data[i] = matrix.data[i];
 		}
 	}
 
-	public static Matrix4f multiply(Matrix4f left, Matrix4f right) {
-		float[] result = new float[COMPONENT_COUNT];
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				result[j + i * HEIGHT] = left.data[j + 0 * HEIGHT] * right.data[0 + i * HEIGHT] + left.data[j + 1 * HEIGHT] * right.data[1 + i * HEIGHT] //
-					+ left.data[j + 2 * HEIGHT] * right.data[2 + i * HEIGHT] + left.data[j + 3 * HEIGHT] * right.data[3 + i * HEIGHT];
-			}
-		}
+	public Matrix4f(org.lwjgl.util.vector.Matrix4f matrix) {
+		this.set(new float[] {
+				matrix.m00, matrix.m01, matrix.m02, matrix.m03, //
+				matrix.m10, matrix.m11, matrix.m12, matrix.m13, //	
+				matrix.m20, matrix.m21, matrix.m22, matrix.m23, // 	
+				matrix.m30, matrix.m31, matrix.m32, matrix.m33
+		});
+	}
 
-		return new Matrix4f(result);
+	public static Matrix4f multiply(Matrix4f left, Matrix4f right) {
+		return new Matrix4f(left).multiply(right);
+	}
+
+	public static Matrix4f inverse(Matrix4f matrix) {
+		return new Matrix4f(matrix).inverse();
+	}
+
+	public static Matrix4f transpose(Matrix4f matrix) {
+		return new Matrix4f(matrix).transpose();
 	}
 
 	public Vector4f multiply(Vector3f vector, float w) {
@@ -68,8 +85,8 @@ public class Matrix4f_new {
 
 	public Matrix4f multiply(Matrix4f matrix) {
 		float[] result = new float[COMPONENT_COUNT];
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
+		for (int i = 0; i < WIDTH; i++) {
+			for (int j = 0; j < HEIGHT; j++) {
 				result[j + i * HEIGHT] = data[j + 0 * HEIGHT] * matrix.data[0 + i * HEIGHT] + data[j + 1 * HEIGHT] * matrix.data[1 + i * HEIGHT] //
 					+ data[j + 2 * HEIGHT] * matrix.data[2 + i * HEIGHT] + data[j + 3 * HEIGHT] * matrix.data[3 + i * HEIGHT];
 			}
@@ -80,14 +97,6 @@ public class Matrix4f_new {
 
 	private Matrix4f set(float[] values) {
 		this.data = values;
-
-		return this;
-	}
-
-	public Matrix4f scale(float scalar) {
-		for (int i = 0; i < COMPONENT_COUNT; i++) {
-			this.data[i] *= scalar;
-		}
 
 		return this;
 	}
@@ -170,42 +179,6 @@ public class Matrix4f_new {
 		}
 
 		return this;
-
-		//		float determinant = data[0] * data[5] * data[10] * data[15] + data[0] * data[6] * data[11] * data[13] + data[0] * data[7] * data[9] * data[14] //
-		//			+ data[1] * data[4] * data[11] * data[14] + data[1] * data[6] * data[8] * data[15] + data[1] * data[7] * data[10] * data[12] //
-		//			+ data[2] * data[4] * data[9] * data[15] + data[2] * data[5] * data[11] * data[12] + data[2] * data[7] * data[8] * data[13] //
-		//			+ data[3] * data[4] * data[10] * data[13] + data[3] * data[5] * data[8] * data[14] + data[3] * data[6] * data[9] * data[12] //
-		//			- data[0] * data[5] * data[11] * data[14] - data[0] * data[6] * data[9] * data[15] - data[0] * data[7] * data[10] * data[13] //
-		//			- data[1] * data[4] * data[6] * data[11] - data[1] * data[6] * data[11] * data[12] - data[1] * data[7] * data[12] * data[14] //
-		//			- data[2] * data[4] * data[11] * data[13] - data[2] * data[5] * data[8] * data[15] - data[2] * data[7] * data[9] * data[12] //
-		//			- data[3] * data[4] * data[9] * data[14] - data[3] * data[5] * data[10] * data[12] - data[3] * data[6] * data[8] * data[13];
-		//		if (determinant == 0) {
-		//			return this;
-		//		}
-		//
-		//		float[] result = new float[] {
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//				data[0] * data[0] * data[0] + data[0] * data[0] * data[0] + data[0] * data[0] * data[0] - data[0] * data[0] * data[0] - data[0] * data[0] * data[0], //
-		//		};
-		//
-		//		return this;
 	}
 
 	public Matrix4f transpose() {
@@ -230,19 +203,16 @@ public class Matrix4f_new {
 		return this;
 	}
 
-	public Matrix4f translate() {
-
-		return this;
+	public Matrix4f translate(float x, float y, float z) {
+		return this.multiply(Matrix4f.Translation(x, y, z));
 	}
 
-	public Matrix4f rotate() {
-
-		return this;
+	public Matrix4f rotate(Quaternion quaternion) {
+		return this.multiply(Matrix4f.Rotation(quaternion));
 	}
 
-	public Matrix4f scale() {
-
-		return this;
+	public Matrix4f scale(float x, float y, float z) {
+		return this.multiply(Matrix4f.Scale(x, y, z));
 	}
 
 	@Override
@@ -254,15 +224,15 @@ public class Matrix4f_new {
 		StringBuilder builder = new StringBuilder();
 
 		if (newlineAfterEachRow) {
-			builder.append("[ ").append(data[0]).append(", ").append(data[1]).append(", ").append(data[2]).append(", ").append(data[3]).append(" ],\n");
-			builder.append("[ ").append(data[4]).append(", ").append(data[5]).append(", ").append(data[6]).append(", ").append(data[7]).append(" ],\n");
-			builder.append("[ ").append(data[8]).append(", ").append(data[9]).append(", ").append(data[10]).append(", ").append(data[11]).append(" ],\n");
-			builder.append("[ ").append(data[12]).append(", ").append(data[13]).append(", ").append(data[14]).append(", ").append(data[15]).append(" ];");
+			builder.append("[ ").append(data[0]).append(", ").append(data[4]).append(", ").append(data[8]).append(", ").append(data[12]).append(" ],\n");
+			builder.append("[ ").append(data[1]).append(", ").append(data[5]).append(", ").append(data[9]).append(", ").append(data[13]).append(" ],\n");
+			builder.append("[ ").append(data[2]).append(", ").append(data[6]).append(", ").append(data[10]).append(", ").append(data[14]).append(" ],\n");
+			builder.append("[ ").append(data[3]).append(", ").append(data[7]).append(", ").append(data[11]).append(", ").append(data[15]).append(" ];");
 		} else {
-			builder.append("[ ").append(data[0]).append(", ").append(data[1]).append(", ").append(data[2]).append(", ").append(data[3]).append(" ], ");
-			builder.append("[ ").append(data[4]).append(", ").append(data[5]).append(", ").append(data[6]).append(", ").append(data[7]).append(" ], ");
-			builder.append("[ ").append(data[8]).append(", ").append(data[9]).append(", ").append(data[10]).append(", ").append(data[11]).append(" ], ");
-			builder.append("[ ").append(data[12]).append(", ").append(data[13]).append(", ").append(data[14]).append(", ").append(data[15]).append(" ];");
+			builder.append("[ ").append(data[0]).append(", ").append(data[4]).append(", ").append(data[8]).append(", ").append(data[12]).append(" ], ");
+			builder.append("[ ").append(data[1]).append(", ").append(data[5]).append(", ").append(data[9]).append(", ").append(data[13]).append(" ], ");
+			builder.append("[ ").append(data[2]).append(", ").append(data[6]).append(", ").append(data[10]).append(", ").append(data[14]).append(" ], ");
+			builder.append("[ ").append(data[3]).append(", ").append(data[7]).append(", ").append(data[11]).append(", ").append(data[15]).append(" ];");
 		}
 
 		return builder.toString();
@@ -284,10 +254,10 @@ public class Matrix4f_new {
 		DecimalFormat formatter = new DecimalFormat(String.format("%1$-" + (precision + 2) + "s", "0.").replace(' ', '0'));
 
 		String[] strings = new String[] {
-				formatter.format(data[0]), formatter.format(data[1]), formatter.format(data[2]), formatter.format(data[3]),//
-				formatter.format(data[4]), formatter.format(data[5]), formatter.format(data[6]), formatter.format(data[7]),//
-				formatter.format(data[8]), formatter.format(data[9]), formatter.format(data[10]), formatter.format(data[11]),//
-				formatter.format(data[12]), formatter.format(data[13]), formatter.format(data[14]), formatter.format(data[15])
+				formatter.format(data[0]), formatter.format(data[4]), formatter.format(data[8]), formatter.format(data[12]),//
+				formatter.format(data[1]), formatter.format(data[5]), formatter.format(data[9]), formatter.format(data[13]),//
+				formatter.format(data[2]), formatter.format(data[6]), formatter.format(data[10]), formatter.format(data[14]),//
+				formatter.format(data[3]), formatter.format(data[7]), formatter.format(data[11]), formatter.format(data[15])
 		};
 
 		StringBuilder builder = new StringBuilder(46 + (3 + precision) * COMPONENT_COUNT);
@@ -435,6 +405,17 @@ public class Matrix4f_new {
 		result.data[15] = 1;
 
 		return result;
+	}
+
+	public static Matrix4f Rotation(Quaternion quaternion) {
+		Vector3f forward = new Vector3f(2.0f * (quaternion.getX() * quaternion.getZ() - quaternion.getW() * quaternion.getY()), 2.0f * (quaternion.getY() * quaternion.getZ() + quaternion.getW()
+			* quaternion.getX()), 1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getY() * quaternion.getY()));
+		Vector3f up = new Vector3f(2.0f * (quaternion.getX() * quaternion.getY() + quaternion.getW() * quaternion.getZ()), 1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getZ()
+			* quaternion.getZ()), 2.0f * (quaternion.getY() * quaternion.getZ() - quaternion.getW() * quaternion.getX()));
+		Vector3f right = new Vector3f(1.0f - 2.0f * (quaternion.getY() * quaternion.getY() + quaternion.getZ() * quaternion.getZ()), 2.0f * (quaternion.getX() * quaternion.getY() - quaternion.getW()
+			* quaternion.getZ()), 2.0f * (quaternion.getX() * quaternion.getZ() + quaternion.getW() * quaternion.getY()));
+
+		return Matrix4f.Rotation(forward, up, right);
 	}
 
 	public static Matrix4f Rotation(float x, float y, float z) {
@@ -666,30 +647,6 @@ public class Matrix4f_new {
 		result.data[13] = 0;
 		result.data[14] = (2.0f * zFar * zNear) / zRange;
 		result.data[15] = 0;
-
-		//		 float aspect = width / height;
-		//		 float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2.0f));
-		//		 float zRange = zNear - zFar;
-		//		
-		//		 result.data[0][0] = 1.0f / (tanHalfFOV * aspect);
-		//		 result.data[0][1] = 0;
-		//		 result.data[0][2] = 0;
-		//		 result.data[0][3] = 0;
-		//		
-		//		 result.data[1][0] = 0;
-		//		 result.data[1][1] = 1.0f / tanHalfFOV;
-		//		 result.data[1][2] = 0;
-		//		 result.data[1][3] = 0;
-		//		
-		//		 result.data[2][0] = 0;
-		//		 result.data[2][1] = 0;
-		//		 result.data[2][2] = (-zNear - zFar) / zRange;
-		//		 result.data[2][3] = 1;
-		//		
-		//		 result.data[3][0] = 0;
-		//		 result.data[3][1] = 0;
-		//		 result.data[3][2] = (2.0f * zFar * zNear) / zRange;
-		//		 result.data[3][3] = 0;
 
 		return result;
 	}

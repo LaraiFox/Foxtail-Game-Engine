@@ -1,13 +1,13 @@
 package laraifox.foxtail.rendering;
 
+import laraifox.foxtail.core.GameComponent;
+import laraifox.foxtail.core.GameObject;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Quaternion;
 import laraifox.foxtail.core.math.Vector3f;
 
-public class Camera {
-	private Transform3D transform;
-
+public class Camera extends GameObject {
 	private Matrix4f projectionMatrix;
 
 	public Camera(Matrix4f projectionMatrix) {
@@ -15,6 +15,8 @@ public class Camera {
 	}
 
 	public Camera(Transform3D transform, Matrix4f projectionMatrix) {
+		super(transform);
+		
 		this.transform = transform;
 		this.projectionMatrix = projectionMatrix;
 	}
@@ -91,13 +93,13 @@ public class Camera {
 
 	public Matrix4f getViewMatrix() {
 		Matrix4f translationMatrix = Matrix4f.Translation(Vector3f.negate(transform.getTranslation()));
-		Matrix4f rotationMatrix = Quaternion.conjugate(transform.getRotation()).toRotationMatrix();
+		Matrix4f rotationMatrix = Matrix4f.Rotation(Quaternion.conjugate(transform.getRotation()));
 
 		return rotationMatrix.multiply(translationMatrix);
 	}
 
 	public Matrix4f getViewProjectionMatrix() {
-		return getProjectionMatrix().multiply(getViewMatrix());
+		return Matrix4f.multiply(projectionMatrix, this.getViewMatrix());
 	}
 
 	public Vector3f getPosition() {

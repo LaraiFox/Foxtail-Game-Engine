@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
@@ -17,14 +18,27 @@ import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.math.Vector4f;
 
 public class Texture2D {
-	private static final TextureFilter DEFAULT_TEXTURE_FILTER = new TextureFilter();
 	private static final int BYTES_PER_PIXEL = 4;
 
-	private int textureID;
-	private int width, height;
+	protected int textureID;
+	protected int width, height;
+
+	public Texture2D() {
+		this.textureID = 0;
+		this.width = 0;
+		this.height = 0;
+	}
+
+	public Texture2D(int width, int height) {
+		this(width, height, TextureFilter.DEFAULT_FILTER);
+	}
+
+	public Texture2D(int width, int height, TextureFilter textureFilter) {
+		this(null, width, height, textureFilter);
+	}
 
 	public Texture2D(String filepath) {
-		this(filepath, DEFAULT_TEXTURE_FILTER);
+		this(filepath, TextureFilter.DEFAULT_FILTER);
 	}
 
 	public Texture2D(String filepath, TextureFilter textureFilter) {
@@ -60,7 +74,7 @@ public class Texture2D {
 		this.width = width;
 		this.height = height;
 
-		this.createTexture(buffer, DEFAULT_TEXTURE_FILTER);
+		this.createTexture(buffer, TextureFilter.DEFAULT_FILTER);
 	}
 
 	public Texture2D(ByteBuffer buffer, int width, int height, TextureFilter textureFilter) {
@@ -82,19 +96,36 @@ public class Texture2D {
 
 		buffer.flip();
 
-		this.createTexture(buffer, DEFAULT_TEXTURE_FILTER);
+		this.createTexture(buffer, TextureFilter.DEFAULT_FILTER);
 	}
 
-	@Override
-	public void finalize() {
-		//		GL11.glDeleteTextures(textureID);
+	public static void unbind() {
+		Texture2D.unbind(0);
+	}
+
+	public static void unbind(int i) {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+	}
+
+	public void bind() {
+		this.bind(0);
+	}
+
+	public void bind(int i) {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+	}
+
+	public void cleanUp() {
+		GL11.glDeleteTextures(textureID);
 	}
 
 	private void createTexture(ByteBuffer buffer, TextureFilter textureFilter) {
 		this.textureID = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, textureFilter.getGLTextureInternalFormat(), width, height, 0, textureFilter.getGLTextureFormat(), GL11.GL_UNSIGNED_BYTE, buffer);
 
 		textureFilter.apply(GL11.GL_TEXTURE_2D);
 		if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
@@ -119,10 +150,6 @@ public class Texture2D {
 		}
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-	}
-
-	public void bind() {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 	}
 
 	public int getTextureID() {

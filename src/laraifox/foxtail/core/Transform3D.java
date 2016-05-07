@@ -34,32 +34,16 @@ public class Transform3D {
 	}
 
 	public Transform3D(Vector3f translation, Quaternion rotation, Vector3f scale) {
-		this.translation = translation;
-		this.rotation = rotation;
-		this.scale = scale;
+		this.translation = new Vector3f(translation);
+		this.rotation = new Quaternion(rotation);
+		this.scale = new Vector3f(scale);
 	}
 
 	public Transform3D(Transform3D transform) {
-		this.translation = transform.translation;
-		this.rotation = transform.rotation;
-		this.scale = transform.scale;
+		this.translation = new Vector3f(transform.translation);
+		this.rotation = new Quaternion(transform.rotation);
+		this.scale = new Vector3f(transform.scale);
 	}
-
-	// public void applyTransformation() {
-	// GL11.glMultMatrix(BufferUtil.createFlippedFloatBuffer(getTransformationMatrix()));
-	// }
-	//
-	// public void applyTranslation() {
-	// GL11.glMultMatrix(BufferUtil.createFlippedFloatBuffer(Matrix4f.initializeTranslation(translation)));
-	// }
-	//
-	// public void applyRotation() {
-	// GL11.glMultMatrix(BufferUtil.createFlippedFloatBuffer(rotation.toRotationMatrix()));
-	// }
-	//
-	// public void applyScale() {
-	// GL11.glMultMatrix(BufferUtil.createFlippedFloatBuffer(Matrix4f.initializeScale(scale.getX(), scale.getY(), scale.getZ())));
-	// }
 
 	public void transform(Transform3D transform) {
 		translate(transform.getTranslation());
@@ -97,7 +81,7 @@ public class Transform3D {
 
 	public Matrix4f getTransformationMatrix() {
 		Matrix4f translationMatrix = Matrix4f.Translation(translation);
-		Matrix4f rotationMatrix = rotation.toRotationMatrix();
+		Matrix4f rotationMatrix = Matrix4f.Rotation(rotation);
 		Matrix4f scaleMatrix = Matrix4f.Scale(scale.getX(), scale.getY(), scale.getZ());
 
 		return translationMatrix.multiply(rotationMatrix.multiply(scaleMatrix));
@@ -108,7 +92,7 @@ public class Transform3D {
 	}
 
 	public Matrix4f getRotationMatrix() {
-		return rotation.toRotationMatrix();
+		return Matrix4f.Rotation(rotation);
 	}
 
 	public Matrix4f getScaleMatrix() {

@@ -60,7 +60,7 @@ public class Logger {
 
 	private static final List<LoggedMessage> MESSAGE_LOG = new ArrayList<LoggedMessage>();
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
-	private static final int ERROR_MESSAGE_LEVEL = MESSAGE_LEVEL_ERROR;
+	private static final int ERROR_MESSAGE_LEVEL = MESSAGE_LEVEL_WARNING;
 	private static String DEFAULT_SENDER_NAME = new String("UNKNOWN");
 
 	private static int requiredMessageLevel = MESSAGE_LEVEL_DEFAULT;
