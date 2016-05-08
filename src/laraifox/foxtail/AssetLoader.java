@@ -100,7 +100,11 @@ public class AssetLoader {
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 
 		for (int i = 0; i < indexedModel.getPositions().size(); i++) {
+<<<<<<< HEAD
 			vertices.add(new Vertex(indexedModel.getPositions().get(i), indexedModel.getTexCoords().get(i), indexedModel.getNormals().get(i), indexedModel.getTangents().get(i), new Vector3f()));
+=======
+			vertices.add(new Vertex(indexedModel.getPositions().get(i), indexedModel.getTexCoords().get(i), indexedModel.getNormals().get(i), new Vector3f(), new Vector3f()));
+>>>>>>> 397962db28f8fe4ecf621f2a34239b23dc86c5d6
 		}
 		Vertex[] vertexData = new Vertex[vertices.size()];
 		vertices.toArray(vertexData);
