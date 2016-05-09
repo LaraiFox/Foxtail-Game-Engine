@@ -3,6 +3,7 @@ package laraifox.foxtail.rendering;
 import org.lwjgl.opengl.GL20;
 
 import laraifox.foxtail.core.GameComponent;
+import laraifox.foxtail.core.GameObject;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.rendering.models.Mesh;
 
@@ -20,12 +21,13 @@ public class RenderComponent extends GameComponent {
 	}
 
 	@Override
-	protected void onComponentAdded() {
+	public void onComponentAdded(GameObject owner) {
+		super.onComponentAdded(owner);
 		RenderingEngine.addRenderComponent(this);
 	}
 
-	public void render(Shader shader) {
-		Matrix4f FOXTAIL_MATRIX_MODEL = owner.getTransform().getTransformationMatrix();
+	public void render(Shader shader, float delta) {
+		Matrix4f FOXTAIL_MATRIX_MODEL = owner.getInterpolatedTransform(delta).getTransformationMatrix();
 		Matrix4f FOXTAIL_MATRIX_I_MODEL = Matrix4f.inverse(FOXTAIL_MATRIX_MODEL);
 		Matrix4f FOXTAIL_MATRIX_MV = Matrix4f.multiply(RenderingEngine.getCameraViewMatrix(), FOXTAIL_MATRIX_MODEL);
 		Matrix4f FOXTAIL_MATRIX_T_MV = Matrix4f.transpose(FOXTAIL_MATRIX_MV);

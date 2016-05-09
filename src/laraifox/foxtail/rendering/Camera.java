@@ -17,20 +17,20 @@ public class Camera extends GameObject {
 	public Camera(Transform3D transform, Matrix4f projectionMatrix) {
 		super(transform);
 		
-		this.transform = transform;
+		this.currentTransform = transform;
 		this.projectionMatrix = projectionMatrix;
 	}
 
 	public void translate(Vector3f translation) {
-		transform.translate(translation);
+		currentTransform.translate(translation);
 	}
 
 	public void translate(Vector3f direction, float scale) {
-		transform.translate(Vector3f.scale(direction, scale));
+		currentTransform.translate(Vector3f.scale(direction, scale));
 	}
 
 	public void rotate(Vector3f axis, float theta) {
-		transform.rotate(axis, theta);
+		currentTransform.rotate(axis, theta);
 	}
 
 	public void lookAt(Vector3f location, Vector3f up) {
@@ -49,7 +49,7 @@ public class Camera extends GameObject {
 		// /////////////////////////////////////////////////////////////////////////////////////////////////
 		//
 
-		Vector3f forwardVector = Vector3f.subtract(transform.getTranslation(), location);
+		Vector3f forwardVector = Vector3f.subtract(currentTransform.getTranslation(), location);
 		Vector3f horizonalVector = Vector3f.normalize(new Vector3f(forwardVector.getX(), 0.0f, forwardVector.getZ()));
 		float dot = Vector3f.dot(Vector3f.Back(), horizonalVector);
 
@@ -69,9 +69,9 @@ public class Camera extends GameObject {
 
 			Quaternion pitch = Quaternion.AxisAngle(yaw.getRight(), pitchAngle).normalize();
 
-			transform.setRotation(pitch.multiply(yaw));
+			currentTransform.setRotation(pitch.multiply(yaw));
 		} else {
-			transform.setRotation(yaw);
+			currentTransform.setRotation(yaw);
 		}
 
 		// Vector3f forward = Vector3f.subtract(location, transform.getTranslation()).normalize();
@@ -92,8 +92,8 @@ public class Camera extends GameObject {
 	}
 
 	public Matrix4f getViewMatrix() {
-		Matrix4f translationMatrix = Matrix4f.Translation(Vector3f.negate(transform.getTranslation()));
-		Matrix4f rotationMatrix = Matrix4f.Rotation(Quaternion.conjugate(transform.getRotation()));
+		Matrix4f translationMatrix = Matrix4f.Translation(Vector3f.negate(currentTransform.getTranslation()));
+		Matrix4f rotationMatrix = Matrix4f.Rotation(Quaternion.conjugate(currentTransform.getRotation()));
 
 		return rotationMatrix.multiply(translationMatrix);
 	}
@@ -103,30 +103,30 @@ public class Camera extends GameObject {
 	}
 
 	public Vector3f getPosition() {
-		return new Vector3f(transform.getTranslation());
+		return new Vector3f(currentTransform.getTranslation());
 	}
 
 	public void setPosition(Vector3f position) {
-		this.transform.setTranslation(position);
+		this.currentTransform.setTranslation(position);
 	}
 
 	public Quaternion getRotation() {
-		return new Quaternion(transform.getRotation());
+		return new Quaternion(currentTransform.getRotation());
 	}
 
 	public void setRotation(Quaternion rotation) {
-		this.transform.setRotation(rotation);
+		this.currentTransform.setRotation(rotation);
 	}
 
 	public Vector3f getForward() {
-		return transform.getRotation().getForward();
+		return currentTransform.getRotation().getForward();
 	}
 
 	public Vector3f getUp() {
-		return transform.getRotation().getUp();
+		return currentTransform.getRotation().getUp();
 	}
 
 	public Vector3f getRight() {
-		return transform.getRotation().getRight();
+		return currentTransform.getRotation().getRight();
 	}
 }

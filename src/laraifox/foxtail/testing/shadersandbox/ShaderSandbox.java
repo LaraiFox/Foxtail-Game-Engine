@@ -33,15 +33,9 @@ import laraifox.foxtail.rendering.Texture2D;
 import laraifox.foxtail.rendering.TextureCube;
 import laraifox.foxtail.rendering.TextureFilter;
 import laraifox.foxtail.rendering.models.Mesh;
-<<<<<<< HEAD
 import laraifox.foxtail.testing.thinmatrixfont.FontType;
 import laraifox.foxtail.testing.thinmatrixfont.GUIText;
 import laraifox.foxtail.testing.thinmatrixfont.TextManager;
-=======
-import laraifox.foxtail.testing.fontMeshCreator.FontType;
-import laraifox.foxtail.testing.fontMeshCreator.GUIText;
-import laraifox.foxtail.testing.fontRendering.TextManager;
->>>>>>> 397962db28f8fe4ecf621f2a34239b23dc86c5d6
 
 public class ShaderSandbox implements IGameManager {
 	private OpenGLDisplay display;
@@ -152,11 +146,8 @@ public class ShaderSandbox implements IGameManager {
 
 	private GUIText[] matrixText;
 
-<<<<<<< HEAD
 	private float angle = 0;
 
-=======
->>>>>>> 397962db28f8fe4ecf621f2a34239b23dc86c5d6
 	public void initialize(OpenGLDisplay display) {
 		System.out.println(AssetLoader.USER_APPDATA_DIRECTORY);
 		this.display = display;
@@ -172,15 +163,9 @@ public class ShaderSandbox implements IGameManager {
 					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
 		}
 
-<<<<<<< HEAD
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordBunny_high.obj"), new Transform3D(new Vector3f(-4.0f,
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordBunny.obj"), new Transform3D(new Vector3f(-4.0f,
 				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordDragon_high.obj"), new Transform3D(new Vector3f(4.0f,
-=======
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordBunny_low.obj"), new Transform3D(new Vector3f(-4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordDragon_low.obj"), new Transform3D(new Vector3f(4.0f,
->>>>>>> 397962db28f8fe4ecf621f2a34239b23dc86c5d6
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordDragon.obj"), new Transform3D(new Vector3f(4.0f,
 				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
 		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f, -0.75f, 5.0f),

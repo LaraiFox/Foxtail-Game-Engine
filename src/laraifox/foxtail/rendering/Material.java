@@ -23,7 +23,7 @@ public class Material {
 		this.emissiveColor = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 		this.subsurfaceColor = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		this.diffuseTexture = new Texture2D();
+		this.diffuseTexture = new Texture2D(new Vector4f(1));
 		this.emissiveTexture = new Texture2D();
 		this.normalTexture = new Texture2D();
 

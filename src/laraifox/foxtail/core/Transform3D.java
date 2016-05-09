@@ -45,10 +45,28 @@ public class Transform3D {
 		this.scale = new Vector3f(transform.scale);
 	}
 
-	public void transform(Transform3D transform) {
+	private Transform3D interpolate(Transform3D transform, float value) {
+		this.translation.lerp(transform.getTranslation(), value);
+		this.rotation.slerp(transform.getRotation(), value);
+		this.scale.lerp(transform.getScale(), value);
+
+		return this;
+	}
+
+	public Transform3D scaleTransform(float value) {
+		this.translation.scale(value);
+		this.rotation.scale(value);
+		this.scale.scale(value);
+		
+		return this;
+	}
+
+	public Transform3D transform(Transform3D transform) {
 		translate(transform.getTranslation());
 		rotate(transform.getRotation());
 		scale(transform.getScale());
+
+		return this;
 	}
 
 	public void translate(float x, float y, float z) {
@@ -163,11 +181,11 @@ public class Transform3D {
 		this.scale = new Vector3f(scale, scale, scale);
 	}
 
-	public static Transform3D buildComposite(Transform3D... transformations) {
-		Transform3D result = new Transform3D();
-		for (int i = 0; i < transformations.length; i++) {
-			result.transform(transformations[i]);
-		}
-		return result;
+	public static Transform3D interpolate(Transform3D left, Transform3D right, float value) {
+		return new Transform3D(left).interpolate(right, value);
+	}
+
+	public static Transform3D transform(Transform3D left, Transform3D right) {
+		return new Transform3D(left).transform(right);
 	}
 }

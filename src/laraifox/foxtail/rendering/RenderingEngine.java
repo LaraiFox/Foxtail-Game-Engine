@@ -15,6 +15,14 @@ public class RenderingEngine {
 	private static Matrix4f cameraViewMatrix;
 	private static Matrix4f cameraViewProjectionMatrix;
 
+	private RenderingEngine() {
+
+	}
+
+	public static void initialize() {
+		RenderingEngine.initialize(new DefaultRenderer3D());
+	}
+
 	public static void initialize(Renderer renderer) {
 		renderer.initialize();
 		RenderingEngine.renderer = renderer;
@@ -40,9 +48,9 @@ public class RenderingEngine {
 		}
 	}
 
-	public static void render() {
+	public static void render(float delta) {
 		RenderingEngine.updateCameraMatrices();
-		RenderingEngine.renderer.render(activeCamera, RENDER_BATCH_MAP);
+		RenderingEngine.renderer.render(activeCamera, RENDER_BATCH_MAP, delta);
 	}
 
 	public static void setActiveCamera(Camera camera) {
