@@ -1,11 +1,13 @@
 package laraifox.foxtail.audio;
 
 import laraifox.foxtail.core.GameComponent;
+import laraifox.foxtail.core.GameObject;
 
 public class AudioComponent extends GameComponent {
 
 	@Override
-	protected void onComponentAdded() {
+	public void onComponentAdded(GameObject owner) {
+		super.onComponentAdded(owner);
 		//		AudioEngine.addAudioComponent(this);
 	}
 

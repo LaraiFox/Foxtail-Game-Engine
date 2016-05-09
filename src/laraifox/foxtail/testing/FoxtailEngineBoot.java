@@ -22,6 +22,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.OpenGLDisplay;
+import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.testing.shadersandbox.ShaderSandbox;
 
 public class FoxtailEngineBoot {
@@ -92,7 +93,7 @@ public class FoxtailEngineBoot {
 
 		try {
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
-			OpenGLDisplay display = new OpenGLDisplay(1200, 900, new ShaderSandbox());
+			OpenGLDisplay display = new OpenGLDisplay(1200, 900, new ComponentTesting());
 			display.setContextAttribs(new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true));
 			display.setPixelFormat(new PixelFormat().withSamples(Math.min(2, MAX_MULTISAMPLES)).withDepthBits(24));
 			display.initialize();

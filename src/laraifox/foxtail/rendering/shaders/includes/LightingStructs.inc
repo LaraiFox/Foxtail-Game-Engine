@@ -29,5 +29,3 @@ struct SpotLight
     vec3 direction;
     float cutoff;
 };
-
-#pragma include "/LightingFunctions.inc"

@@ -1,9 +1,10 @@
 package laraifox.foxtail.physics;
 
-public class PhysicsSimulator {
+import java.util.List;
+import java.util.Map;
 
-	public void initialize() {
-		
-	}
+public abstract class PhysicsSimulator {
+	public abstract void initialize();
 
+	public abstract void simulate(List<PhysicsComponent> physicscomponents, float delta);
 }

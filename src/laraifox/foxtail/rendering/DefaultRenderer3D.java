@@ -9,7 +9,7 @@ public class DefaultRenderer3D extends Renderer {
 	private Shader shader;
 
 	public DefaultRenderer3D() {
-		this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/TexturedPhong.shader");
+		this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/StandardComponent.shader");
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class DefaultRenderer3D extends Renderer {
 	}
 
 	@Override
-	public void render(Camera camera, Map<Integer, RenderBatch> renderBatchMap) {
+	public void render(Camera camera, Map<Integer, RenderBatch> renderBatchMap, float delta) {
 		shader.bind();
 
 		shader.setUniform("FOXTAIL_MATRIX_VIEW", RenderingEngine.getCameraViewMatrix());
@@ -37,11 +37,11 @@ public class DefaultRenderer3D extends Renderer {
 
 			RenderBatch batch = renderBatchMap.get(meshID);
 			for (RenderComponent component : batch.getStaticComponents()) {
-				component.render(shader);
+				component.render(shader, delta);
 			}
 
 			for (RenderComponent component : batch.getDynamicComponents()) {
-				component.render(shader);
+				component.render(shader, delta);
 			}
 		}
 
