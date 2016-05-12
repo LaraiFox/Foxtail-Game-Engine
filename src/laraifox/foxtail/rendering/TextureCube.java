@@ -68,7 +68,7 @@ public class TextureCube {
 						float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
 						float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 						if (textureAnisotropy > supportedAnisotropy) {
-							Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);
+							Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "TextureCube", Logger.MESSAGE_LEVEL_WARNING);
 							textureAnisotropy = supportedAnisotropy;
 						}
 

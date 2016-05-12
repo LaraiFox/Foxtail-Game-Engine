@@ -9,9 +9,9 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import laraifox.foxtail.AssetLoader;
 import laraifox.foxtail.core.BufferUtils;
 import laraifox.foxtail.core.Logger;
+import laraifox.foxtail.core.ResourceManager;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
@@ -45,7 +45,7 @@ public class Shader {
 	public Shader(String vertexFilepath, String fragmentFilepath, boolean bindAttributes) throws Exception {
 		this();
 
-		this.createShader(vertexFilepath, fragmentFilepath, AssetLoader.loadFile(vertexFilepath), AssetLoader.loadFile(fragmentFilepath), bindAttributes);
+		this.createShader(vertexFilepath, fragmentFilepath, ResourceManager.loadFile(vertexFilepath), ResourceManager.loadFile(fragmentFilepath), bindAttributes);
 	}
 
 	public Shader(String shaderFilepath) {
@@ -68,7 +68,7 @@ public class Shader {
 	}
 
 	private int createShader(String shaderFilepath, boolean bindAttributes) throws IOException {
-		String shaderSrc = AssetLoader.loadFile(shaderFilepath);
+		String shaderSrc = ResourceManager.loadFile(shaderFilepath);
 
 		this.shaderName = shaderSrc.substring(shaderSrc.indexOf("\"") + 1, shaderSrc.indexOf("\"", shaderSrc.indexOf("\"") + 1));
 
@@ -86,13 +86,11 @@ public class Shader {
 				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
 
 				return this.createShader("src/laraifox/foxtail/rendering/shaders/Error.shader", bindAttributes);
-				// throw new RuntimeException("Shader '" + shaderFilepath + "' failed to compile and has no fallback!\n" + e.getMessage());
 			} else if (!fallbackPath.startsWith("\\") && !fallbackPath.startsWith("/")) {
 				fallbackPath = System.getProperty("file.separator") + fallbackPath;
 			}
 
 			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
-			// System.out.println("[WARNING] Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.");
 
 			return this.createShader(new File(shaderFilepath).getParent() + fallbackPath, bindAttributes);
 		}
@@ -409,9 +407,9 @@ public class Shader {
 
 		if (uniformLocation == 0xFFFFFFFF) {
 			Logger.log("Uniform '" + uniformName + "' is not used in shader and has been removed!", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_WARNING);
-//			System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
-//			new Exception().printStackTrace();
-//			System.exit(1);
+			//			System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
+			//			new Exception().printStackTrace();
+			//			System.exit(1);
 		}
 
 		uniforms.put(uniformName, uniformLocation);
@@ -516,9 +514,5 @@ public class Shader {
 
 	public static void unbind() {
 		GL20.glUseProgram(0);
-	}
-
-	public void cleanUp() {
-		GL20.glDeleteProgram(id);
 	}
 }

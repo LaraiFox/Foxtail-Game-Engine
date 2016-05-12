@@ -24,6 +24,10 @@ public class Mesh {
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length);
 	}
 
+	public void cleanUp() {
+		GL30.glDeleteVertexArrays(vaoID);
+	}
+
 	protected void createModel(IntBuffer indexBuffer, FloatBuffer vertexBuffer, int indexCount, int vertexCount) {
 		this.vaoID = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(vaoID);

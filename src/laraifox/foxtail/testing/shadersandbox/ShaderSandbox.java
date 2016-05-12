@@ -15,12 +15,12 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import laraifox.foxtail.AssetLoader;
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.InputHandler;
 import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.OpenGLDisplay;
 import laraifox.foxtail.core.Profiler;
+import laraifox.foxtail.core.ResourceManager;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.PerlinNoiseGenerator;
@@ -149,7 +149,9 @@ public class ShaderSandbox implements IGameManager {
 	private float angle = 0;
 
 	public void initialize(OpenGLDisplay display) {
-		System.out.println(AssetLoader.USER_APPDATA_DIRECTORY);
+		Logger.log(ResourceManager.USERS_APPDATA_DIRECTORY, "System", Logger.MESSAGE_LEVEL_DEBUG);
+		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEBUG);
+
 		this.display = display;
 
 		this.camera = new Camera(new Transform3D(new Vector3f(0.0f, 1.0f, 0.0f)), Matrix4f.Projection(70.0f, Display.getWidth(), Display.getHeight(), 0.01f, 100.0f));
@@ -157,16 +159,16 @@ public class ShaderSandbox implements IGameManager {
 		final int SPHERE_COUNT = 10;
 		this.entity_Spheres = new Entity[SPHERE_COUNT * 2];
 		for (int i = 0; i < SPHERE_COUNT; i++) {
-			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), AssetLoader.loadModel("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
-			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), AssetLoader.loadModel("res/models/Sphere.obj"),
-					new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
+			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), ResourceManager.loadModel(ResourceManager
+					.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
+			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), ResourceManager.loadModel(ResourceManager
+					.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
 		}
 
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordBunny.obj"), new Transform3D(new Vector3f(-4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), AssetLoader.loadModel("res/models/StanfordDragon.obj"), new Transform3D(new Vector3f(4.0f,
-				-0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/StanfordBunny.obj")),
+				new Transform3D(new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath(
+				"models/StanfordDragon.obj")), new Transform3D(new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
 		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f, -0.75f, 5.0f),
 				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
@@ -175,12 +177,12 @@ public class ShaderSandbox implements IGameManager {
 		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f, -10.0f, 0.0f),
 				new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
 
-		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), AssetLoader.loadModel("res/models/Torus.obj"), new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f),
-				new Vector3f(1.5f)), new Transform3D());
-		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), AssetLoader.loadModel("res/models/Sphere.obj"), new Transform3D(new Vector3f(15.0f, 0.0f,
-				0.0f), new Vector3f(0.75f)), new Transform3D());
-		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), AssetLoader.loadModel("res/models/Sphere.obj"), new Transform3D(new Vector3f(15.0f, 0.0f,
-				5.75f), new Vector3f(0.75f)), new Transform3D());
+		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Torus.obj")),
+				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(1.5f)), new Transform3D());
+		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")),
+				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
+		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")),
+				new Transform3D(new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
 
 		TextureFilter textureFilter = new TextureFilter();
 		textureFilter.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
@@ -189,11 +191,11 @@ public class ShaderSandbox implements IGameManager {
 		textureFilter.setGLTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
 		textureFilter.setGLTextureAnisotropy(2.0f);
 
-		this.texture_Checker = new Texture2D("res/textures/GreyscaleCheckerBoard.png", textureFilter);
-		this.texture_Blank = new Texture2D("res/textures/Blank.png", textureFilter);
+		this.texture_Checker = new Texture2D(ResourceManager.getFoxtailResourcePath("textures/GreyscaleCheckerBoard.png"), textureFilter);
+		this.texture_Blank = new Texture2D(ResourceManager.getFoxtailResourcePath("textures/Blank.png"), textureFilter);
 
 		PerlinNoiseGenerator png = new PerlinNoiseGenerator(0);
-		final int PERLIN_TEXTURE_RES = 256;
+		final int PERLIN_TEXTURE_RES = 512;
 		int[] perlinPixels = new int[PERLIN_TEXTURE_RES * PERLIN_TEXTURE_RES];
 		for (int i = 0; i < PERLIN_TEXTURE_RES; i++) {
 			for (int j = 0; j < PERLIN_TEXTURE_RES; j++) {
@@ -219,8 +221,8 @@ public class ShaderSandbox implements IGameManager {
 		this.texture_Perlin = new Texture2D(perlinBuffer, PERLIN_TEXTURE_RES, PERLIN_TEXTURE_RES, textureFilter2);
 
 		try {
-			this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/TexturedPhong.shader", false);
-			this.skyboxShader = new Shader("src/laraifox/foxtail/rendering/shaders/Skybox.shader", false);
+			this.shader = new Shader(ResourceManager.getFoxtailResourcePath("shaders/TexturedPhong.shader"), false);
+			this.skyboxShader = new Shader(ResourceManager.getFoxtailResourcePath("shaders/Skybox.shader"), false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -234,39 +236,37 @@ public class ShaderSandbox implements IGameManager {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL13.GL_MULTISAMPLE);
 
-		Logger.log("Model 'StanfordBunny.obj' size: " + entity_Bunny.getMeshSize(), "AssetLoader");
-		Logger.log("Model 'StanfordDragon.obj' size: " + entity_Dragon.getMeshSize(), "AssetLoader");
-		Logger.log("Model 'Cube' size: " + entity_Cube1.getMeshSize(), "AssetLoader");
-		Logger.log("Model 'Sphere.obj' size: " + entity_Spheres[0].getMeshSize(), "AssetLoader");
-		Logger.log("Model 'Torus.obj' size: " + entity_Torus.getMeshSize(), "AssetLoader");
-		int totalModelDataSize = 0;
-		totalModelDataSize += entity_Bunny.getMeshSize();
-		totalModelDataSize += entity_Dragon.getMeshSize();
-		totalModelDataSize += entity_Torus.getMeshSize();
-		totalModelDataSize += entity_Spheres[0].getMeshSize() * (entity_Spheres.length + 2);
-		totalModelDataSize += entity_Cube1.getMeshSize() * 3;
-		Logger.log("Total model data size: " + totalModelDataSize, "AssetLoader");
-		Logger.lineBreak();
-		Logger.flush(true);
+		//		Logger.log("Model 'StanfordBunny.obj' size: " + entity_Bunny.getMeshSize(), "AssetLoader");
+		//		Logger.log("Model 'StanfordDragon.obj' size: " + entity_Dragon.getMeshSize(), "AssetLoader");
+		//		Logger.log("Model 'Cube' size: " + entity_Cube1.getMeshSize(), "AssetLoader");
+		//		Logger.log("Model 'Sphere.obj' size: " + entity_Spheres[0].getMeshSize(), "AssetLoader");
+		//		Logger.log("Model 'Torus.obj' size: " + entity_Torus.getMeshSize(), "AssetLoader");
+		//		int totalModelDataSize = 0;
+		//		totalModelDataSize += entity_Bunny.getMeshSize();
+		//		totalModelDataSize += entity_Dragon.getMeshSize();
+		//		totalModelDataSize += entity_Torus.getMeshSize();
+		//		totalModelDataSize += entity_Spheres[0].getMeshSize() * (entity_Spheres.length + 2);
+		//		totalModelDataSize += entity_Cube1.getMeshSize() * 3;
+		//		Logger.log("Total model data size: " + totalModelDataSize, "AssetLoader");
+		//		Logger.lineBreak();
+		//		Logger.flush(true);
 
 		TextManager.initialize();
 
-		this.fontType = new FontType("res/fonts/Inconsolata-Regular.png", "res/fonts/Inconsolata-Regular.fnt");
+		this.fontType = new FontType(ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.png"), ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.fnt"));
 
 		this.fpsText = new GUIText("FPS: " + display.getCurrentFPS(), 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.005f, 0.0f)), 1.0f, false);
 		this.memoryText = new GUIText("Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / 1048576) + "M / " + (runtime.totalMemory() / 1048576) + "M (" + ((int) (((float) (runtime
 				.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
-
-		Shader.logUnrecognizedUniformCalls = true;
 
 		TextureFilter textureFilter3 = new TextureFilter();
 		textureFilter3.setGLTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
 		textureFilter3.setGLTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
 		//		textureFilter3.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
 		this.skyboxTexture = new TextureCube(new String[] {
-				"res/textures/skybox/right.png", "res/textures/skybox/left.png", //
-				"res/textures/skybox/top.png", "res/textures/skybox/bottom.png", //
-				"res/textures/skybox/back.png", "res/textures/skybox/front.png"
+				ResourceManager.getFoxtailResourcePath("textures/skybox/right.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/left.png"), //
+				ResourceManager.getFoxtailResourcePath("textures/skybox/top.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/bottom.png"), //
+				ResourceManager.getFoxtailResourcePath("textures/skybox/back.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/front.png")
 		}, textureFilter3);
 		this.skyboxVAO = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(skyboxVAO);
@@ -299,6 +299,12 @@ public class ShaderSandbox implements IGameManager {
 				new GUIText("", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.155f, 0.0f)), 1.0f, false),//
 				new GUIText("", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.185f, 0.0f)), 1.0f, false)
 		};
+
+		Logger.log(TextureFilter.DEFAULT_FILTER.toString(), "System", Logger.MESSAGE_LEVEL_DEBUG);
+		Logger.log(textureFilter.toString(), "System", Logger.MESSAGE_LEVEL_DEBUG);
+		Logger.log(textureFilter2.toString(), "System", Logger.MESSAGE_LEVEL_DEBUG);
+		Logger.log(textureFilter3.toString(), "System", Logger.MESSAGE_LEVEL_DEBUG);
+		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEBUG);
 	}
 
 	public void cleanUp() {

@@ -11,7 +11,7 @@ import laraifox.foxtail.core.math.Vector4f;
 
 public class TextureFilter {
 	public static final TextureFilter DEFAULT_FILTER = new TextureFilter();
-	
+
 	private int glTextureFormat;
 	private int glTextureInternalFormat;
 	private int glDepthStencilTextureMode;
@@ -40,11 +40,11 @@ public class TextureFilter {
 				GL11.GL_ALPHA, GL11.GL_REPEAT, GL11.GL_REPEAT, GL11.GL_REPEAT, 0.0f);
 	}
 
-	public TextureFilter(int glTextureFormat, int glTextureInternalFormat, int glDepthStencilTextureMode, int glTextureBaseLevel, Vector4f glTextureBorderColor, int glTextureCompareFunc, int glTextureCompareMode, float glTextureLODBias,
-			int glTextureMinFilter, int glTextureMagFilter, int glTextureMinLOD, int glTextureMaxLOD, int glTextureMaxLevel, int glTextureSwizzleR, int glTextureSwizzleG, int glTextureSwizzleB,
-			int glTextureSwizzleA, int glTextureWrapS, int glTextureWrapT, int glTextureWrapR, float glTextureAnisotropy) {
+	public TextureFilter(int glTextureFormat, int glTextureInternalFormat, int glDepthStencilTextureMode, int glTextureBaseLevel, Vector4f glTextureBorderColor, int glTextureCompareFunc,
+			int glTextureCompareMode, float glTextureLODBias, int glTextureMinFilter, int glTextureMagFilter, int glTextureMinLOD, int glTextureMaxLOD, int glTextureMaxLevel, int glTextureSwizzleR,
+			int glTextureSwizzleG, int glTextureSwizzleB, int glTextureSwizzleA, int glTextureWrapS, int glTextureWrapT, int glTextureWrapR, float glTextureAnisotropy) {
 		this.glTextureFormat = glTextureFormat;
-		this.glTextureInternalFormat = glTextureInternalFormat;		
+		this.glTextureInternalFormat = glTextureInternalFormat;
 		this.glDepthStencilTextureMode = glDepthStencilTextureMode;
 		this.glTextureBaseLevel = glTextureBaseLevel;
 		this.glTextureBorderColor = glTextureBorderColor;
@@ -85,6 +85,35 @@ public class TextureFilter {
 		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, glTextureWrapS);
 		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, glTextureWrapT);
 		GL11.glTexParameteri(target, GL12.GL_TEXTURE_WRAP_R, glTextureWrapR);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder buider = new StringBuilder();
+
+		buider.append("[ ");
+		buider.append(glDepthStencilTextureMode + ", ");
+		buider.append(glTextureBaseLevel + ", ");
+		buider.append(glTextureBorderColor.toString() + ", ");
+		buider.append(glTextureCompareFunc + ", ");
+		buider.append(glDepthStencilTextureMode + ", ");
+		buider.append(glTextureCompareMode + ", ");
+		buider.append(glTextureLODBias + ", ");
+		buider.append(glTextureMinFilter + ", ");
+		buider.append(glTextureMagFilter + ", ");
+		buider.append(glTextureMinLOD + ", ");
+		buider.append(glTextureMaxLOD + ", ");
+		buider.append(glTextureMaxLevel + ", ");
+		buider.append(glTextureSwizzleR + ", ");
+		buider.append(glTextureSwizzleG + ", ");
+		buider.append(glTextureSwizzleB + ", ");
+		buider.append(glTextureSwizzleA + ", ");
+		buider.append(glTextureWrapS + ", ");
+		buider.append(glTextureWrapT + ", ");
+		buider.append(glTextureWrapR);
+		buider.append(" ]");
+
+		return buider.toString();
 	}
 
 	public int getGLTextureFormat() {

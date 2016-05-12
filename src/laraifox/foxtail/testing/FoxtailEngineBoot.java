@@ -93,7 +93,7 @@ public class FoxtailEngineBoot {
 
 		try {
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
-			OpenGLDisplay display = new OpenGLDisplay(1200, 900, new ComponentTesting());
+			OpenGLDisplay display = new OpenGLDisplay(1200, 900, new ShaderSandbox());
 			display.setContextAttribs(new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true));
 			display.setPixelFormat(new PixelFormat().withSamples(Math.min(2, MAX_MULTISAMPLES)).withDepthBits(24));
 			display.initialize();

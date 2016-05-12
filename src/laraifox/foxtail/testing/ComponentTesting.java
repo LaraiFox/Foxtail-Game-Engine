@@ -1,12 +1,12 @@
 package laraifox.foxtail.testing;
 
-import laraifox.foxtail.AssetLoader;
 import laraifox.foxtail.core.GameObject;
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.InputHandler;
 import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.OpenGLDisplay;
 import laraifox.foxtail.core.Profiler;
+import laraifox.foxtail.core.ResourceManager;
 import laraifox.foxtail.core.Transform3D;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector3f;
@@ -48,11 +48,11 @@ public class ComponentTesting implements IGameManager {
 
 		this.sphere1 = new GameObject(new Transform3D(new Vector3f(-1.0f, 0.0f, 5.0f)));
 		// sphere1.addC\omponent(new PhysicsComponent(new Vector3f(1.0f, 0.0f, 0.0f), null));
-		sphere1.addComponent(new RenderComponent(new Material().setBaseColor(new Vector4f(1, 0.5f, 0, 1)), AssetLoader.loadModel("res/models/Sphere.obj"), false));
+		sphere1.addComponent(new RenderComponent(new Material().setBaseColor(new Vector4f(1, 0.5f, 0, 1)), ResourceManager.loadModel("res/models/Sphere.obj"), false));
 
 		this.sphere2 = new GameObject(new Transform3D(new Vector3f(1.0f, 0.0f, 5.0f)));
 		// sphere2.addComponent(new PhysicsComponent(new Vector3f(-1.0f, 0.0f, 0.0f), null));
-		sphere2.addComponent(new RenderComponent(new Material().setBaseColor(new Vector4f(0, 0.5f, 1, 1)), AssetLoader.loadModel("res/models/Sphere.obj"), false));
+		sphere2.addComponent(new RenderComponent(new Material().setBaseColor(new Vector4f(0, 0.5f, 1, 1)), ResourceManager.loadModel("res/models/Sphere.obj"), false));
 	}
 
 	public void cleanUp() {

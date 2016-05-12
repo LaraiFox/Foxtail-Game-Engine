@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -18,7 +20,16 @@ import laraifox.foxtail.core.Logger;
 import laraifox.foxtail.core.math.Vector4f;
 
 public class Texture2D {
+	private static class Texture2DResource {
+
+	}
+
 	private static final int BYTES_PER_PIXEL = 4;
+
+	private static final Map<String, Texture2DResource> LOADED_RESOURCES = new HashMap<String, Texture2D.Texture2DResource>();
+
+	private Texture2DResource resource;
+	private String resourceName;
 
 	protected int textureID;
 	protected int width, height;
@@ -113,6 +124,10 @@ public class Texture2D {
 	}
 
 	public void bind(int i) {
+		if (i < 0 || i >= 32) {
+			new IndexOutOfBoundsException("").printStackTrace();
+			System.exit(1);
+		}
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 	}
@@ -150,6 +165,11 @@ public class Texture2D {
 		}
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		this.cleanUp();
 	}
 
 	public int getTextureID() {

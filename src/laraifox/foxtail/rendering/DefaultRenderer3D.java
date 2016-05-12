@@ -5,20 +5,18 @@ import java.util.Map;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import laraifox.foxtail.core.ResourceManager;
+
 public class DefaultRenderer3D extends Renderer {
 	private Shader shader;
 
 	public DefaultRenderer3D() {
-		this.shader = new Shader("src/laraifox/foxtail/rendering/shaders/StandardComponent.shader");
+		this.shader = new Shader(ResourceManager.getFoxtailResourcePath("shaders/StandardComponent.shader"));
 	}
 
 	@Override
 	public void initialize() {
 
-	}
-
-	public void cleanUp() {
-		shader.cleanUp();
 	}
 
 	@Override

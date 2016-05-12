@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import laraifox.foxtail.core.ResourceManager;
 import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.rendering.Shader;
 import laraifox.foxtail.testing.shadersandbox.ShaderSandbox;
@@ -19,7 +20,7 @@ public class TextManager {
 	private static Shader shader;
 
 	public static void initialize() {
-		TextManager.shader = new Shader("src/laraifox/foxtail/rendering/shaders/TexturedUnlit2D.shader", false);
+		TextManager.shader = new Shader(ResourceManager.getFoxtailResourcePath("shaders/TexturedUnlit2D.shader"), false);
 	}
 
 	public static void render() {
