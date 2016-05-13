@@ -43,8 +43,8 @@ public class Matrix4f {
 	public Matrix4f(org.lwjgl.util.vector.Matrix4f matrix) {
 		this.set(new float[] {
 				matrix.m00, matrix.m01, matrix.m02, matrix.m03, //
-				matrix.m10, matrix.m11, matrix.m12, matrix.m13, //	
-				matrix.m20, matrix.m21, matrix.m22, matrix.m23, // 	
+				matrix.m10, matrix.m11, matrix.m12, matrix.m13, //
+				matrix.m20, matrix.m21, matrix.m22, matrix.m23, //
 				matrix.m30, matrix.m31, matrix.m32, matrix.m33
 		});
 	}
@@ -105,7 +105,7 @@ public class Matrix4f {
 		float[] result = new float[COMPONENT_COUNT];
 
 		result[0] = data[5] * data[10] * data[15] - data[5] * data[11] * data[14] - //
-			data[9] * data[6] * data[15] + data[9] * data[7] * data[14] +//
+			data[9] * data[6] * data[15] + data[9] * data[7] * data[14] + //
 			data[13] * data[6] * data[11] - data[13] * data[7] * data[10];
 
 		result[1] = -data[1] * data[10] * data[15] + data[1] * data[11] * data[14] + //
@@ -152,7 +152,7 @@ public class Matrix4f {
 			data[4] * data[1] * data[11] - data[4] * data[3] * data[9] - //
 			data[8] * data[1] * data[7] + data[8] * data[3] * data[5];
 
-		result[12] = -data[4] * data[9] * data[14] + data[4] * data[10] * data[13] +//
+		result[12] = -data[4] * data[9] * data[14] + data[4] * data[10] * data[13] + //
 			data[8] * data[5] * data[14] - data[8] * data[6] * data[13] - //
 			data[12] * data[5] * data[10] + data[12] * data[6] * data[9];
 
@@ -408,12 +408,15 @@ public class Matrix4f {
 	}
 
 	public static Matrix4f Rotation(Quaternion quaternion) {
-		Vector3f forward = new Vector3f(2.0f * (quaternion.getX() * quaternion.getZ() - quaternion.getW() * quaternion.getY()), 2.0f * (quaternion.getY() * quaternion.getZ() + quaternion.getW()
-			* quaternion.getX()), 1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getY() * quaternion.getY()));
-		Vector3f up = new Vector3f(2.0f * (quaternion.getX() * quaternion.getY() + quaternion.getW() * quaternion.getZ()), 1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getZ()
-			* quaternion.getZ()), 2.0f * (quaternion.getY() * quaternion.getZ() - quaternion.getW() * quaternion.getX()));
-		Vector3f right = new Vector3f(1.0f - 2.0f * (quaternion.getY() * quaternion.getY() + quaternion.getZ() * quaternion.getZ()), 2.0f * (quaternion.getX() * quaternion.getY() - quaternion.getW()
-			* quaternion.getZ()), 2.0f * (quaternion.getX() * quaternion.getZ() + quaternion.getW() * quaternion.getY()));
+		Vector3f forward = new Vector3f(2.0f * (quaternion.getX() * quaternion.getZ() - quaternion.getW() * quaternion.getY()),
+				2.0f * (quaternion.getY() * quaternion.getZ() + quaternion.getW() * quaternion.getX()), 1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getY()
+					* quaternion.getY()));
+		Vector3f up = new Vector3f(2.0f * (quaternion.getX() * quaternion.getY() + quaternion.getW() * quaternion.getZ()),
+				1.0f - 2.0f * (quaternion.getX() * quaternion.getX() + quaternion.getZ() * quaternion.getZ()), 2.0f * (quaternion.getY() * quaternion.getZ() - quaternion.getW()
+					* quaternion.getX()));
+		Vector3f right = new Vector3f(1.0f - 2.0f * (quaternion.getY() * quaternion.getY() + quaternion.getZ() * quaternion.getZ()),
+				2.0f * (quaternion.getX() * quaternion.getY() - quaternion.getW() * quaternion.getZ()), 2.0f * (quaternion.getX() * quaternion.getZ() + quaternion.getW()
+					* quaternion.getY()));
 
 		return Matrix4f.Rotation(forward, up, right);
 	}

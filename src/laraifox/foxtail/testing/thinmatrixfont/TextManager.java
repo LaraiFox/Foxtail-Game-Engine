@@ -101,6 +101,7 @@ public class TextManager {
 
 	public static void removeText(GUIText text) {
 		List<GUIText> textBatch = texts.get(text.getFont());
+		text.cleanUp();
 		textBatch.remove(text);
 		if (textBatch.isEmpty()) {
 			texts.remove(texts.get(text.getFont()));

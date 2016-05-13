@@ -2,7 +2,7 @@ Shader "TexturedPhong" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/Standard.inc"
+		#pragma include "\includes\Standard.inc"
 		
 		uniform mat4 FOXTAIL_MODEL_MATRIX;
 		uniform mat4 FOXTAIL_VIEW_MATRIX;
@@ -19,20 +19,18 @@ Shader "TexturedPhong" {
 		out vec3 pass_VertexNormal;
 
 		void main() {
-			vec3 worldVertexPosition = (FOXTAIL_MODEL_MATRIX * vec4(in_VertexPosition, 1.0)).xyz;
+			vec3 worldVertexPosition = (FOXTAIL_MATRIX_MODEL * vec4(in_VertexPosition, 1.0)).xyz;
 			
-			pass_ToCameraVector = normalize((inverse(FOXTAIL_VIEW_MATRIX) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldVertexPosition);
+			pass_ToCameraVector = normalize((inverse(FOXTAIL_MATRIX_VIEW) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldVertexPosition);
 			
 			pass_VertexPosition = worldVertexPosition;
 			pass_VertexTexCoord = in_VertexTexCoord;
-			pass_VertexNormal = (FOXTAIL_MODEL_MATRIX * vec4(in_VertexNormal, 0.0)).xyz;
+			pass_VertexNormal = (FOXTAIL_MATRIX_MODEL * vec4(in_VertexNormal, 0.0)).xyz;
 		
-			gl_Position = FOXTAIL_MVP_MATRIX * vec4(in_VertexPosition, 1.0);
+			gl_Position = FOXTAIL_MATRIX_MVP * vec4(in_VertexPosition, 1.0);
 		}
 	GLSLFragment
 		#version 330
-
-		#pragma include "/includes/Material.inc"
 		
 		struct BaseLight {
 			vec3 color;

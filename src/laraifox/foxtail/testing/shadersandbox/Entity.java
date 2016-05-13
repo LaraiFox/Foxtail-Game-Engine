@@ -25,8 +25,8 @@ public class Entity {
 	public void render(Matrix4f viewProjectionMatrix, Shader shader) {
 		shader.bind();
 
-		shader.setUniform("FOXTAIL_MODEL_MATRIX", transform.getTransformationMatrix());
-		shader.setUniform("FOXTAIL_MVP_MATRIX", Matrix4f.multiply(viewProjectionMatrix, transform.getTransformationMatrix()));
+		shader.setUniform("FOXTAIL_MATRIX_MODEL", transform.getTransformationMatrix());
+		shader.setUniform("FOXTAIL_MATRIX_MVP", Matrix4f.multiply(viewProjectionMatrix, transform.getTransformationMatrix()));
 
 		shader.setUniform("in_BaseColor", material.getColor());
 		shader.setUniform("in_SpecularIntensity", material.getSpecularIntensity());

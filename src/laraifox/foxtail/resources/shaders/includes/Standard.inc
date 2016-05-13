@@ -3,7 +3,7 @@ uniform mat4 FOXTAIL_MATRIX_VIEW;
 uniform mat4 FOXTAIL_MATRIX_PROJECTION;
 
 uniform mat4 FOXTAIL_MATRIX_MVP;
-uniform mat4 FOXTAIL_MATRIX_I_MODEL;
+uniform mat4 FOXTAIL_MATRIX_I_M;
 uniform mat4 FOXTAIL_MATRIX_MV;
 uniform mat4 FOXTAIL_MATRIX_T_MV;
 uniform mat4 FOXTAIL_MATRIX_IT_MV;

@@ -4,17 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-
 import laraifox.foxtail.core.IGameManager;
 import laraifox.foxtail.core.InputHandler;
 import laraifox.foxtail.core.Logger;
@@ -36,6 +25,17 @@ import laraifox.foxtail.rendering.models.Mesh;
 import laraifox.foxtail.testing.thinmatrixfont.FontType;
 import laraifox.foxtail.testing.thinmatrixfont.GUIText;
 import laraifox.foxtail.testing.thinmatrixfont.TextManager;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 public class ShaderSandbox implements IGameManager {
 	private OpenGLDisplay display;
@@ -156,33 +156,37 @@ public class ShaderSandbox implements IGameManager {
 
 		this.camera = new Camera(new Transform3D(new Vector3f(0.0f, 1.0f, 0.0f)), Matrix4f.Projection(70.0f, Display.getWidth(), Display.getHeight(), 0.01f, 100.0f));
 
-		final int SPHERE_COUNT = 10;
+		final int SPHERE_COUNT = 500;
 		this.entity_Spheres = new Entity[SPHERE_COUNT * 2];
 		for (int i = 0; i < SPHERE_COUNT; i++) {
-			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), ResourceManager.loadModel(ResourceManager
-					.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
-			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), ResourceManager.loadModel(ResourceManager
-					.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -5.0f), new Vector3f(0.75f)), new Transform3D());
+			entity_Spheres[i * 2 + 0] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 64.0f), new Mesh(
+					ResourceManager.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), 1.0f, -5.0f),
+					new Vector3f(0.075f)), new Transform3D());
+			entity_Spheres[i * 2 + 1] = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), (1.0f / (SPHERE_COUNT - 1) * i * 10.0f), 256.0f), new Mesh(
+					ResourceManager.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(-10.0f + (20.0f / (SPHERE_COUNT - 1) * i), -1.0f, -5.0f),
+					new Vector3f(0.075f)), new Transform3D());
 		}
 
-		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/StanfordBunny.obj")),
-				new Transform3D(new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
-		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath(
-				"models/StanfordDragon.obj")), new Transform3D(new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)), new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Bunny = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), new Mesh(
+				ResourceManager.getFoxtailResourcePath("models/StanfordBunny.obj")), new Transform3D(new Vector3f(-4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)),
+				new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
+		this.entity_Dragon = new Entity(new Material(new Vector4f(1.0f, 0.64f, 0.39f, 1.0f), 0.5f, 5.0f), new Mesh(
+				ResourceManager.getFoxtailResourcePath("models/StanfordDragon.obj")), new Transform3D(new Vector3f(4.0f, -0.5f, 5.0f), new Vector3f(0.3f, 0.3f, 0.3f)),
+				new Transform3D(Quaternion.AxisAngle(Vector3f.Up(), 0.2f)));
 
-		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f, -0.75f, 5.0f),
-				new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
-		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f, -10.0f, 0.0f),
-				new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
+		this.entity_Cube1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(-4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(4.0f,
+				-0.75f, 5.0f), new Vector3f(5.0f, 0.5f, 5.0f)), new Transform3D());
+		this.entity_Cube3 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 0.5f, 1.0f), new Mesh(CUBE_VERTICES, CUBE_INDICES), new Transform3D(new Vector3f(0.0f,
+				-10.0f, 0.0f), new Vector3f(50.0f, 0.5f, 50.0f)), new Transform3D());
 
-		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Torus.obj")),
+		entity_Torus = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 256.0f), new Mesh(ResourceManager.getFoxtailResourcePath("models/Torus.obj")),
 				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(1.5f)), new Transform3D());
-		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")),
-				new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
-		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f), ResourceManager.loadModel(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")),
-				new Transform3D(new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
+		entity_SphereOrbitter1 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f),
+				new Mesh(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), new Vector3f(0.75f)), new Transform3D());
+		entity_SphereOrbitter2 = new Entity(new Material(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 5.0f, 256.0f),
+				new Mesh(ResourceManager.getFoxtailResourcePath("models/Sphere.obj")), new Transform3D(new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
 
 		TextureFilter textureFilter = new TextureFilter();
 		textureFilter.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
@@ -228,7 +232,7 @@ public class ShaderSandbox implements IGameManager {
 		}
 		this.velocity_Camera = new Vector3f();
 
-		GL11.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
+		GL11.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -236,33 +240,35 @@ public class ShaderSandbox implements IGameManager {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL13.GL_MULTISAMPLE);
 
-		//		Logger.log("Model 'StanfordBunny.obj' size: " + entity_Bunny.getMeshSize(), "AssetLoader");
-		//		Logger.log("Model 'StanfordDragon.obj' size: " + entity_Dragon.getMeshSize(), "AssetLoader");
-		//		Logger.log("Model 'Cube' size: " + entity_Cube1.getMeshSize(), "AssetLoader");
-		//		Logger.log("Model 'Sphere.obj' size: " + entity_Spheres[0].getMeshSize(), "AssetLoader");
-		//		Logger.log("Model 'Torus.obj' size: " + entity_Torus.getMeshSize(), "AssetLoader");
-		//		int totalModelDataSize = 0;
-		//		totalModelDataSize += entity_Bunny.getMeshSize();
-		//		totalModelDataSize += entity_Dragon.getMeshSize();
-		//		totalModelDataSize += entity_Torus.getMeshSize();
-		//		totalModelDataSize += entity_Spheres[0].getMeshSize() * (entity_Spheres.length + 2);
-		//		totalModelDataSize += entity_Cube1.getMeshSize() * 3;
-		//		Logger.log("Total model data size: " + totalModelDataSize, "AssetLoader");
-		//		Logger.lineBreak();
-		//		Logger.flush(true);
+		// Logger.log("Model 'StanfordBunny.obj' size: " + entity_Bunny.getMeshSize(), "AssetLoader");
+		// Logger.log("Model 'StanfordDragon.obj' size: " + entity_Dragon.getMeshSize(), "AssetLoader");
+		// Logger.log("Model 'Cube' size: " + entity_Cube1.getMeshSize(), "AssetLoader");
+		// Logger.log("Model 'Sphere.obj' size: " + entity_Spheres[0].getMeshSize(), "AssetLoader");
+		// Logger.log("Model 'Torus.obj' size: " + entity_Torus.getMeshSize(), "AssetLoader");
+		// int totalModelDataSize = 0;
+		// totalModelDataSize += entity_Bunny.getMeshSize();
+		// totalModelDataSize += entity_Dragon.getMeshSize();
+		// totalModelDataSize += entity_Torus.getMeshSize();
+		// totalModelDataSize += entity_Spheres[0].getMeshSize() * (entity_Spheres.length + 2);
+		// totalModelDataSize += entity_Cube1.getMeshSize() * 3;
+		// Logger.log("Total model data size: " + totalModelDataSize, "AssetLoader");
+		// Logger.lineBreak();
+		// Logger.flush(true);
 
 		TextManager.initialize();
 
-		this.fontType = new FontType(ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.png"), ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.fnt"));
+		this.fontType = new FontType(ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.png"),
+				ResourceManager.getFoxtailResourcePath("fonts/Inconsolata-Regular.fnt"));
 
 		this.fpsText = new GUIText("FPS: " + display.getCurrentFPS(), 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.005f, 0.0f)), 1.0f, false);
-		this.memoryText = new GUIText("Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / 1048576) + "M / " + (runtime.totalMemory() / 1048576) + "M (" + ((int) (((float) (runtime
-				.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
+		this.memoryText = new GUIText("Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / 1048576) + "M / " + (runtime.totalMemory() / 1048576) + "M ("
+			+ ((int) (((float) (runtime.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(
+				new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
 
 		TextureFilter textureFilter3 = new TextureFilter();
 		textureFilter3.setGLTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
 		textureFilter3.setGLTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
-		//		textureFilter3.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
+		// textureFilter3.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
 		this.skyboxTexture = new TextureCube(new String[] {
 				ResourceManager.getFoxtailResourcePath("textures/skybox/right.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/left.png"), //
 				ResourceManager.getFoxtailResourcePath("textures/skybox/top.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/bottom.png"), //
@@ -312,7 +318,7 @@ public class ShaderSandbox implements IGameManager {
 	}
 
 	public void tick() {
-		//		System.gc();
+		 System.gc();
 
 		Display.setTitle(display.getTitle() + " | FPS: " + display.getCurrentFPS());
 
@@ -328,8 +334,9 @@ public class ShaderSandbox implements IGameManager {
 		InputHandler.update();
 
 		TextManager.removeText(memoryText);
-		this.memoryText = new GUIText("Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / 1048576) + "M / " + (runtime.totalMemory() / 1048576) + "M (" + ((int) (((float) (runtime
-				.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
+		this.memoryText = new GUIText("Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / 1048576) + "M / " + (runtime.totalMemory() / 1048576) + "M ("
+			+ ((int) (((float) (runtime.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(
+				new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
 
 		Profiler.beginMultiSample("Frame Time");
 		Profiler.beginMultiSample("Update Time");
@@ -386,9 +393,10 @@ public class ShaderSandbox implements IGameManager {
 		// entity_SphereOrbitter1.setMomentum(new Transform3D(Vector3f.Up().rotate(Vector3f.Right(), angle * 2).scale(0.1f * delta)));
 		// entity_SphereOrbitter2.setMomentum(new Transform3D(Vector3f.Down().rotate(Vector3f.Right(), -angle * 2).scale(0.1f * delta)));
 
-		entity_Torus.setTransform(new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle - 35.0f)) * 60.0f), new Vector3f(
-				1.5f)));
-		entity_SphereOrbitter1.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f + (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f, //
+		entity_Torus.setTransform(new Transform3D(new Vector3f(15.0f, 0.0f, 0.0f), Quaternion.AxisAngle(Vector3f.Right(), (float) Math.cos(Math.toRadians(angle - 35.0f)) * 60.0f),
+				new Vector3f(1.5f)));
+		entity_SphereOrbitter1.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f
+			+ (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f, //
 				(float) Math.cos(Math.toRadians(-angle - 90)) * 2.0f - (float) Math.sin(Math.toRadians(-angle - 90)) * 2.0f - 2.75f), new Vector3f(0.75f)));
 		entity_SphereOrbitter2.setTransform(new Transform3D(new Vector3f(15.0f, (float) Math.cos(Math.toRadians(angle)) * 2.0f + (float) Math.sin(Math.toRadians(angle)) * 2.0f, //
 				(float) Math.cos(Math.toRadians(angle)) * 2.0f - (float) Math.sin(Math.toRadians(angle)) * 2.0f + 2.75f), new Vector3f(0.75f)));
@@ -403,7 +411,7 @@ public class ShaderSandbox implements IGameManager {
 	}
 
 	public void render() {
-		//		VP_MATRIX = Matrix4f.Projection(0, Display.getWidth(), 0, Display.getHeight(), 0.1f, 1.0f);
+		// VP_MATRIX = Matrix4f.Projection(0, Display.getWidth(), 0, Display.getHeight(), 0.1f, 1.0f);
 
 		Profiler.beginMultiSample("Render Time");
 
@@ -411,27 +419,15 @@ public class ShaderSandbox implements IGameManager {
 
 		Matrix4f viewProjectionMatrix = camera.getViewProjectionMatrix();
 
-		Profiler.beginMultiSample("Matrix4f.toFormattedString()");
-		for (int i = 0; i < 100; i++) {
-			camera.getViewMatrix().toFormattedString(true);
-		}
-		Profiler.endSample("Matrix4f.toFormattedString()");
-
-		Profiler.beginMultiSample("Matrix4f.toString()");
-		for (int i = 0; i < 100; i++) {
-			camera.getViewMatrix().toString();
-		}
-		Profiler.endSample("Matrix4f.toString()");
-
 		texture_Checker.bind();
 
 		shader.bind();
 
-		shader.setUniform("FOXTAIL_VIEW_MATRIX", camera.getViewMatrix());
+		shader.setUniform("FOXTAIL_MATRIX_VIEW", camera.getViewMatrix());
 
 		shader.setUniform("in_AmbientLight", new Vector3f(1.0f, 0.95f, 0.8f).scale(0.1f));
 
-		//		Vector3f direction = Vector3f.Down().rotate(Vector3f.Right(), -45.0f).rotate(Vector3f.Up(), (angle / 10.0f));
+		// Vector3f direction = Vector3f.Down().rotate(Vector3f.Right(), -45.0f).rotate(Vector3f.Up(), (angle / 10.0f));
 
 		// shader.setUniform("in_DirectionalLight.base.color", new Vector3f(1.0f, 0.975f, 0.95f));
 		shader.setUniform("in_DirectionalLight.base.color", new Vector3f(0.8f, 0.8f, 1.0f));
@@ -462,33 +458,34 @@ public class ShaderSandbox implements IGameManager {
 		shader.setUniform("in_PointLights[2].position", new Vector3f(0.0f, 0.0f, 5.0f + (float) Math.sin(Math.toRadians(angle)) * 4.0f));
 		shader.setUniform("in_PointLights[2].range", 10.0f);
 
-		//		Profiler.beginMultiSample("entity_Sphere");
+		Profiler.beginMultiSample("entity_Sphere");
+		GL30.glBindVertexArray(entity_Spheres[0].getMeshID());
 		for (int i = 0; i < entity_Spheres.length; i++) {
-			entity_Spheres[i].render(viewProjectionMatrix, shader);
-			//			shader.setUniform("FOXTAIL_MODEL_MATRIX", entity_Spheres[i].getTransform().getTransformationMatrix());
-			//			shader.setUniform("FOXTAIL_MVP_MATRIX", Matrix4f.multiply(viewProjectionMatrix, entity_Spheres[i].getTransform().getTransformationMatrix()));
-			//
-			//			shader.setUniform("in_BaseColor", entity_Spheres[i].getMaterial().getColor());
-			//			shader.setUniform("in_SpecularIntensity", entity_Spheres[i].getMaterial().getSpecularIntensity());
-			//			shader.setUniform("in_SpecularExponent", entity_Spheres[i].getMaterial().getSpecularExponent());
-			//
-			//			GL30.glBindVertexArray(entity_Spheres[i].getMeshID());
-			//
-			//			GL20.glEnableVertexAttribArray(0);
-			//			GL20.glEnableVertexAttribArray(1);
-			//			GL20.glEnableVertexAttribArray(2);
-			//			GL20.glEnableVertexAttribArray(3);
-			//			
-			//			GL11.glDrawElements(GL11.GL_TRIANGLES, entity_Spheres[i].getMeshVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+			// entity_Spheres[i].render(viewProjectionMatrix, shader);
+			shader.setUniform("FOXTAIL_MATRIX_MODEL", entity_Spheres[i].getTransform().getTransformationMatrix());
+			shader.setUniform("FOXTAIL_MATRIX_MVP", Matrix4f.multiply(viewProjectionMatrix, entity_Spheres[i].getTransform().getTransformationMatrix()));
+
+			shader.setUniform("in_BaseColor", entity_Spheres[i].getMaterial().getColor());
+			shader.setUniform("in_SpecularIntensity", entity_Spheres[i].getMaterial().getSpecularIntensity());
+			shader.setUniform("in_SpecularExponent", entity_Spheres[i].getMaterial().getSpecularExponent());
+
+//			GL30.glBindVertexArray(entity_Spheres[i].getMeshID());
+
+			GL20.glEnableVertexAttribArray(0);
+			GL20.glEnableVertexAttribArray(1);
+			GL20.glEnableVertexAttribArray(2);
+			GL20.glEnableVertexAttribArray(3);
+
+			GL11.glDrawElements(GL11.GL_TRIANGLES, entity_Spheres[i].getMeshVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		}
 
-		//		GL20.glDisableVertexAttribArray(0);
-		//		GL20.glDisableVertexAttribArray(1);
-		//		GL20.glDisableVertexAttribArray(2);
-		//		GL20.glDisableVertexAttribArray(3);
-		//		
-		//		GL30.glBindVertexArray(0);
-		//		Profiler.endSample("entity_Sphere");
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
+
+		GL30.glBindVertexArray(0);
+		Profiler.endSample("entity_Sphere");
 
 		entity_Cube1.render(viewProjectionMatrix, shader);
 		entity_Cube2.render(viewProjectionMatrix, shader);
@@ -507,16 +504,16 @@ public class ShaderSandbox implements IGameManager {
 
 		entity_Cube3.render(viewProjectionMatrix, shader);
 
-		//		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		// GL11.glDisable(GL11.GL_DEPTH_TEST);
 		skyboxTexture.bind();
 		skyboxShader.bind();
-		skyboxShader.setUniform("FOXTAIL_VIEW_PROJECTION_MATRIX", viewProjectionMatrix);
-		skyboxShader.setUniform("in_CameraPosition", camera.getPosition());
+		skyboxShader.setUniform("FOXTAIL_MATRIX_VP", viewProjectionMatrix);
+		skyboxShader.setUniform("FOXTAIL_CAMERA_POSITION", camera.getPosition());
 		GL30.glBindVertexArray(skyboxVAO);
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glDrawElements(GL11.GL_TRIANGLES, CUBE_INDICES.length, GL11.GL_UNSIGNED_INT, 0);
 		GL20.glDisableVertexAttribArray(0);
-		//		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		// GL11.glEnable(GL11.GL_DEPTH_TEST);
 
 		TextManager.removeText(matrixText[0]);
 		TextManager.removeText(matrixText[1]);

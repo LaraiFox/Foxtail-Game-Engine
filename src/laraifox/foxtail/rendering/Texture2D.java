@@ -4,10 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import laraifox.foxtail.core.ICleanable;
+import laraifox.foxtail.core.Logger;
+import laraifox.foxtail.core.math.Vector4f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
@@ -16,19 +18,9 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
-import laraifox.foxtail.core.Logger;
-import laraifox.foxtail.core.math.Vector4f;
-
-public class Texture2D {
-	private static class Texture2DResource {
-
-	}
-
+public class Texture2D implements ICleanable {
 	private static final int BYTES_PER_PIXEL = 4;
 
-	private static final Map<String, Texture2DResource> LOADED_RESOURCES = new HashMap<String, Texture2D.Texture2DResource>();
-
-	private Texture2DResource resource;
 	private String resourceName;
 
 	protected int textureID;

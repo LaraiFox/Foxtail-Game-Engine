@@ -3,15 +3,18 @@ package laraifox.foxtail.rendering.models;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import laraifox.foxtail.core.BufferUtils;
+import laraifox.foxtail.core.ICleanable;
+import laraifox.foxtail.core.ResourceManager;
+import laraifox.foxtail.rendering.Vertex;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import laraifox.foxtail.core.BufferUtils;
-import laraifox.foxtail.rendering.Vertex;
-
-public class Mesh {
+public class Mesh implements ICleanable {
+	private String resourceName;
 	private int vaoID;
 	public int count;
 	private int byteCount;
@@ -20,8 +23,27 @@ public class Mesh {
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length / Vertex.COMPONENT_COUNT);
 	}
 
-	public Mesh(Vertex[] vertices, int[] indices) {
+	public Mesh(String resourceName, Vertex[] vertices, int[] indices) {
+		this.resourceName = resourceName;
+
 		this.createModel(BufferUtils.createIntBuffer(indices, true), BufferUtils.createFloatBuffer(vertices, true), indices.length, vertices.length);
+	}
+
+	public Mesh(String filepath) {
+		this(ResourceManager.getMeshResource(filepath));
+	}
+
+	public Mesh(Mesh mesh) {
+		this.resourceName = mesh.resourceName;
+		this.vaoID = mesh.vaoID;
+		this.count = mesh.count;
+		this.byteCount = mesh.byteCount;
+		System.out.println("ID " + vaoID);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		ResourceManager.releaseMeshResource(resourceName);
 	}
 
 	public void cleanUp() {

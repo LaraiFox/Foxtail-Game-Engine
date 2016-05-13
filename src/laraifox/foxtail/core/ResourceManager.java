@@ -17,8 +17,32 @@ import laraifox.foxtail.rendering.models.Mesh;
 import laraifox.foxtail.rendering.models.OBJModel;
 
 public class ResourceManager {
-	private static class ReferencedResource<T> {
+	private static class ReferencedResource<T extends ICleanable> {
+		private int referenceCount;
+		private T resource;
 
+		public ReferencedResource(T resource) {
+			this.referenceCount = 1;
+			this.resource = resource;
+		}
+
+		@Override
+		protected void finalize() {
+			resource.cleanUp();
+		}
+
+		public void addReference() {
+			referenceCount += 1;
+		}
+
+		public boolean removeReference() {
+			referenceCount -= 1;
+			return referenceCount <= 0;
+		}
+
+		public T getResource() {
+			return resource;
+		}
 	}
 
 	public static final String FOXTAIL_RESOURCE_DIRECTORY;
@@ -41,6 +65,7 @@ public class ResourceManager {
 		}
 	}
 
+	private static final Map<String, ResourceManager.ReferencedResource<Mesh>> MESH_RESOURCE_MAP = new HashMap<String, ResourceManager.ReferencedResource<Mesh>>();
 	private static final Map<String, ResourceManager.ReferencedResource<Texture2D>> TEXTURE_2D_RESOURCE_MAP = new HashMap<String, ResourceManager.ReferencedResource<Texture2D>>();
 
 	private static String programFolderName = new String("");
@@ -53,6 +78,26 @@ public class ResourceManager {
 	public static void initialize(String programFolderName, String internalPrefix) {
 		ResourceManager.programFolderName = programFolderName;
 		ResourceManager.internalResourcePrefix = internalPrefix;
+	}
+
+	public static Mesh getMeshResource(String filepath) {
+		ReferencedResource<Mesh> result = MESH_RESOURCE_MAP.get(filepath);
+		System.out.println(result == null);
+		if (result == null) {
+			result = new ReferencedResource<Mesh>(ResourceManager.loadModel(filepath));
+			MESH_RESOURCE_MAP.put(filepath, result);
+		} else {
+			result.addReference();
+		}
+
+		return result.getResource();
+	}
+
+	public static void releaseMeshResource(String filepath) {
+		ReferencedResource<Mesh> result = MESH_RESOURCE_MAP.get(filepath);
+		if (result.removeReference()) {
+			MESH_RESOURCE_MAP.remove(filepath);
+		}
 	}
 
 	private static String getFormattedFilepath(String filepath) {
@@ -75,9 +120,41 @@ public class ResourceManager {
 		return new String(internalResourcePrefix + ResourceManager.getFormattedFilepath(filepath));
 	}
 
+	public static String loadShaderSource(String filepath) throws IOException {
+		final String INCLUDE_DIRECTIVE = "#pragma include";
+
+		// InputStream inputStream = ResourceManager.class.getResourceAsStream(filepath);
+		// BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		File file = new File(filepath);
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+
+		StringBuilder result = new StringBuilder();
+
+		String line = new String();
+		while ((line = reader.readLine()) != null) {
+			if (line.trim().startsWith(INCLUDE_DIRECTIVE)) {
+				int includeFilepathStart = line.indexOf(INCLUDE_DIRECTIVE);
+				while (line.charAt(includeFilepathStart - 1) != '\"')
+					includeFilepathStart++;
+
+				int includeFilepathEnd = line.length() - 1;
+				while (line.charAt(includeFilepathEnd) != '\"')
+					includeFilepathEnd--;
+
+				result.append(loadShaderSource(file.getParent() + line.substring(includeFilepathStart, includeFilepathEnd)));
+			} else {
+				result.append(line).append("\n");
+			}
+		}
+
+		reader.close();
+
+		return result.toString();
+	}
+
 	public static String loadFile(String filepath) throws IOException {
-		//		InputStream inputStream = ResourceManager.class.getResourceAsStream(filepath);
-		//		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		// InputStream inputStream = ResourceManager.class.getResourceAsStream(filepath);
+		// BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
 
 		StringBuilder result = new StringBuilder();
@@ -92,7 +169,7 @@ public class ResourceManager {
 		return result.toString();
 	}
 
-	public static final Mesh loadModel(String filepath) {
+	private static final Mesh loadModel(String filepath) {
 		String extention = filepath.substring(filepath.lastIndexOf('.'));
 
 		try {
@@ -112,8 +189,8 @@ public class ResourceManager {
 	}
 
 	private static Mesh loadOBJMesh(String filepath) throws FileNotFoundException {
-		//		InputStream inputStream = ResourceManager.class.getResourceAsStream(filepath);
-		//		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		// InputStream inputStream = ResourceManager.class.getResourceAsStream(filepath);
+		// BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
 
 		OBJModel objModel = new OBJModel(reader);
@@ -130,6 +207,6 @@ public class ResourceManager {
 		Integer[] indexData = new Integer[indexedModel.getIndices().size()];
 		indexedModel.getIndices().toArray(indexData);
 
-		return new Mesh(vertexData, ArrayUtils.toIntArray(indexData));
+		return new Mesh(filepath, vertexData, ArrayUtils.toIntArray(indexData));
 	}
 }

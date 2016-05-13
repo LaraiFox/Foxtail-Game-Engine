@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import laraifox.foxtail.core.BufferUtils;
 import laraifox.foxtail.core.Logger;
@@ -16,6 +12,9 @@ import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.core.math.Vector4f;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 public class Shader {
 	private class GLSLStruct {
@@ -31,21 +30,24 @@ public class Shader {
 	public static boolean logUnrecognizedUniformCalls = false;
 
 	private HashMap<String, Integer> uniforms;
-	private List<String> checkedUniforms;
-
-	private int id;
 
 	private String shaderName;
+	private int id;
 
 	private Shader() {
 		this.uniforms = new HashMap<String, Integer>();
-		this.checkedUniforms = new ArrayList<String>();
 	}
 
-	public Shader(String vertexFilepath, String fragmentFilepath, boolean bindAttributes) throws Exception {
+	public Shader(String vertexFilepath, String fragmentFilepath, boolean bindAttributes) {
 		this();
 
-		this.createShader(vertexFilepath, fragmentFilepath, ResourceManager.loadFile(vertexFilepath), ResourceManager.loadFile(fragmentFilepath), bindAttributes);
+		try {
+			this.createShader(vertexFilepath, fragmentFilepath, ResourceManager.loadShaderSource(vertexFilepath), ResourceManager.loadShaderSource(fragmentFilepath), bindAttributes);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Shader(String shaderFilepath) {
@@ -68,7 +70,7 @@ public class Shader {
 	}
 
 	private int createShader(String shaderFilepath, boolean bindAttributes) throws IOException {
-		String shaderSrc = ResourceManager.loadFile(shaderFilepath);
+		String shaderSrc = ResourceManager.loadShaderSource(shaderFilepath);
 
 		this.shaderName = shaderSrc.substring(shaderSrc.indexOf("\"") + 1, shaderSrc.indexOf("\"", shaderSrc.indexOf("\"") + 1));
 
@@ -85,12 +87,13 @@ public class Shader {
 			if (fallbackPath.isEmpty()) {
 				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
 
-				return this.createShader("src/laraifox/foxtail/rendering/shaders/Error.shader", bindAttributes);
+				return this.createShader(ResourceManager.getFoxtailResourcePath("shaders/Error.shader"), bindAttributes);
 			} else if (!fallbackPath.startsWith("\\") && !fallbackPath.startsWith("/")) {
 				fallbackPath = System.getProperty("file.separator") + fallbackPath;
 			}
 
-			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
+			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), "Shader-" + shaderName,
+					Logger.MESSAGE_LEVEL_ERROR);
 
 			return this.createShader(new File(shaderFilepath).getParent() + fallbackPath, bindAttributes);
 		}
@@ -137,23 +140,23 @@ public class Shader {
 		GL20.glDeleteShader(fragmentShader);
 
 		if (bindAttributes) {
-			bindAllAttribs(vertexShaderSrc);
+			bindAllAttributes(vertexShaderSrc);
 		}
 
-		getUniformLocations(vertexShaderSrc);
-		getUniformLocations(fragmentShaderSrc);
+		retrieveUniformLocations(vertexShaderSrc);
+		retrieveUniformLocations(fragmentShaderSrc);
 
 		return id;
 	}
 
-	private void bindAllAttribs(String shaderSrc) {
+	private void bindAllAttributes(String shaderSrc) {
 		final String ATTRIBUTE_KEYWORD = new String("attribute");
 
 		int currentAttribIndex = 0;
 		int attributeStartLocation = shaderSrc.indexOf(ATTRIBUTE_KEYWORD);
 		while (attributeStartLocation != -1) {
-			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';' || !Character.isWhitespace(
-					shaderSrc.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))) {
+			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';'
+				|| !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -164,7 +167,7 @@ public class Shader {
 
 			String attributeName = attributeLine.substring(attributeLine.indexOf(" ") + 1, attributeLine.length()).trim();
 
-			this.bindAttribLocation(currentAttribIndex, attributeName);
+			this.bindAttributeLocation(currentAttribIndex, attributeName);
 			System.out.println("Bound attribute '" + attributeName + "' to index: " + currentAttribIndex);
 			currentAttribIndex++;
 
@@ -242,8 +245,8 @@ public class Shader {
 
 		int structStartLocation = shaderSrc.indexOf(STRUCT_KEYWORD);
 		while (structStartLocation != -1) {
-			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';' || !Character.isWhitespace(shaderSrc
-					.charAt(structStartLocation + STRUCT_KEYWORD.length()))) {
+			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';'
+				|| !Character.isWhitespace(shaderSrc.charAt(structStartLocation + STRUCT_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -304,15 +307,15 @@ public class Shader {
 		return result;
 	}
 
-	private void getUniformLocations(String shaderSrc) {
+	private void retrieveUniformLocations(String shaderSrc) {
 		HashMap<String, ArrayList<GLSLStruct>> structs = this.findUniformStructs(shaderSrc);
 
 		final String UNIFORM_KEYWORD = new String("uniform");
 
 		int uniformStartLocation = shaderSrc.indexOf(UNIFORM_KEYWORD);
 		while (uniformStartLocation != -1) {
-			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';' || !Character.isWhitespace(
-					shaderSrc.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))) {
+			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';'
+				|| !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))) {
 				continue;
 			}
 
@@ -407,9 +410,9 @@ public class Shader {
 
 		if (uniformLocation == 0xFFFFFFFF) {
 			Logger.log("Uniform '" + uniformName + "' is not used in shader and has been removed!", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_WARNING);
-			//			System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
-			//			new Exception().printStackTrace();
-			//			System.exit(1);
+			// System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
+			// new Exception().printStackTrace();
+			// System.exit(1);
 		}
 
 		uniforms.put(uniformName, uniformLocation);
@@ -437,79 +440,45 @@ public class Shader {
 		GL20.glUseProgram(id);
 	}
 
-	public void bindAttribLocation(int index, String name) {
+	public void bindAttributeLocation(int index, String name) {
 		GL20.glBindAttribLocation(id, index, name);
 	}
 
 	public void setUniform(String name, int value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniform1i(uniforms.get(name), value);
+		GL20.glUniform1i(getUniformLocation(name), value);
 	}
 
 	public void setUniform(String name, float value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniform1f(uniforms.get(name), value);
+		GL20.glUniform1f(getUniformLocation(name), value);
 	}
 
 	public void setUniform(String name, Vector2f value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniform2f(uniforms.get(name), value.getX(), value.getY());
+		GL20.glUniform2f(getUniformLocation(name), value.getX(), value.getY());
 	}
 
 	public void setUniform(String name, Vector3f value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniform3f(uniforms.get(name), value.getX(), value.getY(), value.getZ());
+		GL20.glUniform3f(getUniformLocation(name), value.getX(), value.getY(), value.getZ());
 	}
 
 	public void setUniform(String name, Vector4f value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniform4f(uniforms.get(name), value.getX(), value.getY(), value.getZ(), value.getW());
+		GL20.glUniform4f(getUniformLocation(name), value.getX(), value.getY(), value.getZ(), value.getW());
 	}
 
 	public void setUniform(String name, Matrix4f value) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniformMatrix4(uniforms.get(name), false, BufferUtils.createFloatBuffer(value, true));
+		GL20.glUniformMatrix4(getUniformLocation(name), false, BufferUtils.createFloatBuffer(value, true));
 	}
 
 	public void setUniform(String name, Matrix4f value, boolean transpose) {
-		Integer uniformLocation = uniforms.get(name);
-		if (!checkUniform(name, uniformLocation)) {
-			return;
-		}
-		GL20.glUniformMatrix4(uniformLocation, transpose, BufferUtils.createFloatBuffer(value, true));
+		GL20.glUniformMatrix4(getUniformLocation(name), transpose, BufferUtils.createFloatBuffer(value, true));
 	}
 
-	private boolean checkUniform(String name, Integer uniformLocation) {
+	private int getUniformLocation(String name) {
+		Integer uniformLocation = uniforms.get(name);
 		if (uniformLocation == null) {
-			if (logUnrecognizedUniformCalls) {
-				Logger.log("Uniform '" + name + "' is unrecognized.", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_DEBUG);
-				if (!checkedUniforms.contains(name)) {
-					checkedUniforms.add(name);
-				}
-			}
-
-			return false;
+			uniformLocation = -1;
 		}
 
-		return true;
+		return uniformLocation;
 	}
 
 	public static void unbind() {

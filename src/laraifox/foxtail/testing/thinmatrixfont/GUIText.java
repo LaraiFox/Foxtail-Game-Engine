@@ -58,8 +58,7 @@ public class GUIText {
 		TextManager.loadText(this);
 	}
 
-	@Override
-	protected void finalize() {
+	public void cleanUp() {
 		GL30.glDeleteVertexArrays(textMeshVao);
 	}
 
