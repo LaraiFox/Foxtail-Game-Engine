@@ -38,7 +38,6 @@ public class Mesh implements ICleanable {
 		this.vaoID = mesh.vaoID;
 		this.count = mesh.count;
 		this.byteCount = mesh.byteCount;
-		System.out.println("ID " + vaoID);
 	}
 
 	@Override
@@ -68,6 +67,9 @@ public class Mesh implements ICleanable {
 		GL20.glVertexAttribPointer(3, 3, GL11.GL_FLOAT, false, Vertex.BYTE_COUNT, Vertex.TANGENT_OFFSET);
 
 		GL30.glBindVertexArray(0);
+
+		GL15.glDeleteBuffers(iboID);
+		GL15.glDeleteBuffers(vboID);
 
 		this.count = indexCount;
 		this.byteCount = indexCount * Integer.BYTES + vertexCount * Vertex.BYTE_COUNT;

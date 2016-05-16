@@ -89,6 +89,27 @@ public class FrameBuffer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, depthID);
 	}
 
+	public void blitFrameBuffer() {
+		this.blitFrameBuffer(GL11.GL_LINEAR);
+	}
+
+	public void blitFrameBuffer(int filter) {
+		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
+		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.frameBufferID);
+		GL11.glDrawBuffer(GL11.GL_BACK);
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, Display.getWidth(), Display.getHeight(), GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, filter);
+	}
+
+	public void blitFrameBuffer(FrameBuffer output) {
+		this.blitFrameBuffer(output, GL11.GL_LINEAR);
+	}
+
+	public void blitFrameBuffer(FrameBuffer output, int filter) {
+		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, output.frameBufferID);
+		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.frameBufferID);
+		GL30.glBlitFramebuffer(0, 0, this.width, this.height, 0, 0, output.width, output.height, GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, filter);
+	}
+
 	public void cleanUp() {
 		GL30.glDeleteFramebuffers(frameBufferID);
 
@@ -159,7 +180,7 @@ public class FrameBuffer {
 		GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, width, height);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthID);
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();

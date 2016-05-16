@@ -4,7 +4,7 @@ struct BaseLight {
 };
 
 struct DirectionalLight {
-	BaseLight base;
+	BaseLight baseLight;
 	vec3 direction;
 };
 
@@ -17,7 +17,7 @@ struct Attenuation
 
 struct PointLight
 {
-	BaseLight base;
+	BaseLight baseLight;
 	Attenuation attenuation;
 	vec3 position;
 	float range;

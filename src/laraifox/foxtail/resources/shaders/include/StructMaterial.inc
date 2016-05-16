@@ -14,5 +14,3 @@ struct Material {
 	sampler2D opacityTexture;
 	sampler2D refrationTexture;
 };
-
-uniform Material FOXTAIL_MATERIAL;

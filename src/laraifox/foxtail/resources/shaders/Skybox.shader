@@ -1,8 +1,9 @@
-Shader "Skybox" {
+Program "Skybox" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/Standard.inc"
+		#pragma include "\include\FoxtailMatrices.inc"
+		#pragma include "\include\FoxtailCamera.inc"
 			
 		layout(location = 0) in vec3 in_VertexPosition;
 		
@@ -28,4 +29,4 @@ Shader "Skybox" {
 	GLSLEnd
 }
 	
-Fallback ""
+Alternate ""

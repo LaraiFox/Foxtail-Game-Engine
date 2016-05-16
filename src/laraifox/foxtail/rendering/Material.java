@@ -3,6 +3,8 @@ package laraifox.foxtail.rendering;
 import laraifox.foxtail.core.math.Vector4f;
 
 public class Material {
+	public static final String FOXTAIL_DEFAULT_UNIFORM_NAME = new String("FOXTAIL_MATERIAL");
+
 	private Vector4f baseColor;
 	private Vector4f subsurfaceColor;
 	private Vector4f emissiveColor;
@@ -19,37 +21,46 @@ public class Material {
 	private Texture2D refrationTexture;
 
 	public Material() {
-		this.baseColor = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.emissiveColor = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-		this.subsurfaceColor = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		this(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), new Vector4f(1.0f, 1.0f, 1.0f, 1.0f),//
+				new Texture2D(new Vector4f(1.0f)), new Texture2D(), new Texture2D(),//
+				new Texture2D(), new Texture2D(), new Texture2D(), //
+				new Texture2D(), new Texture2D());
+	}
 
-		this.diffuseTexture = new Texture2D(new Vector4f(1));
-		this.emissiveTexture = new Texture2D();
-		this.normalTexture = new Texture2D();
-
-		this.metalicTexture = new Texture2D();
-		this.specularTexture = new Texture2D();
-		this.roughnessTexture = new Texture2D();
-
-		this.opacityTexture = new Texture2D();
-		this.refrationTexture = new Texture2D();
+	public Material(Vector4f baseColor, Vector4f subsurfaceColor, Vector4f emissiveColor, Texture2D diffuseTexture, Texture2D emissiveTexture, Texture2D normalTexture, Texture2D metalicTexture,
+			Texture2D specularTexture, Texture2D roughnessTexture, Texture2D opacityTexture, Texture2D refrationTexture) {
+		this.baseColor = baseColor;
+		this.subsurfaceColor = subsurfaceColor;
+		this.emissiveColor = emissiveColor;
+		this.diffuseTexture = diffuseTexture;
+		this.emissiveTexture = emissiveTexture;
+		this.normalTexture = normalTexture;
+		this.metalicTexture = metalicTexture;
+		this.specularTexture = specularTexture;
+		this.roughnessTexture = roughnessTexture;
+		this.opacityTexture = opacityTexture;
+		this.refrationTexture = refrationTexture;
 	}
 
 	public void bind(Shader shader) {
-		shader.setUniform("FOXTAIL_MATERIAL.baseColor", baseColor);
-		shader.setUniform("FOXTAIL_MATERIAL.subsurfaceColor", subsurfaceColor);
-		shader.setUniform("FOXTAIL_MATERIAL.emissiveColor", emissiveColor);
+		this.bind(shader, FOXTAIL_DEFAULT_UNIFORM_NAME);
+	}
 
-		shader.setUniform("FOXTAIL_MATERIAL.diffuseTexture", 0);
-		shader.setUniform("FOXTAIL_MATERIAL.emissiveTexture", 1);
-		shader.setUniform("FOXTAIL_MATERIAL.normalTexture", 2);
+	public void bind(Shader shader, String uniformName) {
+		shader.setUniform(uniformName + ".baseColor", baseColor);
+		shader.setUniform(uniformName + ".subsurfaceColor", subsurfaceColor);
+		shader.setUniform(uniformName + ".emissiveColor", emissiveColor);
 
-		shader.setUniform("FOXTAIL_MATERIAL.metalicTexture", 3);
-		shader.setUniform("FOXTAIL_MATERIAL.specularTexture", 4);
-		shader.setUniform("FOXTAIL_MATERIAL.roughnessTexture", 5);
+		shader.setUniform(uniformName + ".diffuseTexture", 0);
+		shader.setUniform(uniformName + ".emissiveTexture", 1);
+		shader.setUniform(uniformName + ".normalTexture", 2);
 
-		shader.setUniform("FOXTAIL_MATERIAL.opacityTexture", 6);
-		shader.setUniform("FOXTAIL_MATERIAL.refrationTexture", 7);
+		shader.setUniform(uniformName + ".metalicTexture", 3);
+		shader.setUniform(uniformName + ".specularTexture", 4);
+		shader.setUniform(uniformName + ".roughnessTexture", 5);
+
+		shader.setUniform(uniformName + ".opacityTexture", 6);
+		shader.setUniform(uniformName + ".refrationTexture", 7);
 
 		diffuseTexture.bind(0);
 		emissiveTexture.bind(1);
@@ -118,8 +129,18 @@ public class Material {
 		return this;
 	}
 
+	public Material setDiffuseTexture(Vector4f diffuseColor) {
+		this.diffuseTexture = new Texture2D(diffuseColor);
+		return this;
+	}
+
 	public Material setDiffuseTexture(Texture2D diffuseTexture) {
 		this.diffuseTexture = diffuseTexture;
+		return this;
+	}
+
+	public Material setEmissiveTexture(Vector4f emissiveColor) {
+		this.emissiveTexture = new Texture2D(emissiveColor);
 		return this;
 	}
 
@@ -128,8 +149,18 @@ public class Material {
 		return this;
 	}
 
+	public Material setNormalTexture(Vector4f normalColor) {
+		this.normalTexture = new Texture2D(normalColor);
+		return this;
+	}
+
 	public Material setNormalTexture(Texture2D normalTexture) {
 		this.normalTexture = normalTexture;
+		return this;
+	}
+
+	public Material setMetalicTexture(Vector4f metalicColor) {
+		this.metalicTexture = new Texture2D(metalicColor);
 		return this;
 	}
 
@@ -138,13 +169,28 @@ public class Material {
 		return this;
 	}
 
+	public Material setSpecularTexture(Vector4f specularColor) {
+		this.specularTexture = new Texture2D(specularColor);
+		return this;
+	}
+
 	public Material setSpecularTexture(Texture2D specularTexture) {
 		this.specularTexture = specularTexture;
 		return this;
 	}
 
+	public Material setRoughnessTexture(Vector4f roughnessColor) {
+		this.roughnessTexture = new Texture2D(roughnessColor);
+		return this;
+	}
+
 	public Material setRoughnessTexture(Texture2D roughnessTexture) {
 		this.roughnessTexture = roughnessTexture;
+		return this;
+	}
+
+	public Material setOpacityTexture(Vector4f opacityColor) {
+		this.opacityTexture = new Texture2D(opacityColor);
 		return this;
 	}
 

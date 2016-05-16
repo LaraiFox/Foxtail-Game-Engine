@@ -82,7 +82,6 @@ public class ResourceManager {
 
 	public static Mesh getMeshResource(String filepath) {
 		ReferencedResource<Mesh> result = MESH_RESOURCE_MAP.get(filepath);
-		System.out.println(result == null);
 		if (result == null) {
 			result = new ReferencedResource<Mesh>(ResourceManager.loadModel(filepath));
 			MESH_RESOURCE_MAP.put(filepath, result);
