@@ -159,7 +159,7 @@ public class FrameBuffer {
 		GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, width, height);
 		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthID);
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();

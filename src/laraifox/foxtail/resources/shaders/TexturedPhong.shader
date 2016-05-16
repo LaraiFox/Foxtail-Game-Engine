@@ -1,12 +1,9 @@
-Shader "TexturedPhong" {
+Program "TexturedPhong" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "\includes\Standard.inc"
-		
-		uniform mat4 FOXTAIL_MODEL_MATRIX;
-		uniform mat4 FOXTAIL_VIEW_MATRIX;
-		uniform mat4 FOXTAIL_MVP_MATRIX;
+		#pragma include "\include\FoxtailCamera.inc"
+		#pragma include "\include\FoxtailMatrices.inc"
 
 		layout(location = 0) in vec3 in_VertexPosition;
 		layout(location = 1) in vec2 in_VertexTexCoord;
@@ -32,30 +29,7 @@ Shader "TexturedPhong" {
 	GLSLFragment
 		#version 330
 		
-		struct BaseLight {
-			vec3 color;
-			float intensity;
-		};
-		
-		struct DirectionalLight {
-			BaseLight base;
-			vec3 direction;
-		};
-
-		struct Attenuation
-		{
-			float constant;
-			float linear;
-			float exponent;
-		};
-
-		struct PointLight
-		{
-			BaseLight base;
-			Attenuation attenuation;
-			vec3 position;
-			float range;
-		};
+		#pragma include "\include\StructLighting.inc"
 		
 		#define MAX_POINT_LIGHTS 8
 		
@@ -102,7 +76,7 @@ Shader "TexturedPhong" {
 		}
 
 		vec4 calculateDirectionalLight(DirectionalLight light, vec3 surfaceNormal) {
-			return calculateLight(light.base, light.direction, surfaceNormal);
+			return calculateLight(light.baseLight, light.direction, surfaceNormal);
 		}
 
 		vec4 calculatePointLight(PointLight pointLight, vec3 normal)
@@ -115,7 +89,7 @@ Shader "TexturedPhong" {
 			
 			lightDirection = normalize(lightDirection);
 			
-			vec4 color = calculateLight(pointLight.base, lightDirection, normal);
+			vec4 color = calculateLight(pointLight.baseLight, lightDirection, normal);
 			
 			float attenuation = pointLight.attenuation.constant +
 								 pointLight.attenuation.linear * distanceToPoint +
@@ -139,7 +113,7 @@ Shader "TexturedPhong" {
 			vec3 surfaceNormal = normalize(pass_VertexNormal);
 			totalLight += calculateDirectionalLight(in_DirectionalLight, surfaceNormal);
 			for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
-				if (in_PointLights[i].base.intensity > 0.0) {
+				if (in_PointLights[i].baseLight.intensity > 0.0) {
 					totalLight += calculatePointLight(in_PointLights[i], surfaceNormal);
 				}
 			}
@@ -150,4 +124,4 @@ Shader "TexturedPhong" {
 	GLSLEnd
 }
 	
-Fallback ""
+Alternate ""

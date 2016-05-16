@@ -3,7 +3,13 @@ package laraifox.foxtail.rendering;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import laraifox.foxtail.core.BufferUtils;
 import laraifox.foxtail.core.Logger;
@@ -12,9 +18,6 @@ import laraifox.foxtail.core.math.Matrix4f;
 import laraifox.foxtail.core.math.Vector2f;
 import laraifox.foxtail.core.math.Vector3f;
 import laraifox.foxtail.core.math.Vector4f;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 public class Shader {
 	private class GLSLStruct {
@@ -27,7 +30,29 @@ public class Shader {
 		}
 	}
 
+	private static final int SHADER_SOURCE_INDEX_VERTEX = 0;
+	private static final int SHADER_SOURCE_INDEX_TESSELLATION = 1;
+	private static final int SHADER_SOURCE_INDEX_GEOMETRY = 2;
+	private static final int SHADER_SOURCE_INDEX_FRAGMENT = 3;
+	private static final int SHADER_SOURCE_COUNT = 4;
+
+	private static final String GLSL_KEYWORD_ATTRIBUTE = new String("attribute");
+	private static final String GLSL_KEYWORD_STRUCT = new String("struct");
+	private static final String GLSL_KEYWORD_UNIFORM = new String("uniform");
+
+	private static final String SHADER_NAME_PREFIX = new String("Shader-");
+
+	private static final String SHADER_KEYWORD_PROGRAM = new String("Program");
+	private static final String SHADER_KEYWORD_ALTERNATE = new String("Alternate");
+	private static final String SHADER_KEYWORD_VERTEX = new String("GLSLVertex");
+	private static final String SHADER_KEYWORD_TESSELLATION = new String("GLSLTessellation");
+	private static final String SHADER_KEYWORD_GEOMETRY = new String("GLSLGeometry");
+	private static final String SHADER_KEYWORD_FRAGMENT = new String("GLSLFragment");
+	private static final String SHADER_KEYWORD_PIXEL = new String("GLSLPixel");
+	private static final String SHADER_KEYWORD_END = new String("GLSLEnd");
+
 	public static boolean logUnrecognizedUniformCalls = false;
+	public static boolean exitOnShaderError = false;
 
 	private HashMap<String, Integer> uniforms;
 
@@ -69,37 +94,202 @@ public class Shader {
 		GL20.glDeleteProgram(id);
 	}
 
-	private int createShader(String shaderFilepath, boolean bindAttributes) throws IOException {
-		String shaderSrc = ResourceManager.loadShaderSource(shaderFilepath);
+	private void createShader(String shaderFilepath, boolean bindAttributes) throws IOException {
+		String shaderSourceRaw = ResourceManager.loadShaderSource(shaderFilepath);
 
-		this.shaderName = shaderSrc.substring(shaderSrc.indexOf("\"") + 1, shaderSrc.indexOf("\"", shaderSrc.indexOf("\"") + 1));
+		int shaderNameStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_PROGRAM) + SHADER_KEYWORD_PROGRAM.length();
+		while (shaderSourceRaw.charAt(shaderNameStart - 1) != '\"')
+			shaderNameStart++;
 
-		int vertexIndex = shaderSrc.indexOf("\n", shaderSrc.indexOf("GLSLVertex"));
-		int vertexEnd = shaderSrc.indexOf("GLSLFragment");
-		int fragmentIndex = shaderSrc.indexOf("\n", vertexEnd);
-		int endIndex = shaderSrc.indexOf("GLSLEnd");
+		int shaderNameEnd = shaderNameStart + 1;
+		while (shaderSourceRaw.charAt(shaderNameEnd) != '\"')
+			shaderNameEnd++;
+
+		this.shaderName = shaderSourceRaw.substring(shaderNameStart, shaderNameEnd);
+		if (shaderName.isEmpty()) {
+			shaderName = SHADER_NAME_PREFIX + shaderFilepath;
+		} else {
+			shaderName = SHADER_NAME_PREFIX + shaderName;
+		}
+
+		List<Integer> orderedList = new ArrayList<Integer>(4);
+
+		int glslVertexStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_VERTEX);
+		orderedList.add(glslVertexStart);
+		if (glslVertexStart < 0) {
+			this.onShaderErrorOccurred(shaderSourceRaw, shaderFilepath, "Unable to find vertex shader in source!");
+		}
+		while (shaderSourceRaw.charAt(glslVertexStart - 1) != '\n')
+			glslVertexStart++;
+
+		orderedList.add(glslVertexStart);
+
+		int glslFragmentStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_FRAGMENT);
+		orderedList.add(glslFragmentStart);
+		if (glslFragmentStart < 0) {
+			glslFragmentStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_PIXEL);
+			if (glslFragmentStart < 0) {
+				this.onShaderErrorOccurred(shaderSourceRaw, shaderFilepath, "Unable to find fragment shader in source!");
+			}
+		}
+		while (shaderSourceRaw.charAt(glslFragmentStart - 1) != '\n')
+			glslFragmentStart++;
+
+		orderedList.add(glslFragmentStart);
+
+		int glslTessellationStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_TESSELLATION);
+		orderedList.add(glslTessellationStart);
+		if (glslTessellationStart < 0) {
+			Logger.log("Unable to find tessellation shader in source!", shaderName, Logger.MESSAGE_LEVEL_DEFAULT);
+			glslTessellationStart = Integer.MAX_VALUE - SHADER_SOURCE_INDEX_TESSELLATION;
+		} else {
+			while (shaderSourceRaw.charAt(glslTessellationStart - 1) != '\n')
+				glslTessellationStart++;
+		}
+
+		orderedList.add(glslTessellationStart);
+
+		int glslGeometryStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_GEOMETRY);
+		orderedList.add(glslGeometryStart);
+		if (glslGeometryStart < 0) {
+			Logger.log("Unable to find geometry shader in source!", shaderName, Logger.MESSAGE_LEVEL_DEFAULT);
+			glslGeometryStart = Integer.MAX_VALUE - SHADER_SOURCE_INDEX_GEOMETRY;
+		} else {
+			while (shaderSourceRaw.charAt(glslGeometryStart - 1) != '\n')
+				glslGeometryStart++;
+		}
+
+		orderedList.add(glslGeometryStart);
+
+		Collections.sort(orderedList);
+		Iterator<Integer> iterator = orderedList.iterator();
+		while (iterator.hasNext()) {
+			Integer integer = iterator.next();
+			if (integer >= shaderSourceRaw.length() || integer < 0) {
+				iterator.remove();
+			}
+		}
+
+		int glslShaderEnd = shaderSourceRaw.indexOf(SHADER_KEYWORD_END, orderedList.get(orderedList.size() - 1));
+		if (glslShaderEnd < 0) {
+			this.onShaderErrorOccurred(shaderSourceRaw, shaderFilepath, "Unable to find end of shader source!");
+		}
+
+		orderedList.add(glslShaderEnd);
+
+		String[] shaderSources = new String[SHADER_SOURCE_COUNT];
+		for (int i = 0; i < orderedList.size() - 1; i++) {
+			int sourceStart = orderedList.get(i);
+			int sourceEnd = orderedList.get(i + 1);
+
+			String clippedSource = shaderSourceRaw.substring(sourceStart, sourceEnd);
+
+			if (sourceStart == glslVertexStart) {
+				shaderSources[SHADER_SOURCE_INDEX_VERTEX] = this.shaderSourcePadding(shaderSourceRaw, clippedSource, sourceStart);
+			} else if (sourceStart == glslFragmentStart) {
+				shaderSources[SHADER_SOURCE_INDEX_FRAGMENT] = this.shaderSourcePadding(shaderSourceRaw, clippedSource, sourceStart);
+			} else if (sourceStart == glslGeometryStart) {
+				shaderSources[SHADER_SOURCE_INDEX_GEOMETRY] = this.shaderSourcePadding(shaderSourceRaw, clippedSource, sourceStart);
+			} else if (sourceStart == glslTessellationStart) {
+				shaderSources[SHADER_SOURCE_INDEX_TESSELLATION] = this.shaderSourcePadding(shaderSourceRaw, clippedSource, sourceStart);
+			}
+		}
 
 		try {
-			return this.createShader(shaderFilepath, shaderFilepath, shaderSrc.substring(vertexIndex, vertexEnd), shaderSrc.substring(fragmentIndex, endIndex), bindAttributes);
+			this.createShader(shaderFilepath, shaderFilepath, shaderSources[SHADER_SOURCE_INDEX_VERTEX], shaderSources[SHADER_SOURCE_INDEX_FRAGMENT], bindAttributes);
 		} catch (Exception e) {
-			String fallbackPath = shaderSrc.substring(shaderSrc.indexOf("\"", shaderSrc.indexOf("Fallback")) + 1, shaderSrc.indexOf("\n", shaderSrc.indexOf("Fallback")) - 1);
+			int alternateShaderPathStart = shaderSourceRaw.indexOf(SHADER_KEYWORD_ALTERNATE) + SHADER_KEYWORD_ALTERNATE.length();
+			while (shaderSourceRaw.charAt(alternateShaderPathStart - 1) != '\"')
+				alternateShaderPathStart++;
 
-			if (fallbackPath.isEmpty()) {
-				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), "Shader-" + shaderName, Logger.MESSAGE_LEVEL_ERROR);
+			int alternateShaderPathEnd = alternateShaderPathStart + 1;
+			while (shaderSourceRaw.charAt(alternateShaderPathEnd) != '\"')
+				alternateShaderPathEnd++;
 
-				return this.createShader(ResourceManager.getFoxtailResourcePath("shaders/Error.shader"), bindAttributes);
-			} else if (!fallbackPath.startsWith("\\") && !fallbackPath.startsWith("/")) {
-				fallbackPath = System.getProperty("file.separator") + fallbackPath;
+			String alternateShaderPath = shaderSourceRaw.substring(alternateShaderPathStart, alternateShaderPathEnd);
+
+			if (alternateShaderPath.isEmpty()) {
+				this.onShaderErrorOccurred(shaderSourceRaw, shaderFilepath, e.getMessage());
+			} else {
+				if (!alternateShaderPath.startsWith("\\") && !alternateShaderPath.startsWith("/")) {
+					alternateShaderPath = System.getProperty("file.separator") + alternateShaderPath;
+				}
+
+				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to alternate shader '" + alternateShaderPath + "'.\n" + e.getMessage(), shaderName, Logger.MESSAGE_LEVEL_ERROR);
+
+				this.createShader(new File(shaderFilepath).getParent() + alternateShaderPath, bindAttributes);
 			}
+		}
 
-			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + fallbackPath + "'.\n" + e.getMessage(), "Shader-" + shaderName,
-					Logger.MESSAGE_LEVEL_ERROR);
+		//		for (int i = 0; i < SHADER_SOURCE_COUNT; i++) {
+		//			System.out.println("________________________________________________________________________________");
+		//			if (shaderSources[i] != null) {
+		//				System.out.println(shaderSources[i]);
+		//			}
+		//		}
+		//		System.exit(1);
 
-			return this.createShader(new File(shaderFilepath).getParent() + fallbackPath, bindAttributes);
+		//		int vertexIndex = shaderSourceRaw.indexOf("\n", shaderSourceRaw.indexOf("GLSLVertex"));
+		//		int vertexEnd = shaderSourceRaw.indexOf("GLSLFragment");
+		//		int fragmentIndex = shaderSourceRaw.indexOf("\n", vertexEnd);
+		//		int endIndex = shaderSourceRaw.indexOf("GLSLEnd");
+		//
+		//		try {
+		//			return this.createShader(shaderFilepath, shaderFilepath, shaderSourceRaw.substring(vertexIndex, vertexEnd), shaderSourceRaw.substring(fragmentIndex, endIndex), bindAttributes);
+		//		} catch (Exception e) {
+		//			String alternateShaderPath = shaderSourceRaw.substring(shaderSourceRaw.indexOf("\"", shaderSourceRaw.indexOf(SHADER_KEYWORD_ALTERNATE)) + 1, shaderSourceRaw.indexOf("\n", shaderSourceRaw
+		//					.indexOf(SHADER_KEYWORD_ALTERNATE)) - 1);
+		//
+		//			if (alternateShaderPath.isEmpty() && Shader.exitOnShaderError) {
+		//				Logger.log("Unable to compile shader '" + shaderFilepath + "', going to Error shader.\n" + e.getMessage(), shaderName, Logger.MESSAGE_LEVEL_ERROR);
+		//
+		//				return this.createShader(ResourceManager.getFoxtailResourcePath("shaders/Error.shader"), bindAttributes);
+		//			} else if (!alternateShaderPath.startsWith("\\") && !alternateShaderPath.startsWith("/")) {
+		//				alternateShaderPath = System.getProperty("file.separator") + alternateShaderPath;
+		//			}
+		//
+		//			Logger.log("Unable to compile shader '" + shaderFilepath + "', going to fallback shader '" + alternateShaderPath + "'.\n" + e.getMessage(), shaderName, Logger.MESSAGE_LEVEL_ERROR);
+		//
+		//			return this.createShader(new File(shaderFilepath).getParent() + alternateShaderPath, bindAttributes);
+		//		}
+
+		Logger.lineBreak(Logger.MESSAGE_LEVEL_DEFAULT);
+	}
+
+	private String shaderSourcePadding(String originalSource, String clippedSource, int endIndex) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < originalSource.length() && i < endIndex; i++) {
+			if (originalSource.charAt(i) == '\n') {
+				builder.append("\n");
+			}
+		}
+		builder.append(clippedSource);
+
+		return builder.toString();
+	}
+
+	private void onShaderErrorOccurred(String shaderSourceRaw, String shaderFilepath, String errorMessage) {
+		Logger.log("Unable to compile shader '" + shaderFilepath + "'.\n" + errorMessage, shaderName, Logger.MESSAGE_LEVEL_ERROR);
+		
+		if (exitOnShaderError) {
+			System.exit(1);
+		}
+
+		try {
+			this.createShader(ResourceManager.getFoxtailResourcePath("shaders/Error.shader"), false);
+		} catch (IOException e) {
+			Logger.log("Unable to compile Error shader, trying legacy version.\n" + e.getMessage(), shaderName, Logger.MESSAGE_LEVEL_ERROR);
+			
+			try {
+				this.createShader(ResourceManager.getFoxtailResourcePath("shaders/legacy/Error.shader"), true);
+			} catch (IOException e1) {
+				Logger.log("Unable to compile legacy Error shader.\n" + e1.getMessage(), shaderName, Logger.MESSAGE_LEVEL_CRITICAL);
+				System.exit(1);
+			}
 		}
 	}
 
-	private int createShader(String vertexFilepath, String fragmentFilepath, String vertexShaderSrc, String fragmentShaderSrc, boolean bindAttributes) throws Exception {
+	private void createShader(String vertexFilepath, String fragmentFilepath, String vertexShaderSrc, String fragmentShaderSrc, boolean bindAttributes) throws Exception {
 		this.id = GL20.glCreateProgram();
 
 		int vertexShader = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
@@ -145,22 +335,18 @@ public class Shader {
 
 		retrieveUniformLocations(vertexShaderSrc);
 		retrieveUniformLocations(fragmentShaderSrc);
-
-		return id;
 	}
 
 	private void bindAllAttributes(String shaderSrc) {
-		final String ATTRIBUTE_KEYWORD = new String("attribute");
-
 		int currentAttribIndex = 0;
-		int attributeStartLocation = shaderSrc.indexOf(ATTRIBUTE_KEYWORD);
+		int attributeStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_ATTRIBUTE);
 		while (attributeStartLocation != -1) {
-			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation + ATTRIBUTE_KEYWORD.length()))) {
+			if (attributeStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(attributeStartLocation - 1)) && shaderSrc.charAt(attributeStartLocation - 1) != ';' || !Character.isWhitespace(
+					shaderSrc.charAt(attributeStartLocation + GLSL_KEYWORD_ATTRIBUTE.length()))) {
 				continue;
 			}
 
-			int startIndex = attributeStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
+			int startIndex = attributeStartLocation + GLSL_KEYWORD_ATTRIBUTE.length() + 1;
 			int endIndex = shaderSrc.indexOf(";", startIndex);
 
 			String attributeLine = shaderSrc.substring(startIndex, endIndex);
@@ -171,7 +357,7 @@ public class Shader {
 			System.out.println("Bound attribute '" + attributeName + "' to index: " + currentAttribIndex);
 			currentAttribIndex++;
 
-			attributeStartLocation = shaderSrc.indexOf(ATTRIBUTE_KEYWORD, attributeStartLocation + ATTRIBUTE_KEYWORD.length());
+			attributeStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_ATTRIBUTE, attributeStartLocation + GLSL_KEYWORD_ATTRIBUTE.length());
 		}
 	}
 
@@ -241,16 +427,14 @@ public class Shader {
 	private HashMap<String, ArrayList<GLSLStruct>> findUniformStructs(String shaderSrc) {
 		HashMap<String, ArrayList<GLSLStruct>> result = new HashMap<String, ArrayList<GLSLStruct>>();
 
-		final String STRUCT_KEYWORD = new String("struct");
-
-		int structStartLocation = shaderSrc.indexOf(STRUCT_KEYWORD);
+		int structStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_STRUCT);
 		while (structStartLocation != -1) {
-			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(structStartLocation + STRUCT_KEYWORD.length()))) {
+			if (structStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(structStartLocation - 1)) && shaderSrc.charAt(structStartLocation - 1) != ';' || !Character.isWhitespace(shaderSrc
+					.charAt(structStartLocation + GLSL_KEYWORD_STRUCT.length()))) {
 				continue;
 			}
 
-			int nameStartIndex = structStartLocation + STRUCT_KEYWORD.length() + 1;
+			int nameStartIndex = structStartLocation + GLSL_KEYWORD_STRUCT.length() + 1;
 			int braceStartIndex = shaderSrc.indexOf("{", nameStartIndex);
 			int braceEndIndex = shaderSrc.indexOf("}", braceStartIndex);
 
@@ -301,7 +485,7 @@ public class Shader {
 
 			result.put(structName, structElements);
 
-			structStartLocation = shaderSrc.indexOf(STRUCT_KEYWORD, structStartLocation + STRUCT_KEYWORD.length());
+			structStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_STRUCT, structStartLocation + GLSL_KEYWORD_STRUCT.length());
 		}
 
 		return result;
@@ -310,16 +494,14 @@ public class Shader {
 	private void retrieveUniformLocations(String shaderSrc) {
 		HashMap<String, ArrayList<GLSLStruct>> structs = this.findUniformStructs(shaderSrc);
 
-		final String UNIFORM_KEYWORD = new String("uniform");
-
-		int uniformStartLocation = shaderSrc.indexOf(UNIFORM_KEYWORD);
+		int uniformStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_UNIFORM);
 		while (uniformStartLocation != -1) {
-			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';'
-				|| !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation + UNIFORM_KEYWORD.length()))) {
+			if (uniformStartLocation == 0 || !Character.isWhitespace(shaderSrc.charAt(uniformStartLocation - 1)) && shaderSrc.charAt(uniformStartLocation - 1) != ';' || !Character.isWhitespace(
+					shaderSrc.charAt(uniformStartLocation + GLSL_KEYWORD_UNIFORM.length()))) {
 				continue;
 			}
 
-			int startIndex = uniformStartLocation + UNIFORM_KEYWORD.length() + 1;
+			int startIndex = uniformStartLocation + GLSL_KEYWORD_UNIFORM.length() + 1;
 			int endIndex = shaderSrc.indexOf(";", startIndex);
 
 			String uniformLine = shaderSrc.substring(startIndex, endIndex);
@@ -388,7 +570,7 @@ public class Shader {
 				this.addUniform(uniformName, uniformType, structs);
 			}
 
-			uniformStartLocation = shaderSrc.indexOf(UNIFORM_KEYWORD, uniformStartLocation + UNIFORM_KEYWORD.length());
+			uniformStartLocation = shaderSrc.indexOf(GLSL_KEYWORD_UNIFORM, uniformStartLocation + GLSL_KEYWORD_UNIFORM.length());
 		}
 	}
 
@@ -409,7 +591,7 @@ public class Shader {
 		int uniformLocation = GL20.glGetUniformLocation(id, uniformName);
 
 		if (uniformLocation == 0xFFFFFFFF) {
-			Logger.log("Uniform '" + uniformName + "' is not used in shader and has been removed!", "Shader-" + shaderName, Logger.MESSAGE_LEVEL_WARNING);
+			Logger.log("Uniform '" + uniformName + "' is not used in shader and has been removed!", shaderName, Logger.MESSAGE_LEVEL_WARNING);
 			// System.err.println("Error: Could not find uniform: " + uniformType + " " + uniformName);
 			// new Exception().printStackTrace();
 			// System.exit(1);

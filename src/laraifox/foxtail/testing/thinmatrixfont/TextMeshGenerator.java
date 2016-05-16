@@ -105,6 +105,8 @@ public class TextMeshGenerator {
 
 		GL30.glBindVertexArray(0);
 
+		GL15.glDeleteBuffers(vboID);
+
 		text.setMeshInfo(vaoID, vertexPositions.size() / 2);
 	}
 

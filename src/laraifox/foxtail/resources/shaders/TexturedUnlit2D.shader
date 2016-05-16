@@ -1,8 +1,8 @@
-Shader "TexturedUnlit2D" {
+Program "TexturedUnlit2D" {
 	GLSLVertex
 		#version 330
 
-		#pragma include "/includes/Standard.inc"
+		#pragma include "/include/FoxtailMatrices.inc"
 	
 		uniform mat4 FOXTAIL_PROJECTION_MATRIX;
 		
@@ -35,4 +35,4 @@ Shader "TexturedUnlit2D" {
 	GLSLEnd
 }
 	
-Fallback ""
+Alternate ""

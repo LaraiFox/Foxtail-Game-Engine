@@ -71,9 +71,11 @@ public class BufferUtils {
 		return buffer;
 	}
 
-	public static FloatBuffer createFloatBuffer(float[] data, boolean flipped) {
-		FloatBuffer buffer = createFloatBuffer(data.length);
-		buffer.put(data);
+	public static FloatBuffer createFloatBuffer(float[] values, boolean flipped) {
+		FloatBuffer buffer = createFloatBuffer(values.length);
+		for (float value : values) {
+			buffer.put(value);
+		}
 
 		if (flipped)
 			buffer.flip();
