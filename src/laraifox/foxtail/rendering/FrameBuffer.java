@@ -2,6 +2,8 @@ package laraifox.foxtail.rendering;
 
 import java.nio.ByteBuffer;
 
+import laraifox.foxtail.core.Logger;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
@@ -9,24 +11,35 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
-import laraifox.foxtail.core.Logger;
-
 public class FrameBuffer {
 	public static final int GENERATE_NO_TEXTURE = 0;
 	public static final int GENERATE_COLOR_TEXTURE = 1;
 	public static final int GENERATE_DEPTH_TEXTURE = 2;
 	public static final int GENERATE_COLOR_DEPTH_TEXTURE = 3;
 
-	private int frameBufferID;
-	private int colorID, depthID;
-	private int width, height;
-	private int generateTextures;
+	protected int frameBufferID;
+	protected int colorID;
+	protected int depthID;
+	protected int width, height;
+	protected int generateTextures;
+
+	protected FrameBuffer() {
+
+	}
 
 	public FrameBuffer(int width, int height) {
-		this(width, height, FrameBuffer.GENERATE_COLOR_DEPTH_TEXTURE);
+		this(width, height, FrameBuffer.GENERATE_COLOR_DEPTH_TEXTURE, TextureFilter.DEFAULT_FILTER);
 	}
 
 	public FrameBuffer(int width, int height, int generateTextures) {
+		this(width, height, generateTextures, TextureFilter.DEFAULT_FILTER);
+	}
+
+	public FrameBuffer(int width, int height, TextureFilter textureFilter) {
+		this(width, height, FrameBuffer.GENERATE_COLOR_DEPTH_TEXTURE, textureFilter);
+	}
+
+	public FrameBuffer(int width, int height, int generateTextures, TextureFilter textureFilter) {
 		this.width = width;
 		this.height = height;
 
@@ -37,13 +50,13 @@ public class FrameBuffer {
 		GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
 
 		if ((generateTextures & FrameBuffer.GENERATE_COLOR_TEXTURE) == FrameBuffer.GENERATE_COLOR_TEXTURE) {
-			this.createColorTexture(TextureFilter.DEFAULT_FILTER);
+			this.createColorTexture(textureFilter);
 		} else {
 			this.createColorAttachment();
 		}
 
 		if ((generateTextures & FrameBuffer.GENERATE_DEPTH_TEXTURE) == FrameBuffer.GENERATE_DEPTH_TEXTURE) {
-			this.createDepthTexture(TextureFilter.DEFAULT_FILTER);
+			this.createDepthTexture(textureFilter);
 		} else {
 			this.createDepthAttachment();
 		}
@@ -61,8 +74,7 @@ public class FrameBuffer {
 	}
 
 	public static void unbindTexture(int i) {
-		GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		Texture2D.unbind(i);
 	}
 
 	public void bindFrameBuffer() {
@@ -153,7 +165,8 @@ public class FrameBuffer {
 					float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
 					float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 					if (textureAnisotropy > supportedAnisotropy) {
-						Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "FrameBuffer", Logger.MESSAGE_LEVEL_WARNING);
+						Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "FrameBuffer",
+								Logger.MESSAGE_LEVEL_WARNING);
 						textureAnisotropy = supportedAnisotropy;
 					}
 
@@ -183,6 +196,6 @@ public class FrameBuffer {
 
 	@Override
 	protected void finalize() throws Throwable {
-		super.finalize();
+		this.cleanUp();
 	}
 }
