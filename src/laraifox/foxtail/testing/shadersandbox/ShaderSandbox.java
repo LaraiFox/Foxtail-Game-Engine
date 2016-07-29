@@ -192,11 +192,11 @@ public class ShaderSandbox implements IGameManager {
 				new Vector3f(15.0f, 0.0f, 5.75f), new Vector3f(0.75f)), new Transform3D());
 
 		TextureFilter textureFilter = new TextureFilter();
-		textureFilter.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
-		textureFilter.setGLTextureMagFilter(GL11.GL_NEAREST);
-		textureFilter.setGLTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
-		textureFilter.setGLTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
-		textureFilter.setGLTextureAnisotropy(2.0f);
+		textureFilter.setTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
+		textureFilter.setTextureMagFilter(GL11.GL_NEAREST);
+		textureFilter.setTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
+		textureFilter.setTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
+		textureFilter.setTextureAnisotropy(2.0f);
 
 		this.texture_Checker = new Texture2D(ResourceManager.getFoxtailResourcePath("textures/GreyscaleCheckerBoard.png"), textureFilter);
 		this.texture_Blank = new Texture2D(ResourceManager.getFoxtailResourcePath("textures/Blank.png"), textureFilter);
@@ -221,9 +221,9 @@ public class ShaderSandbox implements IGameManager {
 		perlinBuffer.flip();
 
 		TextureFilter textureFilter2 = new TextureFilter();
-		textureFilter2.setGLTextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR);
-		textureFilter2.setGLTextureMagFilter(GL11.GL_LINEAR);
-		textureFilter2.setGLTextureAnisotropy(2.0f);
+		textureFilter2.setTextureMinFilter(GL11.GL_LINEAR_MIPMAP_LINEAR);
+		textureFilter2.setTextureMagFilter(GL11.GL_LINEAR);
+		textureFilter2.setTextureAnisotropy(2.0f);
 
 		this.texture_Perlin = new Texture2D(perlinBuffer, PERLIN_TEXTURE_RES, PERLIN_TEXTURE_RES, textureFilter2);
 
@@ -267,9 +267,9 @@ public class ShaderSandbox implements IGameManager {
 				.totalMemory() - runtime.freeMemory()) / (float) runtime.totalMemory()) * 10000.0f) / 100) + "%)", 1.0f, fontType, new Transform3D(new Vector3f(0.005f, 0.035f, 0.0f)), 1.0f, false);
 
 		TextureFilter textureFilter3 = new TextureFilter();
-		textureFilter3.setGLTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
-		textureFilter3.setGLTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
-		// textureFilter3.setGLTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
+		textureFilter3.setTextureWrapS(GL12.GL_CLAMP_TO_EDGE);
+		textureFilter3.setTextureWrapT(GL12.GL_CLAMP_TO_EDGE);
+		// textureFilter3.setTextureMinFilter(GL11.GL_NEAREST_MIPMAP_LINEAR);
 		this.skyboxTexture = new TextureCube(new String[] {
 				ResourceManager.getFoxtailResourcePath("textures/skybox/right.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/left.png"), //
 				ResourceManager.getFoxtailResourcePath("textures/skybox/top.png"), ResourceManager.getFoxtailResourcePath("textures/skybox/bottom.png"), //

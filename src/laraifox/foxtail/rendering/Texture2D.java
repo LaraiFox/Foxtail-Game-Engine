@@ -132,17 +132,17 @@ public class Texture2D implements ICleanable {
 		this.textureID = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, textureFilter.getGLTextureInternalFormat(), width, height, 0, textureFilter.getGLTextureFormat(), GL11.GL_UNSIGNED_BYTE, buffer);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, textureFilter.getTextureInternalFormat(), width, height, 0, textureFilter.getTextureFormat(), GL11.GL_UNSIGNED_BYTE, buffer);
 
 		textureFilter.apply(GL11.GL_TEXTURE_2D);
-		if (textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
-			textureFilter.getGLTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR || //
-			textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
-			textureFilter.getGLTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getGLTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR) {
+		if (textureFilter.getTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+			textureFilter.getTextureMinFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getTextureMinFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR || //
+			textureFilter.getTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_NEAREST || textureFilter.getTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_NEAREST || //
+			textureFilter.getTextureMagFilter() == GL11.GL_NEAREST_MIPMAP_LINEAR || textureFilter.getTextureMagFilter() == GL11.GL_LINEAR_MIPMAP_LINEAR) {
 			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-			if (textureFilter.getGLTextureAnisotropy() > 0.0f) {
+			if (textureFilter.getTextureAnisotropy() > 0.0f) {
 				if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
-					float textureAnisotropy = textureFilter.getGLTextureAnisotropy();
+					float textureAnisotropy = textureFilter.getTextureAnisotropy();
 					float supportedAnisotropy = GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 					if (textureAnisotropy > supportedAnisotropy) {
 						Logger.log("Texture anisotropy has been limited to the max supported anisotropy! (" + supportedAnisotropy + ")", "Texture2D", Logger.MESSAGE_LEVEL_WARNING);

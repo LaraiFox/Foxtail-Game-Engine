@@ -12,27 +12,27 @@ import laraifox.foxtail.core.math.Vector4f;
 public class TextureFilter {
 	public static final TextureFilter DEFAULT_FILTER = new TextureFilter();
 
-	private int glTextureFormat;
-	private int glTextureInternalFormat;
-	private int glDepthStencilTextureMode;
-	private int glTextureBaseLevel;
-	private Vector4f glTextureBorderColor;
-	private int glTextureCompareFunc;
-	private int glTextureCompareMode;
-	private float glTextureLODBias;
-	private int glTextureMinFilter;
-	private int glTextureMagFilter;
-	private int glTextureMinLOD;
-	private int glTextureMaxLOD;
-	private int glTextureMaxLevel;
-	private int glTextureSwizzleR;
-	private int glTextureSwizzleG;
-	private int glTextureSwizzleB;
-	private int glTextureSwizzleA;
-	private int glTextureWrapS;
-	private int glTextureWrapT;
-	private int glTextureWrapR;
-	private float glTextureAnisotropy;
+	private int textureFormat;
+	private int textureInternalFormat;
+	private int depthStencilTextureMode;
+	private int textureBaseLevel;
+	private Vector4f textureBorderColor;
+	private int textureCompareFunc;
+	private int textureCompareMode;
+	private float textureLODBias;
+	private int textureMinFilter;
+	private int textureMagFilter;
+	private int textureMinLOD;
+	private int textureMaxLOD;
+	private int textureMaxLevel;
+	private int textureSwizzleR;
+	private int textureSwizzleG;
+	private int textureSwizzleB;
+	private int textureSwizzleA;
+	private int textureWrapS;
+	private int textureWrapT;
+	private int textureWrapR;
+	private float textureAnisotropy;
 
 	public TextureFilter() {
 		this(GL11.GL_RGBA, GL11.GL_RGBA, GL11.GL_DEPTH_COMPONENT, 0, Vector4f.Zero(), GL11.GL_ALWAYS, GL11.GL_NONE, 0.0f, //
@@ -40,51 +40,51 @@ public class TextureFilter {
 				GL11.GL_ALPHA, GL11.GL_REPEAT, GL11.GL_REPEAT, GL11.GL_REPEAT, 0.0f);
 	}
 
-	public TextureFilter(int glTextureFormat, int glTextureInternalFormat, int glDepthStencilTextureMode, int glTextureBaseLevel, Vector4f glTextureBorderColor, int glTextureCompareFunc,
-			int glTextureCompareMode, float glTextureLODBias, int glTextureMinFilter, int glTextureMagFilter, int glTextureMinLOD, int glTextureMaxLOD, int glTextureMaxLevel, int glTextureSwizzleR,
-			int glTextureSwizzleG, int glTextureSwizzleB, int glTextureSwizzleA, int glTextureWrapS, int glTextureWrapT, int glTextureWrapR, float glTextureAnisotropy) {
-		this.glTextureFormat = glTextureFormat;
-		this.glTextureInternalFormat = glTextureInternalFormat;
-		this.glDepthStencilTextureMode = glDepthStencilTextureMode;
-		this.glTextureBaseLevel = glTextureBaseLevel;
-		this.glTextureBorderColor = glTextureBorderColor;
-		this.glTextureCompareFunc = glTextureCompareFunc;
-		this.glTextureCompareMode = glTextureCompareMode;
-		this.glTextureLODBias = glTextureLODBias;
-		this.glTextureMinFilter = glTextureMinFilter;
-		this.glTextureMagFilter = glTextureMagFilter;
-		this.glTextureMinLOD = glTextureMinLOD;
-		this.glTextureMaxLOD = glTextureMaxLOD;
-		this.glTextureMaxLevel = glTextureMaxLevel;
-		this.glTextureSwizzleR = glTextureSwizzleR;
-		this.glTextureSwizzleG = glTextureSwizzleG;
-		this.glTextureSwizzleB = glTextureSwizzleB;
-		this.glTextureSwizzleA = glTextureSwizzleA;
-		this.glTextureWrapS = glTextureWrapS;
-		this.glTextureWrapT = glTextureWrapT;
-		this.glTextureWrapR = glTextureWrapR;
-		this.glTextureAnisotropy = glTextureAnisotropy;
+	public TextureFilter(int textureFormat, int textureInternalFormat, int depthStencilTextureMode, int textureBaseLevel, Vector4f textureBorderColor, int textureCompareFunc,
+			int textureCompareMode, float textureLODBias, int textureMinFilter, int textureMagFilter, int textureMinLOD, int textureMaxLOD, int textureMaxLevel, int textureSwizzleR,
+			int textureSwizzleG, int textureSwizzleB, int textureSwizzleA, int textureWrapS, int textureWrapT, int textureWrapR, float textureAnisotropy) {
+		this.textureFormat = textureFormat;
+		this.textureInternalFormat = textureInternalFormat;
+		this.depthStencilTextureMode = depthStencilTextureMode;
+		this.textureBaseLevel = textureBaseLevel;
+		this.textureBorderColor = textureBorderColor;
+		this.textureCompareFunc = textureCompareFunc;
+		this.textureCompareMode = textureCompareMode;
+		this.textureLODBias = textureLODBias;
+		this.textureMinFilter = textureMinFilter;
+		this.textureMagFilter = textureMagFilter;
+		this.textureMinLOD = textureMinLOD;
+		this.textureMaxLOD = textureMaxLOD;
+		this.textureMaxLevel = textureMaxLevel;
+		this.textureSwizzleR = textureSwizzleR;
+		this.textureSwizzleG = textureSwizzleG;
+		this.textureSwizzleB = textureSwizzleB;
+		this.textureSwizzleA = textureSwizzleA;
+		this.textureWrapS = textureWrapS;
+		this.textureWrapT = textureWrapT;
+		this.textureWrapR = textureWrapR;
+		this.textureAnisotropy = textureAnisotropy;
 	}
 
 	public void apply(int target) {
-		GL11.glTexParameteri(target, GL43.GL_DEPTH_STENCIL_TEXTURE_MODE, glDepthStencilTextureMode);
-		GL11.glTexParameteri(target, GL12.GL_TEXTURE_BASE_LEVEL, glTextureBaseLevel);
-		GL11.glTexParameter(target, GL11.GL_TEXTURE_BORDER_COLOR, BufferUtils.createFloatBuffer(glTextureBorderColor, true));
-		GL11.glTexParameteri(target, GL14.GL_TEXTURE_COMPARE_FUNC, glTextureCompareFunc);
-		GL11.glTexParameteri(target, GL14.GL_TEXTURE_COMPARE_MODE, glTextureCompareMode);
-		GL11.glTexParameterf(target, GL14.GL_TEXTURE_LOD_BIAS, glTextureLODBias);
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_MIN_FILTER, glTextureMinFilter);
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_MAG_FILTER, glTextureMagFilter);
-		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MIN_LOD, glTextureMinLOD);
-		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MAX_LOD, glTextureMaxLOD);
-		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MAX_LEVEL, glTextureMaxLevel);
-		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_R, glTextureSwizzleR);
-		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_G, glTextureSwizzleG);
-		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_B, glTextureSwizzleB);
-		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_A, glTextureSwizzleA);
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, glTextureWrapS);
-		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, glTextureWrapT);
-		GL11.glTexParameteri(target, GL12.GL_TEXTURE_WRAP_R, glTextureWrapR);
+		GL11.glTexParameteri(target, GL43.GL_DEPTH_STENCIL_TEXTURE_MODE, depthStencilTextureMode);
+		GL11.glTexParameteri(target, GL12.GL_TEXTURE_BASE_LEVEL, textureBaseLevel);
+		GL11.glTexParameter(target, GL11.GL_TEXTURE_BORDER_COLOR, BufferUtils.createFloatBuffer(textureBorderColor, true));
+		GL11.glTexParameteri(target, GL14.GL_TEXTURE_COMPARE_FUNC, textureCompareFunc);
+		GL11.glTexParameteri(target, GL14.GL_TEXTURE_COMPARE_MODE, textureCompareMode);
+		GL11.glTexParameterf(target, GL14.GL_TEXTURE_LOD_BIAS, textureLODBias);
+		GL11.glTexParameteri(target, GL11.GL_TEXTURE_MIN_FILTER, textureMinFilter);
+		GL11.glTexParameteri(target, GL11.GL_TEXTURE_MAG_FILTER, textureMagFilter);
+		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MIN_LOD, textureMinLOD);
+		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MAX_LOD, textureMaxLOD);
+		GL11.glTexParameteri(target, GL12.GL_TEXTURE_MAX_LEVEL, textureMaxLevel);
+		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_R, textureSwizzleR);
+		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_G, textureSwizzleG);
+		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_B, textureSwizzleB);
+		GL11.glTexParameteri(target, GL33.GL_TEXTURE_SWIZZLE_A, textureSwizzleA);
+		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_S, textureWrapS);
+		GL11.glTexParameteri(target, GL11.GL_TEXTURE_WRAP_T, textureWrapT);
+		GL11.glTexParameteri(target, GL12.GL_TEXTURE_WRAP_R, textureWrapR);
 	}
 
 	@Override
@@ -92,216 +92,216 @@ public class TextureFilter {
 		StringBuilder buider = new StringBuilder();
 
 		buider.append("[ ");
-		buider.append(glDepthStencilTextureMode + ", ");
-		buider.append(glTextureBaseLevel + ", ");
-		buider.append(glTextureBorderColor.toString() + ", ");
-		buider.append(glTextureCompareFunc + ", ");
-		buider.append(glDepthStencilTextureMode + ", ");
-		buider.append(glTextureCompareMode + ", ");
-		buider.append(glTextureLODBias + ", ");
-		buider.append(glTextureMinFilter + ", ");
-		buider.append(glTextureMagFilter + ", ");
-		buider.append(glTextureMinLOD + ", ");
-		buider.append(glTextureMaxLOD + ", ");
-		buider.append(glTextureMaxLevel + ", ");
-		buider.append(glTextureSwizzleR + ", ");
-		buider.append(glTextureSwizzleG + ", ");
-		buider.append(glTextureSwizzleB + ", ");
-		buider.append(glTextureSwizzleA + ", ");
-		buider.append(glTextureWrapS + ", ");
-		buider.append(glTextureWrapT + ", ");
-		buider.append(glTextureWrapR);
+		buider.append(depthStencilTextureMode + ", ");
+		buider.append(textureBaseLevel + ", ");
+		buider.append(textureBorderColor.toString() + ", ");
+		buider.append(textureCompareFunc + ", ");
+		buider.append(depthStencilTextureMode + ", ");
+		buider.append(textureCompareMode + ", ");
+		buider.append(textureLODBias + ", ");
+		buider.append(textureMinFilter + ", ");
+		buider.append(textureMagFilter + ", ");
+		buider.append(textureMinLOD + ", ");
+		buider.append(textureMaxLOD + ", ");
+		buider.append(textureMaxLevel + ", ");
+		buider.append(textureSwizzleR + ", ");
+		buider.append(textureSwizzleG + ", ");
+		buider.append(textureSwizzleB + ", ");
+		buider.append(textureSwizzleA + ", ");
+		buider.append(textureWrapS + ", ");
+		buider.append(textureWrapT + ", ");
+		buider.append(textureWrapR);
 		buider.append(" ]");
 
 		return buider.toString();
 	}
 
-	public int getGLTextureFormat() {
-		return glTextureFormat;
+	public int getTextureFormat() {
+		return textureFormat;
 	}
 
-	public int getGLTextureInternalFormat() {
-		return glTextureInternalFormat;
+	public int getTextureInternalFormat() {
+		return textureInternalFormat;
 	}
 
-	public int getGLDepthStencilTextureMode() {
-		return glDepthStencilTextureMode;
+	public int getDepthStencilTextureMode() {
+		return depthStencilTextureMode;
 	}
 
-	public int getGLTextureBaseLevel() {
-		return glTextureBaseLevel;
+	public int getTextureBaseLevel() {
+		return textureBaseLevel;
 	}
 
-	public Vector4f getGLTextureBorderColor() {
-		return glTextureBorderColor;
+	public Vector4f getTextureBorderColor() {
+		return textureBorderColor;
 	}
 
-	public int getGLTextureCompareFunc() {
-		return glTextureCompareFunc;
+	public int getTextureCompareFunc() {
+		return textureCompareFunc;
 	}
 
-	public int getGLTextureCompareMode() {
-		return glTextureCompareMode;
+	public int getTextureCompareMode() {
+		return textureCompareMode;
 	}
 
-	public float getGLTextureLODBias() {
-		return glTextureLODBias;
+	public float getTextureLODBias() {
+		return textureLODBias;
 	}
 
-	public int getGLTextureMinFilter() {
-		return glTextureMinFilter;
+	public int getTextureMinFilter() {
+		return textureMinFilter;
 	}
 
-	public int getGLTextureMagFilter() {
-		return glTextureMagFilter;
+	public int getTextureMagFilter() {
+		return textureMagFilter;
 	}
 
-	public int getGLTextureMinLOD() {
-		return glTextureMinLOD;
+	public int getTextureMinLOD() {
+		return textureMinLOD;
 	}
 
-	public int getGLTextureMaxLOD() {
-		return glTextureMaxLOD;
+	public int getTextureMaxLOD() {
+		return textureMaxLOD;
 	}
 
-	public int getGLTextureMaxLevel() {
-		return glTextureMaxLevel;
+	public int getTextureMaxLevel() {
+		return textureMaxLevel;
 	}
 
-	public int getGLTextureSwizzleR() {
-		return glTextureSwizzleR;
+	public int getTextureSwizzleR() {
+		return textureSwizzleR;
 	}
 
-	public int getGLTextureSwizzleG() {
-		return glTextureSwizzleG;
+	public int getTextureSwizzleG() {
+		return textureSwizzleG;
 	}
 
-	public int getGLTextureSwizzleB() {
-		return glTextureSwizzleB;
+	public int getTextureSwizzleB() {
+		return textureSwizzleB;
 	}
 
-	public int getGLTextureSwizzleA() {
-		return glTextureSwizzleA;
+	public int getTextureSwizzleA() {
+		return textureSwizzleA;
 	}
 
-	public int getGLTextureWrapS() {
-		return glTextureWrapS;
+	public int getTextureWrapS() {
+		return textureWrapS;
 	}
 
-	public int getGLTextureWrapT() {
-		return glTextureWrapT;
+	public int getTextureWrapT() {
+		return textureWrapT;
 	}
 
-	public int getGLTextureWrapR() {
-		return glTextureWrapR;
+	public int getTextureWrapR() {
+		return textureWrapR;
 	}
 
-	public float getGLTextureAnisotropy() {
-		return glTextureAnisotropy;
+	public float getTextureAnisotropy() {
+		return textureAnisotropy;
 	}
 
-	public TextureFilter setGLTextureFormat(int glTextureFormat) {
-		this.glTextureFormat = glTextureFormat;
+	public TextureFilter setTextureFormat(int textureFormat) {
+		this.textureFormat = textureFormat;
 		return this;
 	}
 
-	public TextureFilter setGLTextureInternalFormat(int glTextureInternalFormat) {
-		this.glTextureInternalFormat = glTextureInternalFormat;
+	public TextureFilter setTextureInternalFormat(int textureInternalFormat) {
+		this.textureInternalFormat = textureInternalFormat;
 		return this;
 	}
 
-	public TextureFilter setGLDepthStencilTextureMode(int glDepthStencilTextureMode) {
-		this.glDepthStencilTextureMode = glDepthStencilTextureMode;
+	public TextureFilter setDepthStencilTextureMode(int glDepthStencilTextureMode) {
+		this.depthStencilTextureMode = glDepthStencilTextureMode;
 		return this;
 	}
 
-	public TextureFilter setGLTextureBaseLevel(int glTextureBaseLevel) {
-		this.glTextureBaseLevel = glTextureBaseLevel;
+	public TextureFilter setTextureBaseLevel(int textureBaseLevel) {
+		this.textureBaseLevel = textureBaseLevel;
 		return this;
 	}
 
-	public TextureFilter setGLTextureBorderColor(Vector4f glTextureBorderColor) {
-		this.glTextureBorderColor = glTextureBorderColor;
+	public TextureFilter setTextureBorderColor(Vector4f textureBorderColor) {
+		this.textureBorderColor = textureBorderColor;
 		return this;
 	}
 
-	public TextureFilter setGLTextureCompareFunc(int glTextureCompareFunc) {
-		this.glTextureCompareFunc = glTextureCompareFunc;
+	public TextureFilter setTextureCompareFunc(int textureCompareFunc) {
+		this.textureCompareFunc = textureCompareFunc;
 		return this;
 	}
 
-	public TextureFilter setGLTextureCompareMode(int glTextureCompareMode) {
-		this.glTextureCompareMode = glTextureCompareMode;
+	public TextureFilter setTextureCompareMode(int textureCompareMode) {
+		this.textureCompareMode = textureCompareMode;
 		return this;
 	}
 
-	public TextureFilter setGLTextureLODBias(float glTextureLODBias) {
-		this.glTextureLODBias = glTextureLODBias;
+	public TextureFilter setTextureLODBias(float textureLODBias) {
+		this.textureLODBias = textureLODBias;
 		return this;
 	}
 
-	public TextureFilter setGLTextureMinFilter(int glTextureMinFilter) {
-		this.glTextureMinFilter = glTextureMinFilter;
+	public TextureFilter setTextureMinFilter(int textureMinFilter) {
+		this.textureMinFilter = textureMinFilter;
 		return this;
 	}
 
-	public TextureFilter setGLTextureMagFilter(int glTextureMagFilter) {
-		this.glTextureMagFilter = glTextureMagFilter;
+	public TextureFilter setTextureMagFilter(int textureMagFilter) {
+		this.textureMagFilter = textureMagFilter;
 		return this;
 	}
 
-	public TextureFilter setGLTextureMinLOD(int glTextureMinLOD) {
-		this.glTextureMinLOD = glTextureMinLOD;
+	public TextureFilter setTextureMinLOD(int textureMinLOD) {
+		this.textureMinLOD = textureMinLOD;
 		return this;
 	}
 
-	public TextureFilter setGLTextureMaxLOD(int glTextureMaxLOD) {
-		this.glTextureMaxLOD = glTextureMaxLOD;
+	public TextureFilter setTextureMaxLOD(int textureMaxLOD) {
+		this.textureMaxLOD = textureMaxLOD;
 		return this;
 	}
 
-	public TextureFilter setGLTextureMaxLevel(int glTextureMaxLevel) {
-		this.glTextureMaxLevel = glTextureMaxLevel;
+	public TextureFilter setTextureMaxLevel(int textureMaxLevel) {
+		this.textureMaxLevel = textureMaxLevel;
 		return this;
 	}
 
-	public TextureFilter setGLTextureSwizzleR(int glTextureSwizzleR) {
-		this.glTextureSwizzleR = glTextureSwizzleR;
+	public TextureFilter setTextureSwizzleR(int textureSwizzleR) {
+		this.textureSwizzleR = textureSwizzleR;
 		return this;
 	}
 
-	public TextureFilter setGLTextureSwizzleG(int glTextureSwizzleG) {
-		this.glTextureSwizzleG = glTextureSwizzleG;
+	public TextureFilter setTextureSwizzleG(int textureSwizzleG) {
+		this.textureSwizzleG = textureSwizzleG;
 		return this;
 	}
 
-	public TextureFilter setGLTextureSwizzleB(int glTextureSwizzleB) {
-		this.glTextureSwizzleB = glTextureSwizzleB;
+	public TextureFilter setTextureSwizzleB(int textureSwizzleB) {
+		this.textureSwizzleB = textureSwizzleB;
 		return this;
 	}
 
-	public TextureFilter setGLTextureSwizzleA(int glTextureSwizzleA) {
-		this.glTextureSwizzleA = glTextureSwizzleA;
+	public TextureFilter setTextureSwizzleA(int textureSwizzleA) {
+		this.textureSwizzleA = textureSwizzleA;
 		return this;
 	}
 
-	public TextureFilter setGLTextureWrapS(int glTextureWrapS) {
-		this.glTextureWrapS = glTextureWrapS;
+	public TextureFilter setTextureWrapS(int textureWrapS) {
+		this.textureWrapS = textureWrapS;
 		return this;
 	}
 
-	public TextureFilter setGLTextureWrapT(int glTextureWrapT) {
-		this.glTextureWrapT = glTextureWrapT;
+	public TextureFilter setTextureWrapT(int textureWrapT) {
+		this.textureWrapT = textureWrapT;
 		return this;
 	}
 
-	public TextureFilter setGLTextureWrapR(int glTextureWrapR) {
-		this.glTextureWrapR = glTextureWrapR;
+	public TextureFilter setTextureWrapR(int textureWrapR) {
+		this.textureWrapR = textureWrapR;
 		return this;
 	}
 
-	public TextureFilter setGLTextureAnisotropy(float glTextureAnisotropy) {
-		this.glTextureAnisotropy = glTextureAnisotropy;
+	public TextureFilter setTextureAnisotropy(float textureAnisotropy) {
+		this.textureAnisotropy = textureAnisotropy;
 		return this;
 	}
 }
