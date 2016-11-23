@@ -1,9 +1,9 @@
 package laraifox.foxtail.core;
 
+import laraifox.foxtail.core.math.Vector2f;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-
-import laraifox.foxtail.core.math.Vector2f;
 
 public class InputHandler {
 	public static final int KEY_NONE = 0x00;
@@ -138,16 +138,16 @@ public class InputHandler {
 	public static final int KEY_POWER = 0xDE;
 	public static final int KEY_SLEEP = 0xDF;
 
-	public static final int MOUSE_LEFT = 0;
-	public static final int MOUSE_RIGHT = 1;
-	public static final int MOUSE_MIDDLE = 2;
-	public static final int MOUSE_BACK = 3;
-	public static final int MOUSE_FORWARD = 4;
 	public static final int MOUSE_1 = 0;
+	public static final int MOUSE_LEFT = 0;
 	public static final int MOUSE_2 = 1;
+	public static final int MOUSE_RIGHT = 1;
 	public static final int MOUSE_3 = 2;
+	public static final int MOUSE_MIDDLE = 2;
 	public static final int MOUSE_4 = 3;
+	public static final int MOUSE_BACK = 3;
 	public static final int MOUSE_5 = 4;
+	public static final int MOUSE_FORWARD = 4;
 	public static final int MOUSE_6 = 5;
 	public static final int MOUSE_7 = 6;
 	public static final int MOUSE_8 = 7;
@@ -160,34 +160,33 @@ public class InputHandler {
 	public static final int MOUSE_15 = 14;
 	public static final int MOUSE_16 = 15;
 
-	public static final int KEYCODE_COUNT = 256;
-	public static final int MOUSEBUTTON_COUNT = 16;
+	public static final int KEY_CODE_COUNT = 256;
+	public static final int MOUSE_BUTTON_COUNT = 16;
 
-	private static boolean[] currentKeys = new boolean[KEYCODE_COUNT];
-	private static boolean[] previousKeys = new boolean[KEYCODE_COUNT];
-	private static boolean[] currentButtons = new boolean[MOUSEBUTTON_COUNT];
-	private static boolean[] previousButtons = new boolean[MOUSEBUTTON_COUNT];
+	private static boolean[] currentKeys = new boolean[KEY_CODE_COUNT];
+	private static boolean[] previousKeys = new boolean[KEY_CODE_COUNT];
+	private static boolean[] currentButtons = new boolean[MOUSE_BUTTON_COUNT];
+	private static boolean[] previousButtons = new boolean[MOUSE_BUTTON_COUNT];
 
 	private static float mouseX, mouseY;
 	private static float mouseDX, mouseDY;
 	private static float mouseDWheel;
 
-	private InputHandler() {
-	}
+	private InputHandler() {}
 
 	public static void update() {
-		for (int i = 0; i < KEYCODE_COUNT; i++) {
+		for (int i = 0; i < KEY_CODE_COUNT; i++) {
 			previousKeys[i] = currentKeys[i];
 		}
 
-		for (int i = 0; i < MOUSEBUTTON_COUNT; i++) {
+		for (int i = 0; i < MOUSE_BUTTON_COUNT; i++) {
 			previousButtons[i] = currentButtons[i];
 		}
 
 		while (Keyboard.next()) {
 			int eventKey = Keyboard.getEventKey();
 
-			if (0 <= eventKey && eventKey < KEYCODE_COUNT) {
+			if (0 <= eventKey && eventKey < KEY_CODE_COUNT) {
 				currentKeys[eventKey] = Keyboard.getEventKeyState();
 			}
 		}
@@ -195,7 +194,7 @@ public class InputHandler {
 		while (Mouse.next()) {
 			int eventButton = Mouse.getEventButton();
 
-			if (0 <= eventButton && eventButton < MOUSEBUTTON_COUNT) {
+			if (0 <= eventButton && eventButton < MOUSE_BUTTON_COUNT) {
 				currentButtons[eventButton] = Mouse.getEventButtonState();
 			}
 		}

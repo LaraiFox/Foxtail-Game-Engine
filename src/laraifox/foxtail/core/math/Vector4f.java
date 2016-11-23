@@ -152,15 +152,15 @@ public class Vector4f {
 		return new Vector4f(vector).ceil();
 	}
 
-	public Vector4f clamp(Vector4f vector, Vector4f min, Vector4f max) {
+	public static Vector4f clamp(Vector4f vector, Vector4f min, Vector4f max) {
 		return new Vector4f(vector).min(max).max(min);
 	}
 
-	public Vector4f clamp(Vector4f vector, float minX, float minY, float minZ, float minW, float maxX, float maxY, float maxZ, float maxW) {
+	public static Vector4f clamp(Vector4f vector, float minX, float minY, float minZ, float minW, float maxX, float maxY, float maxZ, float maxW) {
 		return new Vector4f(vector).min(maxX, maxY, maxZ, maxW).max(minX, minY, minZ, minW);
 	}
 
-	public Vector4f clamp(Vector4f vector, float min, float max) {
+	public static Vector4f clamp(Vector4f vector, float min, float max) {
 		return new Vector4f(vector).min(max).max(min);
 	}
 

@@ -10,7 +10,7 @@ public class ArrayUtils {
 		return result;
 	}
 
-	public static int[] listToIntArray(List<Integer> list) {
+	public static int[] toIntArray(List<Integer> list) {
 		int[] array = new int[list.size()];
 		for (int i = 0; i < array.length; i++) {
 			array[i] = list.get(i);
@@ -18,7 +18,7 @@ public class ArrayUtils {
 		return array;
 	}
 
-	public static float[] listToFloatArray(List<Float> list) {
+	public static float[] toFloatArray(List<Float> list) {
 		float[] array = new float[list.size()];
 		for (int i = 0; i < array.length; i++) {
 			array[i] = list.get(i);

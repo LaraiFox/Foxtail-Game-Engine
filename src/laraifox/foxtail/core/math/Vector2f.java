@@ -245,15 +245,15 @@ public class Vector2f {
 		return new Vector2f(vector).ceil();
 	}
 
-	public Vector2f clamp(Vector2f vector, Vector2f min, Vector2f max) {
+	public static Vector2f clamp(Vector2f vector, Vector2f min, Vector2f max) {
 		return new Vector2f(vector).min(max).max(min);
 	}
 
-	public Vector2f clamp(Vector2f vector, float minX, float minY, float maxX, float maxY) {
+	public static Vector2f clamp(Vector2f vector, float minX, float minY, float maxX, float maxY) {
 		return new Vector2f(vector).min(maxX, maxY).max(minX, minY);
 	}
 
-	public Vector2f clamp(Vector2f vector, float min, float max) {
+	public static Vector2f clamp(Vector2f vector, float min, float max) {
 		return new Vector2f(vector).min(max).max(min);
 	}
 

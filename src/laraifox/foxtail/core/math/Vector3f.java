@@ -302,15 +302,15 @@ public class Vector3f {
 		return new Vector3f(vector).ceil();
 	}
 
-	public Vector3f clamp(Vector3f vector, Vector3f min, Vector3f max) {
+	public static Vector3f clamp(Vector3f vector, Vector3f min, Vector3f max) {
 		return new Vector3f(vector).min(max).max(min);
 	}
 
-	public Vector3f clamp(Vector3f vector, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+	public static Vector3f clamp(Vector3f vector, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
 		return new Vector3f(vector).min(maxX, maxY, maxZ).max(minX, minY, minZ);
 	}
 
-	public Vector3f clamp(Vector3f vector, float min, float max) {
+	public static Vector3f clamp(Vector3f vector, float min, float max) {
 		return new Vector3f(vector).min(max).max(min);
 	}
 
